@@ -1,0 +1,685 @@
+@charset "UTF-8";
+
+:root {
+  --status-bar-background: #0071ce;
+  --status-bar-font-color: white;
+  --background-button: #0071ce;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+   src: url(../fonts/OpenSans-Regular-webfont.eot);
+   src: url(../fonts/OpenSans-Regular-webfont.eot?#iefix) format('embedded-opentype'),
+        url(../fonts/OpenSans-Regular-webfont.woff) format('woff'),
+        url(../fonts/OpenSans-Regular-webfont.ttf) format('truetype'),
+        url(../fonts/OpenSans-Regular-webfont.svg#georgiaregular) format('svg');
+
+}
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                          GENERAL
+-------------------------------------------------------------------------------------------------
+*/
+
+.html,
+.body {
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
+    background: #F6F7FB;
+    margin-top:55px;
+}
+
+.h1, .h2{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bolder;
+    margin:0;
+    padding:0;
+}
+
+.webpage  {
+    margin:0 20px;
+    padding:0;
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+.box {
+    padding: 0 19px 19px 19px;
+    margin-bottom: 16px;
+
+
+    background-color: #fff;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, .20);
+
+    border-radius: 6px;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto auto;
+
+}
+
+.box-title {
+    text-transform: uppercase;
+    margin-top: 8px;
+    margin-bottom: 3px;
+    color: #000;
+}
+
+.iconHeader {
+    padding-right: 9px;
+}
+
+.view-background-color {
+    background-color: #F2F2F2; /*#F2F2F2;*/
+
+    width:100%;
+
+}
+
+.border-bottom{
+    width:100%;
+    border-bottom:1px solid silver;
+    margin-bottom:7px;
+}
+.border-top{
+    width:100%;
+    border-top:1px solid silver;
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    padding: .2em .2em 0;
+    background: white;
+    border: none;
+}
+
+.ui-widget.ui-widget-content {
+    border: 1px solid #F2F2F2;
+}
+
+.classTabs {
+    font-weight: normal !important;
+    background-color: transparent;
+
+}
+
+
+.classTabs ui-tabs-tab ui-tabs-anchor {
+    background: black;
+}
+
+.ui-widget.ui-widget-content {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    background-color:white;
+}
+
+.bg-light{
+    background: #F5F7F8;
+}
+.bg-light-1{
+    background: #F1FBFD;
+}
+
+
+.invisible {
+    display:none;
+}
+
+.maxwidth {
+    width: 100%;
+}
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                      NAVIGATION
+-------------------------------------------------------------------------------------------------
+*/
+.breadcrumb {
+
+    margin-bottom: 3px;
+    background: #FAFAFA;
+
+}
+a{
+    color: var(--status-bar-background);
+}
+
+.text-primary{
+    color: var(--status-bar-background);
+}
+.glyphicon:hover{
+    color: var(--status-bar-background);
+}
+
+/*
+
+.navbar {
+    border: none;
+    border-radius: 0;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    height:40px;
+    background: var(--status-bar-background);
+    color:var(--status-bar-font-color);
+    margin-bottom:10px;
+    display:block;
+}
+
+
+.nav li a {
+    color:var(--status-bar-font-color) !important;
+}
+
+
+.navbarItem li a{
+    color:var(--status-bar-background) !important;
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+    background: transparent;
+    color:white;
+    padding:6px;
+}
+*/
+/* ---------------------------------------------------
+                                               BUTTONS
+----------------------------------------------------- */
+
+.btn-primary {
+    background-color: var(--status-bar-background);
+}
+.btn-primary:hover{
+    background-color: var(--status-bar-background);
+    color: #fff;
+    border-color: #204d74;
+    opacity: 0.8;
+}
+
+/* ---------------------------------------------------
+    HEADER
+----------------------------------------------------- */
+
+.pageTitle{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: Bold;
+    font-size:150%;
+    padding:0 10px 0 0;
+}
+.textSubHeader{
+    color: #848484;
+}
+.header-background{
+    background-color: #F3F6F8;
+}
+
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                      GRID / VIEW
+-------------------------------------------------------------------------------------------------
+*/
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+
+.summary{
+    float:left;
+    display:block;
+    position:relative;
+    top:-5px;
+}
+.pagination{
+    float:right;
+    display: block;
+    position:relative;
+    top:-30px;
+}
+.width5px{
+    width:5px;
+}
+.width10px{
+    width:10px;
+}
+.GridView{
+    width:80px;
+    text-align:center;
+}
+
+/* Item impar tabla */
+
+.grid-view table.items tr.even {
+    background-color: #F8F8FF;
+    color: #708090;
+}
+
+/* Item par de la tabla */
+
+.grid-view table.items tr.odd {
+    background-color: white;
+}
+.grid-view table.items tr.selected {
+    background: green;
+}
+
+/* Tabla HOVER item */
+
+.grid-view table.items tr:hover {
+    background:gold;
+    color: black;
+}
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#content {
+
+    min-height: 100vh;
+    transition: all 0.3s;
+    width:100%;
+}
+
+.form-control-autocomplete {
+    display: inline-block;
+    width: 92%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-top-color: rgb(204, 204, 204);
+    border-right-color: rgb(204, 204, 204);
+    border-bottom-color: rgb(204, 204, 204);
+    border-left-color: rgb(204, 204, 204);
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.compactRadioGroup {
+    display: inline-block !important;
+    width: auto !important;
+}
+/*
+-------------------------------------------------------------------------------------------------
+                                                                             STATUS COLOR TICKETS
+-------------------------------------------------------------------------------------------------
+*/
+.statusOpen{
+    color:green;
+    background: transparent;
+}
+.statusOnHold{
+    color:red;
+    background: black;
+}
+.statusEscalated{
+    color:red;
+    background: transparent;
+}
+.statusBlack {
+    color:white;
+    background: black;
+}
+
+/*
+-------------------------------------------------------------------------------------------------
+                                                                               STATUS COLOR TASKS
+-------------------------------------------------------------------------------------------------
+*/
+.statusNotStarted{
+    color:white;
+    background: black;
+}
+.statusDeferred{
+    color:yellow;
+    background: black;
+}
+
+.statusInProgress{
+    color:green;
+    background: transparent;
+}
+.statusCompleted{
+    color:black;
+    background: transparent;
+}
+
+.statusWaitingOnSomeoneElse{
+    color:white;
+    background: red;
+}
+.statusCanceled{
+    color:yellow;
+    background: red;
+}
+
+
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                      GRAPH INDEX
+-------------------------------------------------------------------------------------------------
+*/
+
+.graph-frequency-quality {
+    height:30px;
+    width:100%;
+}
+
+
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                          BADGER
+-------------------------------------------------------------------------------------------------
+*/
+
+.nroRowsbadge{
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #777;
+    border-radius: 10px;
+    position:relative;
+    top:-10px;
+}
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 3px;
+}
+
+.badge:empty {
+    display: none;
+}
+
+.btn .badge {
+    position: relative;
+    top: -1px;
+}
+
+.badge-pill {
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    border-radius: 10rem;
+}
+
+.badge-primary {
+    color: #fff;
+    background-color: #467fcf;
+}
+
+.badge-primary[href]:hover, .badge-primary[href]:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #2f66b3;
+}
+
+.badge-secondary {
+    color: #fff;
+    background-color: #868e96;
+}
+
+.badge-secondary[href]:hover, .badge-secondary[href]:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #6c757d;
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #5eba00;
+}
+
+.badge-success[href]:hover, .badge-success[href]:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #448700;
+}
+
+.badge-info {
+    color: #fff;
+    background-color: #45aaf2;
+}
+
+.badge-info[href]:hover, .badge-info[href]:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #1594ef;
+}
+
+.badge-warning {
+    color: #fff;
+    background-color: #f1c40f;
+}
+
+.badge-warning[href]:hover, .badge-warning[href]:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #c29d0b;
+}
+
+.badge-danger {
+    color: #fff;
+    background-color: #cd201f;
+}
+
+.badge-danger[href]:hover, .badge-danger[href]:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #a11918;
+}
+.badge-error {
+    color: #fff;
+    background-color: red;
+}
+.badge-error[href]:hover, .badge-error[href]:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: red;
+}
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                          TOGGLE
+-------------------------------------------------------------------------------------------------
+*/
+
+a[data-value="1"]{
+    color: green !important;
+    background-color: transparent;
+}
+a[data-value="0"]{
+    color: red !important;
+    background-color: transparent;
+}
+a[data-value=""]{
+    color: red !important;
+    background-color: transparent;
+}
+.glyphicon.glyphicon-ok-circle{
+    color: green !important;
+    background-color: transparent;
+}
+.glyphicon.glyphicon-remove-sign{
+    color: red !important;
+    background-color: transparent;
+}
+
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                          FOOTER
+-------------------------------------------------------------------------------------------------
+*/
+
+footer {
+    background: #333333;
+    color:#999999;
+    border-top: 1px solid #ddd;
+    padding: 7px;
+    width:100%;
+}
+.footer a{
+    color:#999999;
+    text-transform: capitalize;
+}
+.copyright{
+    background: #333333;
+    color:#999999;
+    padding:0 0 0 7px;
+}
+.copyright a{
+    color:#999999;
+}
+.footer-secondary {
+    padding: 7.5px 0;
+    background-color: #F4F5F7;
+}
+
+.payment-icon {
+    display: inline-block;
+    opacity: .6;
+    transition: opacity .3s;
+    border-radius: 5px;
+
+
+    padding-bottom: 0;
+    padding: 3px 5px 5px;
+    margin: 3px 3px 0
+}
+
+.payment-icon svg {
+    vertical-align: middle;
+    height: 20px;
+    width: auto !important;
+}
+
+.payment-icon:hover {
+    opacity: 1
+}
+
+.payment-ways{
+    text-align: right;
+}
+
+.payment-ways .payment-icon svg {
+    fill: #FFF
+}
+
+.payment-ways .payment-icon {
+    background-color: rgba(255, 255, 255, 0.1);
+
+}
+
+.footer-before {
+    background: transparent;
+    padding:9px;
+
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+@media (max-width: 1090px) {
+
+    .form-control-autocomplete {
+        width: 83%;
+    }
+
+
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+    .copyright{
+        text-align: center;
+    }
+}
+
+@media (max-width: 800px) {
+    .copyright{
+        text-align: center;
+    }
+    .payment-ways{
+        text-align: center;
+    }
+}
