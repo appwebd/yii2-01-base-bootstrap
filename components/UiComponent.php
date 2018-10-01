@@ -193,7 +193,7 @@ class UiComponent extends Component
         $buttonUpdate= '';
         if (Common::getProfilePermission(ACTION_UPDATE)) {
             $buttonUpdate = $this->button(
-                self::BUTTON_TEXT_UPDATE . Yii::t('app', self::BUTTON_TEXT_UPDATE),
+                self::BUTTON_ICON_UPDATE . Yii::t('app', self::BUTTON_TEXT_UPDATE),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', 'Update the current record'),
                 [ACTION_UPDATE, 'id'=>$primaryKey]
@@ -227,7 +227,7 @@ class UiComponent extends Component
                 self::HTML_TITLE,'=\'', Yii::t('app', self::BUTTON_TEXT_REFRESH),'\' ',
                 self::HTML_DATA_TOGGLE,'=\'',self::HTML_TOOLTIP,'\' ',
                 self::HTML_DATA_PLACEMENT,'=\'',self::HTML_DATA_PLACEMENT_VALUE,
-        '\'>',self::BUTTON_ICON_REFRESH_FORM . Yii::t('app',self::BUTTON_TEXT_REFRESH),'</button>',
+        '\'>',self::BUTTON_ICON_REFRESH . Yii::t('app', self::BUTTON_TEXT_REFRESH),'</button>',
 
         self::HTML_SPACE,
 
