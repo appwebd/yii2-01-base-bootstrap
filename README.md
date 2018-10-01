@@ -83,6 +83,7 @@ mysql -u root -p < docs/db_base.sql
 
 ~~~
 
+The initial administrator account like user and password is admin admin
 
 **NOTES:**
 - Yii won't create the database for you, this has to be done manually before you can access it.
