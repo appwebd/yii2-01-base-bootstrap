@@ -35,7 +35,7 @@ class Profile extends \yii\db\ActiveRecord
     const PROFILE_ID       = 'profile_id';
     const PROFILE_NAME     = 'profile_name';
     const TITLE            = 'Profiles';
-    
+
     /**
     * @return array the validation rules.
     */
