@@ -106,16 +106,15 @@ class LogsController extends Controller
     public function actionActions()
     {
 
-        $searchModel  = new ActionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $logsSearchModel  = new ActionSearch();
+        $dataProvider = $logsSearchModel->search(Yii::$app->request->queryParams);
         $pageSize = Yii::$app->ui->pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
             self::ACTIONS,
             [
-                SEARCH_MODEL => $searchModel,
+                SEARCH_MODEL => $logsSearchModel,
                 DATA_PROVIDER => $dataProvider,
                 PAGE_SIZE => $pageSize
             ]
@@ -128,7 +127,7 @@ class LogsController extends Controller
      */
     public function actionBlocked()
     {
-        BaseController::bitacora(Yii::t('app', 'showing the view: Blocked/index'), MSG_INFO);
+        
         $searchModel  = new BlockedSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -150,8 +149,7 @@ class LogsController extends Controller
      * @return mixed
      */
     public function actionControllers()
-    {
-        BaseController::bitacora(Yii::t('app', 'showing the view: Controllers/index'), MSG_INFO);
+    {        
         $searchModel  = new ControllersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -174,9 +172,9 @@ class LogsController extends Controller
      */
     public function actionIndex()
     {
-        BaseController::bitacora(Yii::t('app', 'showing the view: Logs/index'), MSG_INFO);
-        $searchModel  = new LogsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $logsSearchModel  = new LogsSearch();
+        $dataProvider = $logsSearchModel->search(Yii::$app->request->queryParams);
 
         $pageSize = Yii::$app->ui->pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
@@ -189,7 +187,7 @@ class LogsController extends Controller
         return $this->render(
             ACTION_INDEX,
             [
-                SEARCH_MODEL => $searchModel,
+                SEARCH_MODEL => $logsSearchModel,
                 DATA_PROVIDER => $dataProvider,
                 PAGE_SIZE => $pageSize,
                 self::CONTROLLER_ID => $controllerId
@@ -201,8 +199,7 @@ class LogsController extends Controller
      * @return mixed
      */
     public function actionStatus()
-    {
-        BaseController::bitacora(Yii::t('app', 'showing the view: Status/index'), MSG_INFO);
+    {        
         $searchModel  = new StatusSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

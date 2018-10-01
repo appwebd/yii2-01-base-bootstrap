@@ -28,20 +28,6 @@ class ProfileController extends Controller
     const PROFILE_ID = 'profile_id';
 
     /**
-     * Defaults actions
-     *
-     * @return void
-     */
-    public function actions()
-    {
-        return [
-            ERROR => [
-                STR_CLASS => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
-    /**
      * Before action instructions for to do before call actions
      *
      * @param object $action
@@ -131,7 +117,7 @@ class ProfileController extends Controller
      */
     public function actionDelete($id)
     {
-        if (! $this->previousRequirementToRemoveRecords()) {
+        if (! BaseController::previousRequirementToRemoveRecords()) {
             return $this->redirect([ACTION_INDEX]);
         }
 
@@ -186,8 +172,8 @@ class ProfileController extends Controller
     public function actionIndex()
     {
 
-        $searchModel  = new ProfileSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $profileSearchModel  = new ProfileSearch();
+        $dataProvider = $profileSearchModel->search(Yii::$app->request->queryParams);
 
         $pageSize = Yii::$app->ui->pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
@@ -195,7 +181,7 @@ class ProfileController extends Controller
         return $this->render(
             ACTION_INDEX,
             [
-                SEARCH_MODEL => $searchModel,
+                SEARCH_MODEL => $profileSearchModel,
                 DATA_PROVIDER => $dataProvider,
                 PAGE_SIZE => $pageSize
             ]
@@ -211,22 +197,20 @@ class ProfileController extends Controller
     {
 
         $result = Yii::$app->request->post('selection');
-        $nroSelections = sizeof($result);
 
-        if (! $this->previousRequirementToRemoveRecords() ||
-            ! BaseController::previousRequirementToRemoveRecords($result)
+        if (! BaseController::previousRequirementToRemoveRecords() ||
+            ! BaseController::requestPostSeleccionItems($result)
         ) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $deleteOK = "";
         $deleteKO = "";
-
+        $nroSelections = sizeof($result);
         for ($i = 0; $i < $nroSelections; $i++) {
             $profileId = $result[$i];
 
             if (($model = Profile::findOne($profileId)) !== null) {
-
                 if ($this->referentialIntegrityCheck($model->profile_id) <= 0) {
                     $deleteOK .= $profileId . ", ";
                     $model->delete();
@@ -303,30 +287,6 @@ class ProfileController extends Controller
             MSG_INFO
         );
         return $this->render(ACTION_VIEW, [MODEL => $model]);
-    }
-
-    /**
-     * Check Previous Requirement To Remove a Records. This is:
-     *
-     * a) Method Post
-     * b) Priviledges to remove records (before action checked this condition)
-     *
-     * @return bool
-     */
-    private function previousRequirementToRemoveRecords()
-    {
-        if (!Yii::$app->request->isPost) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    'Page not valid Please do not repeat this requirement. All site traffic is being monitored'
-                ),
-                MSG_SECURITY_ISSUE
-            );
-            return false;
-        }
-
-        return true;
     }
 
     /**

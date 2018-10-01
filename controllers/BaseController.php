@@ -30,6 +30,11 @@ class BaseController extends Controller
     const SECRET_KEY = 'money20343';
     const SECRET_IV  = '2034312280';
 
+    /**
+     * Check if user profile has access privilege over one controller/action
+     * @param  string $action action name
+     * @return bool
+     */
     public static function checkBadAccess($action)
     {
 
@@ -137,10 +142,15 @@ class BaseController extends Controller
         BaseController::bitacora($event, $statusId);
         $badge = Status::getStatusBadge($statusId);
         Yii::$app->session->setFlash($badge, $event);
-
     }
 
-    public static function previousRequirementToRemoveRecords($result)
+    /**
+     * Verify if the variable $result has information (used for delete records of gridview)
+     *
+     * @param string $result
+     * @return bool
+     */
+    public static function requestPostSeleccionItems($result)
     {
         if (!isset($result)) {
             BaseController::bitacora(
@@ -155,8 +165,44 @@ class BaseController extends Controller
         }
         return true;
     }
+    
+    /**
+     * Previous requirement to remove a records
+     *
+     * @return void
+     */
+    public static function previousRequirementToRemoveRecords()
+    {
+        if (!Yii::$app->request->isPost) {
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    'Page not valid Please do not repeat this requirement.
+                    All site traffic is being monitored'
+                ),
+                MSG_SECURITY_ISSUE
+            );
+            return false;
+        }
+
+        if (!Common::getProfilePermission(ACTION_DELETE)) {
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    'Your account don\'t have priviledges for this action,
+                    please do not repeat this requirement. All site traffic is being monitored'
+                ),
+                MSG_SECURITY_ISSUE
+            );
+            return false;
+        }
+
+        return true;
+    }
 
     /**
+     * Resume of operation
+     *
      * @param $deleteOK String with all the records deleted
      * @param $deleteKO string with all the records not deleted for some reason.
      */
@@ -184,6 +230,11 @@ class BaseController extends Controller
         }
     }
 
+    /**
+     * Encode a string
+     * @param $string
+     * @return string
+     */
     public static function stringEncode($string)
     {
 
@@ -201,6 +252,11 @@ class BaseController extends Controller
         return  base64_encode($output);
     }
 
+    /**
+     * Decode a string
+     * @param $string
+     * @return string
+     */
     public static function stringDecode($string)
     {
 

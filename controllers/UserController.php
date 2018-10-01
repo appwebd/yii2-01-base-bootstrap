@@ -26,20 +26,6 @@ class UserController extends Controller
 {
     const USER_ID ='user_id';
 
-    /**
-     * Defaults actions
-     *
-     * @return void
-     */
-    public function actions()
-    {
-        return [
-            ERROR => [
-                STR_CLASS => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
     public function beforeAction($action)
     {
         if (BaseController::checkBadAccess($action->id)) {
@@ -119,7 +105,7 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        if (! $this->previousRequirementToRemoveRecords()) {
+        if (! BaseController::previousRequirementToRemoveRecords()) {
             return $this->redirect([ACTION_INDEX]);
         }
 
@@ -155,20 +141,21 @@ class UserController extends Controller
     public function actionIndex()
     {
 
-        $searchModel  = new UserSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $userSearchModel  = new UserSearch();
 
+        $dataProvider = $userSearchModel->search(Yii::$app->request->queryParams);
         $pageSize = Yii::$app->ui->pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
-                SEARCH_MODEL => $searchModel,
+                SEARCH_MODEL => $userSearchModel,
                 DATA_PROVIDER => $dataProvider,
                 PAGE_SIZE => $pageSize
             ]
         );
+
     }
 
     /**
@@ -179,17 +166,15 @@ class UserController extends Controller
     public function actionRemove()
     {
 
-        if (!Yii::$app->request->isPost) {
-            return $this->redirect([ACTION_INDEX]);
-        }
-
         $result = Yii::$app->request->post('selection');
-        $nroSelections = sizeof($result);
-        if (! BaseController::previousRequirementToRemoveRecords($result)) {
+
+        if (! BaseController::previousRequirementToRemoveRecords() ||
+            ! BaseController::requestPostSeleccionItems($result)
+        ) {
             return $this->redirect([ACTION_INDEX]);
         }
 
-
+        $nroSelections = sizeof($result);
         $deleteOK = "";
         $deleteKO = "";
 
@@ -263,33 +248,9 @@ class UserController extends Controller
 
         BaseController::bitacora(
             Yii::t('app', 'The requested page does not exist {id}', ['id'=>$primaryKey]),
-            MSG_ERROR
+            MSG_SECURITY_ISSUE
         );
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
-    }
-
-    /**
-     * Check Previous Requirement To Remove a Records. This is:
-     *
-     * a) Method Post
-     * b) Priviledges to remove records (before action checked this condition)
-     *
-     * @return bool
-     */
-    private function previousRequirementToRemoveRecords()
-    {
-        if (!Yii::$app->request->isPost) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    'Page not valid Please do not repeat this requirement. All site traffic is being monitored'
-                ),
-                MSG_SECURITY_ISSUE
-            );
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -301,11 +262,12 @@ class UserController extends Controller
     private function referentialIntegrityCheck($userId)
     {
 
-        $nroRegs = common::getNroRowsForeignkey(
+        return common::getNroRowsForeignkey(
                 'logs',
                 self::USER_ID,
                 $userId
             );
+
     }
 
     private function transaction($model)

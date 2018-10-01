@@ -30,20 +30,6 @@ class PermissionController extends Controller
     const CONTROLLER_ID   = 'controller_id';
 
     /**
-     * Defaults actions
-     *
-     * @return void
-     */
-    public function actions()
-    {
-        return [
-            ERROR => [
-                STR_CLASS => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
-    /**
      * Before action instructions for to do before call actions
      *
      * @param object $action
@@ -149,7 +135,7 @@ class PermissionController extends Controller
      */
     public function actionDelete($id)
     {
-        if (! $this->previousRequirementToRemoveRecords()) {
+        if (! BaseController::previousRequirementToRemoveRecords()) {
             return $this->redirect([ACTION_INDEX]);
         }
 
@@ -185,8 +171,8 @@ class PermissionController extends Controller
     public function actionIndex()
     {
 
-        $searchModel  = new PermissionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $permissionSearchModel  = new PermissionSearch();
+        $dataProvider = $permissionSearchModel->search(Yii::$app->request->queryParams);
 
         $pageSize = Yii::$app->ui->pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
@@ -200,10 +186,10 @@ class PermissionController extends Controller
         return $this->render(
             ACTION_INDEX,
             [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'pageSize' => $pageSize,
-                self::CONTROLLER_ID=> $controllerId
+                SEARCH_MODEL => $permissionSearchModel,
+                DATA_PROVIDER => $dataProvider,
+                PAGE_SIZE => $pageSize,
+                self::CONTROLLER_ID => $controllerId
             ]
         );
     }
@@ -216,26 +202,22 @@ class PermissionController extends Controller
     public function actionRemove()
     {
 
-        if (!Yii::$app->request->isPost) {
+        $result = Yii::$app->request->post('selection');
+
+        if (! BaseController::previousRequirementToRemoveRecords() ||
+            ! BaseController::requestPostSeleccionItems($result)
+        ) {
             return $this->redirect([ACTION_INDEX]);
         }
 
-        $result = Yii::$app->request->post('selection');
-        if (!isset($result)) {
-            return $this->redirect([ACTION_INDEX]);
-        }
 
         $deleteOK = "";
         $deleteKO = "";
-        $nroSelections    = sizeof($result);
-
+        $nroSelections = sizeof($result);
         for ($i = 0; $i < $nroSelections; $i++) {
             if (($model = Permission::findOne($result[$i])) !== null) {
-                $nroRegs = 0;
-
-                if ($nroRegs <= 0) {
+                if ($model->delete()) {
                     $deleteOK .= $model->permission_id . ", ";
-                    $model->delete();
                 } else {
                     $deleteKO .= $model->permission_id . ", ";
                 }

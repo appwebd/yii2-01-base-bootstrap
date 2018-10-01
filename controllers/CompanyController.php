@@ -32,20 +32,6 @@ class CompanyController extends Controller
     const COMPANY_CREATE_MODAL      = 'companycreatemodal';
 
     /**
-     * Defaults actions
-     *
-     * @return void
-     */
-    public function actions()
-    {
-        return [
-            ERROR => [
-                STR_CLASS => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
-    /**
      * Before action instructions for to do before call actions
      *
      * @param object $action
@@ -68,7 +54,7 @@ class CompanyController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                  'only' => [
-                    self::AUTOCOMPLETE_COMPANY,
+                    self::COMPANY_AUTOCOMPLETE,
                     ACTION_CREATE,
                     ACTION_DELETE,
                     ACTION_INDEX,
@@ -79,7 +65,7 @@ class CompanyController extends Controller
                 'rules' => [
                     [
                         ACTIONS => [
-                           self::AUTOCOMPLETE_COMPANY,
+                           self::COMPANY_AUTOCOMPLETE,
                            ACTION_CREATE,
                            ACTION_DELETE,
                            ACTION_INDEX,
@@ -95,7 +81,7 @@ class CompanyController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 ACTIONS => [
-                    self::AUTOCOMPLETE_COMPANY=>['get'],
+                    self::COMPANY_AUTOCOMPLETE=>['get'],
                     ACTION_CREATE => ['get', 'post'],
                     ACTION_DELETE => ['post'],
                     ACTION_INDEX  => ['get'],
@@ -192,7 +178,7 @@ class CompanyController extends Controller
     public function actionDelete($id)
     {
 
-        if (! $this->previousRequirementToRemoveRecords()) {
+        if (! BaseController::previousRequirementToRemoveRecords()) {
             return $this->redirect([ACTION_INDEX]);
         }
 
@@ -227,16 +213,15 @@ class CompanyController extends Controller
     public function actionIndex()
     {
 
-        $searchModel  = new CompanySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $companySearchModel  = new CompanySearch();
+        $dataProvider = $companySearchModel->search(Yii::$app->request->queryParams);
         $pageSize = Yii::$app->ui->pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
-                SEARCH_MODEL => $searchModel,
+                SEARCH_MODEL => $companySearchModel,
                 DATA_PROVIDER => $dataProvider,
                 PAGE_SIZE => $pageSize
             ]
@@ -251,19 +236,18 @@ class CompanyController extends Controller
     public function actionRemove()
     {
 
-        if (! $this->previousRequirementToRemoveRecords()) {
+        $result = Yii::$app->request->post('selection');
+
+        if (! BaseController::previousRequirementToRemoveRecords() ||
+            ! BaseController::requestPostSeleccionItems($result)
+        ) {
             return $this->redirect([ACTION_INDEX]);
         }
 
-        $result = Yii::$app->request->post('selection');
-        $nroSelections = sizeof($result);
-        if (! BaseController::previousRequirementToRemoveRecords($result)) {
-            return $this->redirect([ACTION_INDEX]);
-        }
 
         $deleteOK = "";
         $deleteKO = "";
-
+        $nroSelections = sizeof($result);
 
         for ($i = 0; $i < $nroSelections; $i++) {
             $companyId = $result[$i];
@@ -282,7 +266,6 @@ class CompanyController extends Controller
 
         return $this->redirect([ACTION_INDEX]);
     }
-
 
 
     /**
@@ -338,32 +321,6 @@ class CompanyController extends Controller
         );
         return $this->render(ACTION_VIEW, [MODEL => $model]);
     }
-
-
-    /**
-     * Check Previous Requirement To Remove a Records. This is:
-     *
-     * a) Method Post
-     * b) Priviledges to remove records (before action checked this condition)
-     *
-     * @return bool
-     */
-    private function previousRequirementToRemoveRecords()
-    {
-        if (!Yii::$app->request->isPost) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    'Page not valid Please do not repeat this requirement. All site traffic is being monitored'
-                ),
-                MSG_SECURITY_ISSUE
-            );
-            return false;
-        }
-
-        return true;
-    }
-
 
     /**
      * Check nro. records found in other tables related.
