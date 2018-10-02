@@ -39,6 +39,8 @@ class Blocked extends \yii\db\ActiveRecord
     const IPV4_ADDRESS_INT = 'ipv4_address_int';
     const STATUS_ID        = 'status_id';
     const STATUS_NAME      = 'status_name';
+    const TITLE            = 'Ipv4 Blocked ';
+    const STATUS_STATUS_NAME = 'status.status_name';
 
     /**
      * @return array the validation rules.
