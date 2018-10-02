@@ -42,7 +42,6 @@ echo Nav::widget([
                 [LABEL => Yii::t('app', 'Blocked'), 'url'=>['logs/blocked']],
                 [LABEL => Yii::t('app', 'Controllers'), 'url'=>['logs/controllers']],
                 [LABEL => Yii::t('app', 'Status'), 'url'=>['logs/status']],
-
             ]
 
         ],
