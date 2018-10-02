@@ -15,14 +15,15 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use app\models\Company;
-use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Company */
 /* @var $form yii\widgets\ActiveForm */
+
 if ($model->isNewRecord) {
     $model->active = 1;
 }
+
 echo '
 <div class="row">
     <div class="col-sm-4">';
