@@ -12,12 +12,13 @@
 */
 
 use yii\grid\GridView;
+use app\models\Controllers;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ControllersSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Controllers');
+$this->title = Yii::t('app', Controllers::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
 echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
@@ -36,20 +37,20 @@ echo GridView::widget([
     'filterModel' => $searchModel,
     'layout'=>'{items}{summary}{pager}',
     'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => 'table maxwidth items table-striped table-condensed'],
+    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
     'columns' => [
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => 'controller_id',
+            ATTRIBUTE => Controllers::CONTROLLER_ID,
             OPTIONS => [STR_CLASS=>COLSM1],
             FORMAT=>'raw'
         ],
-        'controller_name',
-        'controller_description',
+        Controllers::CONTROLLER_NAME,
+        Controllers::CONTROLLER_DESCRIPTION,
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             FILTER => Yii::$app->ui->yesOrNoArray(),
-            ATTRIBUTE => 'menu_boolean_private',
+            ATTRIBUTE => Controllers::MENU_BOOLEAN_PRIVATE,
             OPTIONS => [STR_CLASS=>'col-sm-2'],
             VALUE => function ($model) {
                 return Yii::$app->ui->yesOrNo($model->active);
@@ -59,7 +60,7 @@ echo GridView::widget([
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             FILTER => Yii::$app->ui->yesOrNoArray(),
-            ATTRIBUTE => 'menu_boolean_visible',
+            ATTRIBUTE => Controllers::MENU_BOOLEAN_VISIBLE,
             OPTIONS => [STR_CLASS=>COLSM1],
             VALUE => function ($model) {
                 return Yii::$app->ui->yesOrNo($model->active);
@@ -69,7 +70,7 @@ echo GridView::widget([
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             FILTER => Yii::$app->ui->yesOrNoArray(),
-            ATTRIBUTE => 'active',
+            ATTRIBUTE => Controllers::ACTIVE,
             OPTIONS => [STR_CLASS=>COLSM1],
             VALUE => function ($model) {
                 return Yii::$app->ui->yesOrNo($model->active);

@@ -21,7 +21,7 @@ use app\models\Status;
 /* @var $searchModel app\models\LogsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Logs (user bitacora)');
+$this->title = Yii::t('app', Logs::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
 echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
@@ -43,13 +43,12 @@ echo GridView::widget([
 'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
 'columns' => [
     [STR_CLASS => 'yii\grid\CheckboxColumn', OPTIONS => [STR_CLASS=>'width10px']],
-    'logs_id',
-    'date',
+    Logs::LOGS_ID,
+    Logs::DATE,
     [
         STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => 'status_id',
+        ATTRIBUTE => Logs::STATUS_ID,
         FILTER => LogsSearch::getStatusListSearch(),
-        LABEL => 'Status',
         VALUE => function ($model) {
             $status = Status::getStatusName($model->status_id);
             return Yii::$app->ui->badgetStatus($model->status_id, $status);
@@ -58,27 +57,27 @@ echo GridView::widget([
     ],
     [
         STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => "controller_id",
+        ATTRIBUTE => Logs::CONTROLLER_ID,
         FILTER => LogsSearch::getControllersListSearch(),
-        VALUE=>'controllers.controller_name',
+        VALUE => Logs::CONTROLLER_CONTROLLER_NAME,
         FORMAT => 'raw',
     ],
     [
         STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => "action_id",
+        ATTRIBUTE => Logs::ACTION_ID,
         FILTER => LogsSearch::getActionListSearch($controller_id),
-        VALUE => 'action.action_name',
+        VALUE => Logs::ACTION_ACTION_NAME,
         FORMAT => 'raw',
     ],
-    'event',
-    'user_agent',
+    Logs::EVENT,
+    Logs::USER_AGENT,
     [
-        ATTRIBUTE => 'ipv4_address',
+        ATTRIBUTE => Logs::IPV4_ADDRESS,
         OPTIONS => [STR_CLASS=>'col-sm-1'],
-        VALUE => 'ipv4_address',
+        VALUE => Logs::IPV4_ADDRESS,
     ],
     [
-        ATTRIBUTE => 'confirmed',
+        ATTRIBUTE => Logs::CONFIRMED,
         OPTIONS => [STR_CLASS=>'col-sm-1'],
         FILTER => Yii::$app->ui->yesOrNoArray(),
         VALUE => function ($model) {
@@ -87,7 +86,7 @@ echo GridView::widget([
     ],
     [
         STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => "user_id",
+        ATTRIBUTE => Logs::USER_ID,
         FILTER => LogsSearch::getUserList(),
         VALUE => function ($model) {
             return $model->user->firstName . ' ' .$model->user->lastName;

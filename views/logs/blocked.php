@@ -14,12 +14,13 @@
 use yii;
 use yii\grid\GridView;
 use \app\models\search\BlockedSearch;
+use app\models\Blocked;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BlockedSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Ipv4 Blocked ');
+$this->title = Yii::t('app',  Blocked::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
 echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
@@ -41,22 +42,22 @@ echo GridView::widget([
 'filterModel' => $searchModel,
 'layout'=>'{items}{summary}{pager}',
 'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => 'table maxwidth items table-striped table-condensed'],
+'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
 'columns' => [
     [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS=>'width10px']],
     [
         STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => 'id',
+        ATTRIBUTE => Blocked::ID,
         OPTIONS => [STR_CLASS=>'col-sm-1'],
         FORMAT => 'raw'
     ],
-    'ipv4_address',
-    'date',
+    Blocked::IPV4_ADDRESS,
+    Blocked::DATE,
     [
         "class" => yii\grid\DataColumn::className(),
-        "attribute" => "status_id",
+        "attribute" => Blocked::STATUS_ID,
         'filter' => BlockedSearch::getStatusListSearch(),
-        "value" => 'status.status',
+        "value" => Blocked::STATUS_STATUS_NAME,
         "format" => "raw",
     ],
 ]]);
