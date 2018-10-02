@@ -16,9 +16,7 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\helpers\ArrayHelper;
 use yii\helpers\HtmlPurifier;
-use app\models\Action;
 
 /**
  * Logs
