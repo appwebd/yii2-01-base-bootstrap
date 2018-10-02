@@ -37,6 +37,9 @@ class Action extends \yii\db\ActiveRecord
     const ACTIVE        = 'active';
     const ACTION_ID     = 'action_id';
     const CONTROLLER_ID = 'controller_id';
+    const CONTROLLER_CONTROLLER_NAME = 'controllers.controller_name';
+    const TABLE = 'action';
+    const TITLE = 'Actions';
 
     /**
     * @return array the validation rules.
@@ -194,7 +197,7 @@ class Action extends \yii\db\ActiveRecord
     public static function getControllersList()
     {
         $droptions = Controllers::find([self::ACTIVE=>1])
-                    ->orderBy(['controller_name' => SORT_ASC])
+                    ->orderBy([self::CONTROLLER_NAME => SORT_ASC])
                     ->asArray()->all();
         return ArrayHelper::map($droptions, self::CONTROLLER_ID, self::CONTROLLER_NAME);
     }
