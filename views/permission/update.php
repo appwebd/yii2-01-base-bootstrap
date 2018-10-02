@@ -11,6 +11,8 @@
   * @version     1.0
 */
 
+use app\models\Permission;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Permission */
 

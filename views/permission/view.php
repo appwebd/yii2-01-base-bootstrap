@@ -13,6 +13,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Permission;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Permission */
@@ -32,13 +33,12 @@ echo Yii::$app->ui->header(
 echo DetailView::widget([
     'model' => $model,
     'attributes' => [
-    //'permission_id',
         [
             ATTRIBUTE => 'profile.profile_name',
             VALUE => function ($model) {
                 return $model->profile->profile_name;
             },
-            LABEL =>'Profile'
+            //LABEL =>'Profile'
         ],
         [
             ATTRIBUTE => 'controllers.controller_name',
