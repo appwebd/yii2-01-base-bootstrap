@@ -20,15 +20,16 @@ use app\models\Permission;
 /* @var $model app\models\Permission */
 /* @var $form yii\widgets\ActiveForm */
 
-?>
 
-<div class='row'>
-    <div class='col-sm-5'>
-        texto de Ayuda
-    </div>
+echo '
+<div class="row">
+    <div class="col-sm-5 text-justify"><p>';
+    echo Yii::t('app', 'Select the user profile to which you want to create / update the access properties');
+    echo '<br/><br/><br/><br/><br/><br/>';
+    echo Yii::t('app', 'Select the view / web page to then identify the action that is performed on it. Setting access Yes / No will indicate if the profile has access to this resource');
+    echo '</p></div>
+    <div class="col-sm-7">';
 
-    <div class='col-sm-7'>
-        <?php
         $form = ActiveForm::begin(
             [
                'id' => 'form-permission',
@@ -39,7 +40,7 @@ use app\models\Permission;
 
 
         $items = $model->getProfileList();
-        echo $form->field($model, Permission::PROFILE_ID)->dropDownList(
+        echo $form->field($model, Permission::PROFILE_ID)->RadioList(
             $items,
             [
                 PROMPT=>Yii::t('app', 'Select Profile'),
@@ -102,7 +103,8 @@ use app\models\Permission;
 
         echo $form->field($model, Permission::ACTION_PERMISSION)->checkbox(
             [
-                UNCHECK => 0, LABEL => '&nbsp; Assign access ?',
+                UNCHECK => 0,
+                LABEL => Yii::t('app', '&nbsp; Assign access ?'),
                 AUTOFOCUS   => AUTOFOCUS,
                 TABINDEX    => 4,
             ]
