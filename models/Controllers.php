@@ -39,6 +39,7 @@ class Controllers extends \yii\db\ActiveRecord
     const CONTROLLER_NAME            = 'controller_name';
     const MENU_BOOLEAN_PRIVATE       = 'menu_boolean_private';
     const MENU_BOOLEAN_VISIBLE       = 'menu_boolean_visible';
+    const TITLE = 'Controllers';
 
     /**
     * @return array the validation rules.
