@@ -18,32 +18,19 @@ use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\search\ActionSearch;
-use app\models\search\ControllersSearch;
 use app\models\search\BlockedSearch;
+use app\models\search\ControllersSearch;
 use app\models\search\LogsSearch;
 use app\models\search\StatusSearch;
 
 class LogsController extends Controller
 {
-    const CONTROLLER_ID = 'controller_id';
     const ACTIONS  = 'actions';
-    const CONTROLLERS = 'controllers';
     const BLOCKED = 'blocked';
+    const CONTROLLER_ID = 'controller_id';
+    const CONTROLLERS = 'controllers';
     const STATUS = 'status';
-
-    /**
-     * Defaults actions
-     *
-     * @return void
-     */
-    public function actions()
-    {
-        return [
-            ERROR => [
-                STR_CLASS => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
+    
     /**
      * Before action instructions for to do before call actions
      *
@@ -106,15 +93,15 @@ class LogsController extends Controller
     public function actionActions()
     {
 
-        $logsSearchModel  = new ActionSearch();
-        $dataProvider = $logsSearchModel->search(Yii::$app->request->queryParams);
+        $actionsSearchModel  = new ActionSearch();
+        $dataProvider = $actionsSearchModel->search(Yii::$app->request->queryParams);
         $pageSize = Yii::$app->ui->pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
             self::ACTIONS,
             [
-                SEARCH_MODEL => $logsSearchModel,
+                SEARCH_MODEL => $actionsSearchModel,
                 DATA_PROVIDER => $dataProvider,
                 PAGE_SIZE => $pageSize
             ]
@@ -149,7 +136,7 @@ class LogsController extends Controller
      * @return mixed
      */
     public function actionControllers()
-    {        
+    {
         $searchModel  = new ControllersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -199,7 +186,7 @@ class LogsController extends Controller
      * @return mixed
      */
     public function actionStatus()
-    {        
+    {
         $searchModel  = new StatusSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
