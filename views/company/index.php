@@ -46,25 +46,18 @@ $template = Common::getProfilePermissionString();
         'filterModel' => $searchModel,
         'layout'=>'{items}{summary}{pager}',
         'filterSelector' => 'select[name="per-page"]',
-        'tableOptions' =>[STR_CLASS => 'table maxwidth'],
+        'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
         'columns' => [
             [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS => 'width10px']],
-                    Company::COMPANY_ID, // 86
-                Company::COMPANY_NAME, //103
-
-                Company::ADDRESS, // 86
-                Company::CONTACT_PERSON, //99
-                Company::CONTACT_PHONE_1, //109
-
-                Company::CONTACT_PHONE_2, //109
-
-                Company::CONTACT_PHONE_3, //109
-
-                Company::CONTACT_EMAIL, //88
-
-                Company::WEBPAGE, //108
-
-// 100
+                Company::COMPANY_ID,
+                Company::COMPANY_NAME,
+                Company::ADDRESS,
+                Company::CONTACT_PERSON,
+                Company::CONTACT_PHONE_1,
+                Company::CONTACT_PHONE_2,
+                Company::CONTACT_PHONE_3,
+                Company::CONTACT_EMAIL,
+                Company::WEBPAGE,
                 [
                     STR_CLASS => yii\grid\DataColumn::className(),
                     FILTER => Yii::$app->ui->yesOrNoArray(),

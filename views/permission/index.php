@@ -41,7 +41,7 @@ echo GridView::widget([
     'filterModel' => $searchModel,
     'layout'=>'{items}{summary}{pager}',
     'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => 'table maxwidth items table-striped table-condensed'],
+    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
     'columns' => [
         [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS=>'width10px']],
         [

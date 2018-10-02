@@ -40,7 +40,7 @@ echo GridView::widget([
 'filterModel' => $searchModel,
 'layout'=>'{items}{summary}{pager}',
 'filterSelector' => 'select[name="per-page"]',
-'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
 'columns' => [
     [STR_CLASS => 'yii\grid\CheckboxColumn', OPTIONS => [STR_CLASS=>'width10px']],
     'logs_id',
