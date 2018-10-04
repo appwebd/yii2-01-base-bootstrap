@@ -25,11 +25,9 @@ if ($model->isNewRecord) {
 
 echo '
 <div class="row">
-    <div class="col-sm-5">';
-?>
-        texto de Ayuda
-<?php
-    echo '
+    <div class="col-sm-5"><p class="text-justify"><br>',
+        Yii::t('app', 'Enter the name that best identifies your user profile.'),
+    '
     </div>
     <div class="col-sm-7">';
 
@@ -42,25 +40,25 @@ echo '
         );
 
 
-       echo $form->field($model, 'profile_name')->textInput(
-           [
-                MAXLENGTH => true,
-                AUTOFOCUS => AUTOFOCUS,
-                TABINDEX => 1,
-                REQUIRED => REQUIRED,
-                AUTOCOMPLETE => 'off',
-           ]
-       )->label();
+        echo $form->field($model, 'profile_name')->textInput(
+            [
+                    MAXLENGTH => true,
+                    AUTOFOCUS => AUTOFOCUS,
+                    TABINDEX => 1,
+                    REQUIRED => REQUIRED,
+                    AUTOCOMPLETE => 'off',
+            ]
+        )->label();
 
-       echo $form->field($model, 'active')->checkbox(
+        echo $form->field($model, 'active')->checkbox(
             [
                 UNCHECK => 0,
                 AUTOFOCUS => AUTOFOCUS,
                 TABINDEX => 2,
                 REQUIRED => REQUIRED,
                 AUTOCOMPLETE => 'off',
-           ]
-       )->label('Active');
+            ]
+        )->label();
 
         echo '<div class=\'form-group\'>';
             echo Yii::$app->ui->buttonsCreate(3);
