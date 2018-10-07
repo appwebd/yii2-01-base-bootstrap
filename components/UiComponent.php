@@ -70,6 +70,12 @@ class UiComponent extends Component
     const HTML_WEBPAGE_OPEN             = '<div class="webpage ">
                                                <div class="row">
                                                    <div class="col-sm-12 box">';
+
+
+    const HTML_WEBPAGE_OPEN_COL_SM_8    = '<div class="webpage ">
+                                               <div class="row">
+                                                   <div class="col-sm-8 box">';
+    const HTML_WEBPAGE_CLOSE_OPEN_COL_SM_4  = '</div><div class="col-sm-4">';
     const HTML_WEBPAGE_CLOSE            = '</div></div></div>';
 
 
@@ -94,10 +100,16 @@ class UiComponent extends Component
         );
     }
 
-    public function buttonsAdminHeader()
+    /**
+     * @param $showButtons String with boolean values to show Create, refresh, delete buttons.
+     */
+
+    public function buttonsAdmin($showButtons='111', $buttonHeader=true)
     {
+        $aShowButtons = str_split($showButtons,1);
+
         $buttonCreate= '';
-        if (Common::getProfilePermission(ACTION_CREATE)) {
+        if ($aShowButtons[0] && Common::getProfilePermission(ACTION_CREATE)) {
             $buttonCreate = $this->button(
                 self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
                 self::CSS_BTN_PRIMARY,
@@ -107,60 +119,34 @@ class UiComponent extends Component
         }
 
         $buttonDelete = '';
-        if (Common::getProfilePermission(ACTION_DELETE)) {
+        if ($aShowButtons[2] && Common::getProfilePermission(ACTION_DELETE)) {
             $buttonDelete= $this->buttonDelete(
                 [ACTION_REMOVE],
                 self::CSS_BTN_DEFAULT
             );
         }
 
-        echo '<br/>',
+        $buttonRefresh = '';
+        if ($aShowButtons[1]) {
+            $buttonRefresh = $this->buttonRefresh();
+        }
+
+        if ($buttonHeader) {
+            echo '<br/>',
             $buttonCreate,
             self::HTML_SPACE,
-            $this->button(
-                self::BUTTON_ICON_REFRESH . Yii::t('app', self::BUTTON_TEXT_REFRESH),
-                self::CSS_BTN_DEFAULT,
-                Yii::t('app', 'Refresh view'),
-                [ACTION_INDEX]
-            ),
+            $buttonRefresh,
             self::HTML_SPACE,
             $buttonDelete;
-    }
-    /**
-     * Show buttons in view admin/index
-     *
-     * @return void
-     */
-    public function buttonsAdminBottom()
-    {
-        $buttonCreate= '';
-        if (Common::getProfilePermission(ACTION_CREATE)) {
-            $buttonCreate = $this->button(
-                self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
-                self::CSS_BTN_PRIMARY,
-                Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
-                [ACTION_CREATE]
-            );
-        }
-
-        $buttonDelete = '';
-        if (Common::getProfilePermission(ACTION_DELETE)) {
-            $buttonDelete = $this->buttonDelete(
-                [ACTION_REMOVE],
-                self::CSS_BTN_DEFAULT
-            );
-        }
-
-        echo $buttonDelete,
+        } else {
+            echo '<br/>',
+            $buttonDelete,
             self::HTML_SPACE,
-            $this->button(
-                self::BUTTON_ICON_REFRESH . Yii::t('app', self::BUTTON_TEXT_REFRESH),
-                self::CSS_BTN_DEFAULT,
-                Yii::t('app', 'Reload the active webpage'),
-                [ACTION_INDEX]
-            ),
+            $buttonRefresh,
             self::HTML_SPACE,
             $buttonCreate;
+        }
+
     }
 
     /**
@@ -214,7 +200,7 @@ class UiComponent extends Component
             );
     }
 
-    public function buttonsCreate($tabIndex)
+    public function buttonsCreate($tabIndex, $showBackToIndex = true)
     {
         $buttonSave = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
@@ -229,14 +215,16 @@ class UiComponent extends Component
                 self::HTML_DATA_PLACEMENT,'=\'',self::HTML_DATA_PLACEMENT_VALUE,
         '\'>',self::BUTTON_ICON_REFRESH . Yii::t('app', self::BUTTON_TEXT_REFRESH),'</button>',
 
-        self::HTML_SPACE,
+        self::HTML_SPACE;
+        if ($showBackToIndex) {
+            echo $this->button(
+                self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
+                self::CSS_BTN_DEFAULT,
+                Yii::t('app', 'Back to administration view'),
+                [ACTION_INDEX]
+            );
+        }
 
-        $this->button(
-            self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
-            self::CSS_BTN_DEFAULT,
-            Yii::t('app', 'Back to administration view'),
-            [ACTION_INDEX]
-        );
     }
 
     public function buttonDelete($action, $css)
@@ -256,14 +244,31 @@ class UiComponent extends Component
             ]
         );
     }
-
+    /**
+     * Button Refresh view
+     *
+     */
+    public static function buttonRefresh($caption=self::BUTTON_TEXT_REFRESH)
+    {
+        $caption = self::BUTTON_ICON_REFRESH . Yii::t('app', $caption);
+        return Html::a(
+            $caption,
+            [ACTION_INDEX],
+            [
+                STR_CLASS => self::CSS_BTN_DEFAULT,
+                self::HTML_TITLE => Yii::t('app', 'Refresh view'),
+                self::HTML_DATA_TOGGLE => self::HTML_TOOLTIP,
+                self::HTML_DATA_PLACEMENT =>self::HTML_DATA_PLACEMENT_VALUE,
+            ]
+        );
+    }
     /**
      * Return html for button save
      *
      * @param integer $tabIndex
      * @return void
      */
-    public function buttonSave($tabIndex)
+    public static function buttonSave($tabIndex)
     {
         return  Html::submitButton(
             self::BUTTON_ICON_SAVE . Yii::t('app', self::BUTTON_TEXT_SAVE),
@@ -274,6 +279,7 @@ class UiComponent extends Component
                 self::HTML_DATA_PLACEMENT =>self::HTML_DATA_PLACEMENT_VALUE,
                 'name'      => 'save-button',
                 'id'        => self::BUTTON_TEXT_SAVE,
+                VALUE => 'save-button',
                 AUTOFOCUS   => AUTOFOCUS,
                 TABINDEX    => $tabIndex,
             ]
@@ -308,12 +314,24 @@ class UiComponent extends Component
         Yii::t('app', $panelTitle).'</b></div><div class="panel-body">';
     }
 
+    /**
+     * Show page header and navigation buttons of the index page.
+     * @param string $icon
+     * @param string $pageTitle
+     * @param string $subHeader
+     * @param string $table (name of database table)
+     * @param string $showButtons 111 means (in correlative order)
+     *               1:Show button New
+     *               1: Show button Refresh
+     *               1: Show button Delete
+     * @param bool $showPageSize
+     */
     public function headerAdmin(
         $icon = 'user',
         $pageTitle = 'User',
         $subHeader = 'Users',
         $table = 'user',
-        $showButtons = true,
+        $showButtons = '111',
         $showPageSize = false
     ) {
         $nroRows = Common::getNroRows($table);
@@ -335,12 +353,12 @@ class UiComponent extends Component
                     <div class=\'col-sm-6 text-right\'>';
 
         if ($showButtons) {
-            $this->buttonsAdminHeader();
+            $this->buttonsAdmin($showButtons);
         }
 
         if ($showPageSize) {
             $pageSize = $this->pageSize();
-            echo '<br>', Yii::$app->ui->pageSizeDropDownList($pageSize);
+            echo Yii::$app->ui->pageSizeDropDownList($pageSize);
         }
         echo '      </div>
               </div>
