@@ -48,6 +48,9 @@ class Logs extends \yii\db\ActiveRecord
     const STATUS_ID            = 'status_id';
     const USER_AGENT           = 'user_agent';
     const USER_ID              = 'user_id';
+    const TITLE                = 'Logs (user bitacora)';
+    const CONTROLLER_CONTROLLER_NAME = 'controllers.controller_name';
+    const ACTION_ACTION_NAME = 'action.action_name';
 
     /**
     * @return array the validation rules.
