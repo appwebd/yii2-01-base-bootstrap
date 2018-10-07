@@ -33,7 +33,10 @@ echo Html::beginForm(['user/index'], 'post');
 echo Yii::$app->ui->headerAdmin(
     'user',
     $this->title,
-    Yii::t('app', 'This view permit Create a new User, update or delete information related of user')
+    Yii::t('app', 'This view permit Create a new User, update or delete information related of user'),
+    'user',
+    '111',
+    false
 );
 
 echo GridView::widget([
@@ -46,14 +49,14 @@ echo GridView::widget([
 
         [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS=>'width:10px'] ],
 
-        'username',
-        'firstName',
-        'lastName',
-        'email',
+        User::USERNAME,
+        User::FIRSTNAME,
+        User::LASTNAME,
+        User::EMAIL,
 
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => 'company_id',
+            ATTRIBUTE => User::COMPANY_ID,
             FILTER => CompanySearch::getCompanyListSearch('user'),
             VALUE => function ($model) {
                 return Company::getCompanyName($model->company_id);
@@ -61,7 +64,7 @@ echo GridView::widget([
         ],
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => 'profile_id',
+            ATTRIBUTE => User::PROFILE_ID,
             FILTER => ProfileSearch::getProfileListSearch('user'),
             VALUE => function ($model) {
                 $profile_name = Profile::getProfileName($model->profile_id);
@@ -72,7 +75,7 @@ echo GridView::widget([
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             FILTER => Yii::$app->ui->yesOrNoArray(),
-            ATTRIBUTE => 'active',
+            ATTRIBUTE => User::ACTIVE,
             OPTIONS => [STR_CLASS=>'col-sm-1'],
             VALUE => function ($model) {
                 return Yii::$app->ui->yesOrNo($model->active);
@@ -88,7 +91,7 @@ echo GridView::widget([
     ],
 ]);
 
-echo '<br/><br/>';
-echo Yii::$app->ui->buttonsAdminBottom();
+echo '<br/>';
+echo Yii::$app->ui->buttonsAdmin('111', false);
 Html::endForm();
 echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;

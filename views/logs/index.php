@@ -11,7 +11,6 @@
   * @version     1.0
 */
 
-use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\search\LogsSearch;
 use app\models\Logs;
@@ -31,7 +30,7 @@ echo Yii::$app->ui->headerAdmin(
     $this->title,
     Yii::t('app', 'This view is the event log of the web application.'),
     'logs',
-    false,
+    '000',
     true
 );
 
@@ -42,7 +41,6 @@ echo GridView::widget([
 'filterSelector' => 'select[name="per-page"]',
 'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
 'columns' => [
-    [STR_CLASS => 'yii\grid\CheckboxColumn', OPTIONS => [STR_CLASS=>'width10px']],
     Logs::LOGS_ID,
     Logs::DATE,
     [

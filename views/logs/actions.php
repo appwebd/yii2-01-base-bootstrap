@@ -30,7 +30,7 @@ echo Yii::$app->ui->headerAdmin(
     Yii::t('app', 'This view recollect all the views or windows that exists in this web application. 
     (for a proposal of privileges and access control)'),
     'action',
-    false,
+    '000',
     true
 );
 

@@ -33,7 +33,9 @@ echo Yii::$app->ui->headerAdmin(
     'ok-circle',
     $this->title,
     Yii::t('app', 'This view permit Create, update or delete information related of permission'),
-    Permission::TABLE
+    Permission::TABLE,
+    '111',
+    false
 );
 
 echo GridView::widget([
@@ -98,6 +100,6 @@ echo GridView::widget([
 ]);
 
 echo '<br/><br/>';
-echo Yii::$app->ui->buttonsAdminBottom();
+echo Yii::$app->ui->buttonsAdmin('111', false);
 Html::endForm();
 echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;

@@ -11,7 +11,6 @@
   * @version     1.0
 */
 
-use yii;
 use yii\grid\GridView;
 use \app\models\search\BlockedSearch;
 use app\models\Blocked;
@@ -33,7 +32,7 @@ echo Yii::$app->ui->headerAdmin(
         'This view shows the IP addresses that have been blocked for security or administrative reasons.'
     ),
     'blocked',
-    false,
+    '000',
     true
 );
 

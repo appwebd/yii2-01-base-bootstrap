@@ -37,7 +37,7 @@ $template = Common::getProfilePermissionString();
         $this->title,
         Yii::t('app', 'This view permit Create a new User, update or delete information related of user'),
         'company',
-        true,
+        '111',
         false
     );
 
@@ -79,6 +79,6 @@ $template = Common::getProfilePermissionString();
     ]);
 
     echo '<br/><br/>';
-    echo Yii::$app->ui->buttonsAdminBottom();
+    echo Yii::$app->ui->buttonsAdminBottom('111', false);
     Html::endForm();
     echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;

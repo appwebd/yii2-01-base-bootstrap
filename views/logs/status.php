@@ -12,7 +12,6 @@
 */
 
 use yii\grid\GridView;
-use yii\helpers\Html;
 use app\models\Status;
 
 /* @var $this yii\web\View */
@@ -24,13 +23,12 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
 
-echo Html::beginForm(['logs/status'], 'post');
 echo Yii::$app->ui->headerAdmin(
     'road',
     $this->title,
     Yii::t('app', 'This view exists for to do more easy the stadistica process in the web application'),
     'status',
-    false,
+    '000',
     true
 );
 
@@ -63,6 +61,4 @@ echo GridView::widget([
 ]);
 
 echo '<br/><br/>';
-Html::endForm();
-
 echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;

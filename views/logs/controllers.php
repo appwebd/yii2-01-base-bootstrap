@@ -28,7 +28,7 @@ echo Yii::$app->ui->headerAdmin(
     $this->title,
     Yii::t('app', 'This view recollect all the controllers that exists in this web application'),
     'controllers',
-    false,
+    '000',
     true
 );
 
