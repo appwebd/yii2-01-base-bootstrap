@@ -1,9 +1,9 @@
 <?php
 
 // comment out the following three lines when deployed to production
-defined('YII_DEBUG') || define('YII_DEBUG', false);
+defined('YII_DEBUG') || define('YII_DEBUG', true);
 defined('YII_TRACE_LEVEL') || define('YII_TRACE_LEVEL', 3);
-defined('YII_ENV') || define('YII_ENV', 'prod'); // 'prod' is for production environment
+defined('YII_ENV') || define('YII_ENV', 'dev'); // 'prod' is for production environment
 
 defined('DISABLE_CACHE') || define('DISABLE_CACHE', true);
 
@@ -36,6 +36,7 @@ defined('HEADER') || define('HEADER', 'header');
 defined('HTML_ROW_DIV6') || define('HTML_ROW_DIV6', '<div class="row"><div class="col-sm-6">');
 defined('HTML_DIV_CLOSE_DIV6_OPEN') || define('HTML_DIV_CLOSE_DIV6_OPEN', '</div><div class="col-sm-6">');
 defined('HTML_DIV_CLOSEX2') || define('HTML_DIV_CLOSEX2', '</div></div>');
+defined('HTML_DIV_CLOSE') || define('HTML_DIV_CLOSE', '</div>');
 
 defined('FILTER') || define('FILTER', 'filter');
 defined('FORMAT') || define('FORMAT', 'format');
