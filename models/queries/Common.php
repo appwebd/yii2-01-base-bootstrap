@@ -55,7 +55,12 @@ class Common extends ActiveQuery
      */
     public static function getProfilePermission($actionName)
     {
-        $profileId = Yii::$app->user->identity->profile->profile_id;
+        if (isset(Yii::$app->user->identity->profile->profile_id)) {
+            $profileId = Yii::$app->user->identity->profile->profile_id;
+        } else {
+            $profileId = 0;
+        }
+
         if ($profileId==99) {  // 99=profile administrator
             return 1;          // OK = 1 = Permit access
         }
@@ -90,18 +95,24 @@ class Common extends ActiveQuery
         return $actionPermission;
     }
 
-    public static function getProfilePermissionString()
+    /**
+     * @param $showButtons
+     * @return string
+     */
+    public static function getProfilePermissionString($showButtons='111')
     {
+        $aButton = str_split($showButtons,1);
+
         $template = '';
-        if (Common::getProfilePermission('view')) {
+        if ($aButton[0] && Common::getProfilePermission('view')) {
             $template .='{view}';
         }
 
-        if (Common::getProfilePermission('update')) {
+        if ($aButton[1] && Common::getProfilePermission('update')) {
             $template .=' {update}';
         }
 
-        if (Common::getProfilePermission('delete')) {
+        if ($aButton[2] && Common::getProfilePermission('delete')) {
             $template .=' {delete}';
         }
         return $template;
