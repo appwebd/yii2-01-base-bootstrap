@@ -310,5 +310,4 @@ class PermissionController extends Controller
 
         return false;
     }
-
 }

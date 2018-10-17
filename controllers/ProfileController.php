@@ -304,10 +304,10 @@ class ProfileController extends Controller
         );
 
         return $nroRegs + common::getNroRowsForeignkey(
-                'user',
-                self::PROFILE_ID,
-                $profileId
-            );
+            'user',
+            self::PROFILE_ID,
+            $profileId
+        );
     }
 
     /**
@@ -339,5 +339,4 @@ class ProfileController extends Controller
 
         return false;
     }
-
 }
