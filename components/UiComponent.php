@@ -67,17 +67,6 @@ class UiComponent extends Component
     const STR_PER_PAGE                  = 'per-page';
     const STR_PAGESIZE                  = 'pageSize';
     const STR_CONFIRM                   = 'confirm';
-    const HTML_WEBPAGE_OPEN             = '<div class="webpage ">
-                                               <div class="row">
-                                                   <div class="col-sm-12 box">';
-
-
-    const HTML_WEBPAGE_OPEN_COL_SM_8    = '<div class="webpage ">
-                                               <div class="row">
-                                                   <div class="col-sm-8 box">';
-    const HTML_WEBPAGE_CLOSE_OPEN_COL_SM_4  = '</div><div class="col-sm-4">';
-    const HTML_WEBPAGE_CLOSE            = '</div></div></div>';
-
 
     public function badgetStatus($statusId, $status)
     {
@@ -104,9 +93,9 @@ class UiComponent extends Component
      * @param $showButtons String with boolean values to show Create, refresh, delete buttons.
      */
 
-    public function buttonsAdmin($showButtons='111', $buttonHeader=true)
+    public function buttonsAdmin($showButtons = '111', $buttonHeader = true)
     {
-        $aShowButtons = str_split($showButtons,1);
+        $aShowButtons = str_split($showButtons, 1);
 
         $buttonCreate= '';
         if ($aShowButtons[0] && Common::getProfilePermission(ACTION_CREATE)) {
@@ -146,7 +135,6 @@ class UiComponent extends Component
             self::HTML_SPACE,
             $buttonCreate;
         }
-
     }
 
     /**
@@ -224,7 +212,6 @@ class UiComponent extends Component
                 [ACTION_INDEX]
             );
         }
-
     }
 
     public function buttonDelete($action, $css)
@@ -248,7 +235,7 @@ class UiComponent extends Component
      * Button Refresh view
      *
      */
-    public static function buttonRefresh($caption=self::BUTTON_TEXT_REFRESH)
+    public static function buttonRefresh($caption = self::BUTTON_TEXT_REFRESH)
     {
         $caption = self::BUTTON_ICON_REFRESH . Yii::t('app', $caption);
         return Html::a(
@@ -291,16 +278,16 @@ class UiComponent extends Component
         $pageTitle = 'User',
         $subHeader = 'Users'
     ) {
-        echo "<div class=\"border-bottom \">
-                    <h3 class='". self::COLOR_PRIMARY ."'><b>
-                        <span class='glyphicon glyphicon-". $icon . " " .self::COLOR_PRIMARY . " iconHeader'>
-                        </span>$pageTitle</b>
-
-                    </h3>
-              </div>
-              <p class='text-justify textSubHeader'>$subHeader</p>
-              <br/>
-             ";
+        echo '<div class="row"><div class="col-sm-12">
+                    <div class="border-bottom">
+                        <h3 class="headerTitle ', self::COLOR_PRIMARY ,'"><strong>
+                            <span class="glyphicon glyphicon-', $icon ,' ' ,
+                                self::COLOR_PRIMARY , ' headerIcon">
+                            </span> ', $pageTitle, '</strong>
+                        </h3>
+                    </div>
+                    <p class="text-justify headerSubText">',$subHeader,'</p><br/>
+            </div></div>';
     }
 
     /**
@@ -335,14 +322,15 @@ class UiComponent extends Component
         $showPageSize = false
     ) {
         $nroRows = Common::getNroRows($table);
+
         echo '<div class=\'row \'>
-                    <div class=\'col-sm-6 \'>
-                        <h3 class="'.self::COLOR_PRIMARY.'"><b>
-                            <span class=\'glyphicon glyphicon-', $icon, self::COLOR_PRIMARY, ' iconHeader \'>',
+                    <div class=\'col-sm-6  \'>',
+                        '<h3 class="headerTitle '.self::COLOR_PRIMARY.'"><strong>
+                            <span class=\'glyphicon glyphicon-', $icon, self::COLOR_PRIMARY, ' headerIcon \'>',
                             '</span>',
                             $pageTitle,
                         self::HTML_SPACE,
-                        '</b><span class=\'nroRowsbadge \' title=\'',
+                        '</strong><span class=\'nroRowsbadge \' title=\'',
                             Yii::t(
                                 'app',
                                 'Registers entered (It is updated when the form is loaded)'
@@ -350,7 +338,7 @@ class UiComponent extends Component
                             self::HTML_DATA_PLACEMENT, '=',self::HTML_DATA_PLACEMENT_VALUE, '>', $nroRows,
                         '</span></h3>',
                     '</div>
-                    <div class=\'col-sm-6 text-right\'>';
+                    <div class=\'col-sm-6  text-right\'>';
 
         if ($showButtons) {
             $this->buttonsAdmin($showButtons);
