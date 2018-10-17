@@ -14,7 +14,6 @@ active,user,tinyint(1),NO,,17,Active
 address,company,char(100),NO,,3,Address
 auth_key,user,char(32),NO,,3,key auth
 company_id,company,int(11),NO,PRI,1,Company
-company_id,user,int(11),NO,,14,Company
 company_name,company,char(60),NO,,2,Name
 confirmed,logs,tinyint(1),NO,,10,ipv4 address confirmed
 contact_email,company,char(254),YES,,8,Contact email
