@@ -141,21 +141,20 @@ class UserController extends Controller
     public function actionIndex()
     {
 
-        $userSearchModel  = new UserSearch();
+        $searchModelUser  = new UserSearch();
 
-        $dataProvider = $userSearchModel->search(Yii::$app->request->queryParams);
+        $dataProviderUser = $searchModelUser->search(Yii::$app->request->queryParams);
         $pageSize = Yii::$app->ui->pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
+        $dataProviderUser->pagination->pageSize=$pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
-                SEARCH_MODEL => $userSearchModel,
-                DATA_PROVIDER => $dataProvider,
+                'searchModelUser' => $searchModelUser,
+                'dataProviderUser' => $dataProviderUser,
                 PAGE_SIZE => $pageSize
             ]
         );
-
     }
 
     /**
@@ -263,11 +262,10 @@ class UserController extends Controller
     {
 
         return common::getNroRowsForeignkey(
-                'logs',
-                self::USER_ID,
-                $userId
-            );
-
+            'logs',
+            self::USER_ID,
+            $userId
+        );
     }
 
     private function transaction($model)

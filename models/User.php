@@ -26,7 +26,6 @@ use app\models\queries\UserQuery;
  *
  * @property tinyint(1)    active                      Active
  * @property char(32)      auth_key                    key auth
- * @property int(11)       company_id                  Company association
  * @property char(254)     email                       Email
  * @property char(255)     email_confirmation_token    Email token of confirmation
  * @property tinyint(1)    email_is_verified           Boolean is email verified
@@ -52,7 +51,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_TRUE=1;
     const ACTIVE                        = 'active';
     const AUTH_KEY                      = 'auth_key';
-    const COMPANY_ID                    = 'company_id';
     const EMAIL                         = 'email';
     const EMAIL_CONFIRMATION_TOKEN      = 'email_confirmation_token';
     const EMAIL_IS_VERIFIED             = 'email_is_verified';
@@ -76,7 +74,6 @@ class User extends ActiveRecord implements IdentityInterface
     public $_password;
     public $password;
 
-
     /**
     * @return array the validation rules.
     */
@@ -85,7 +82,6 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [[self::ACTIVE,
               self::AUTH_KEY,
-              self::COMPANY_ID,
               self::EMAIL,
               self::EMAIL_CONFIRMATION_TOKEN,
               self::EMAIL_IS_VERIFIED,
@@ -108,7 +104,7 @@ class User extends ActiveRecord implements IdentityInterface
             [[self::PROFILE_ID], 'in', 'range'=>array_keys(Profile::getProfileList())],
             [self::TELEPHONE, STRING, 'max' => 15],
             [[self::USERNAME, self::IPV4_ADDRESS_LAST_LOGIN], STRING, LENGTH => [1, 20]],
-            [[self::COMPANY_ID,
+            [[
               self::PROFILE_ID,
               self::USER_ID], 'integer'],
             [[self::ACTIVE,
@@ -132,7 +128,7 @@ class User extends ActiveRecord implements IdentityInterface
                 $this->$attribute = HtmlPurifier::process($this->$attribute);
               }
             ],
-    ];
+        ];
     }
 
     /**
@@ -143,7 +139,6 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             self::ACTIVE                  => Yii::t('app', 'Active'),
             self::AUTH_KEY                => Yii::t('app', 'key auth'),
-            self::COMPANY_ID              => Yii::t('app', 'Company'),
             self::EMAIL                   => Yii::t('app', 'Email'),
             self::EMAIL_CONFIRMATION_TOKEN => Yii::t('app', 'Email token of confirmation '),
             self::EMAIL_IS_VERIFIED       => Yii::t('app', 'Boolean is email verified '),
@@ -192,15 +187,10 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::map($droptions, self::USER_ID, self::USERNAME);
     }
 
-    /**
-     * @return UserQuery custom query class with user scopes
-     */
-
-    public static function find()
+    public static function getUsername($userId)
     {
-        return new UserQuery(get_called_class());
+        return static::findOne([self::USERNAME=> $userId]);
     }
-
     /**
      * Find user by AccessToken
      *
@@ -343,17 +333,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCompany()
-    {
-        return $this->hasOne(
-            Company::className(),
-            [self::COMPANY_ID => self::COMPANY_ID]
-        );
     }
 
     /**

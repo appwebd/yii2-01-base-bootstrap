@@ -11,6 +11,7 @@
   * @version     1.0
 */
 
+use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -22,7 +23,7 @@ $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 $this->params[BREADCRUMBS][] = ['label' => $model->user_id, 'url' => ['view', 'id' => $model->user_id]];
 $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Yii::$app->ui->header(
     'user',
@@ -34,4 +35,4 @@ echo Yii::$app->ui->header(
 );
 
 echo $this->render('_form', ['model' => $model,]);
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

@@ -27,7 +27,7 @@ $this->title = Yii::t('app', User::TITLE);
 
 $this->params[BREADCRUMBS][] = $this->title;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Html::beginForm(['user/index'], 'post');
 echo Yii::$app->ui->headerAdmin(
@@ -40,8 +40,8 @@ echo Yii::$app->ui->headerAdmin(
 );
 
 echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
+    'dataProvider' => $dataProviderUser,
+    'filterModel' => $searchModelUser,
     'layout'=>'{items}{summary}{pager}',
     'filterSelector' => 'select[name="per-page"]',
     'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
@@ -53,15 +53,6 @@ echo GridView::widget([
         User::FIRSTNAME,
         User::LASTNAME,
         User::EMAIL,
-
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => User::COMPANY_ID,
-            FILTER => CompanySearch::getCompanyListSearch('user'),
-            VALUE => function ($model) {
-                return Company::getCompanyName($model->company_id);
-            }
-        ],
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             ATTRIBUTE => User::PROFILE_ID,
@@ -94,4 +85,4 @@ echo GridView::widget([
 echo '<br/>';
 echo Yii::$app->ui->buttonsAdmin('111', false);
 Html::endForm();
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

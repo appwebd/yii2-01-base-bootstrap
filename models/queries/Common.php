@@ -37,14 +37,28 @@ class Common extends ActiveQuery
 
     public static function getNroRowsForeignkey($table, $field, $value)
     {
-        $count = (new Query())->select('COUNT(*)')
+        $count = (new Query())->select('count(*)')
             ->from($table)
-            ->where(["$field"=>$value])
+            ->where(["$field" => $value])
             ->limit(1);
 
         $return = 0;
         if (isset($count)) {
             $return = $count->count();
+        }
+        return $return;
+    }
+
+    public static function getDescription($table, $column, $field, $value)
+    {
+        $result = ((new Query())->select($column)
+            ->from($table)
+            ->where([$field => $value])
+            ->limit(1)->createCommand())->queryColumn();
+
+        $return = '';
+        if (isset($result[0])) {
+            $return = $result[0];
         }
         return $return;
     }

@@ -23,7 +23,7 @@ $this->title = Yii::t('app', User::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 $this->params[BREADCRUMBS][] = $model->user_id;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Yii::$app->ui->header(
     'user',
@@ -42,7 +42,6 @@ echo DetailView::widget([
         User::TELEPHONE,
         User::IPV4_ADDRESS_LAST_LOGIN,
         'profile.profile_name',
-        'company.company_name',
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             FILTER => Yii::$app->ui->yesOrNoArray(),
@@ -57,4 +56,4 @@ echo DetailView::widget([
 ]);
 
 echo Yii::$app->ui->buttonsViewBottom($model);
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

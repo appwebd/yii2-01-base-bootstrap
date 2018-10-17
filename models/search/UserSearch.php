@@ -27,7 +27,6 @@ class UserSearch extends User
     const STR_LABEL = 'label';
     const ACTIVE                        = 'active';
     const AUTH_KEY                      = 'auth_key';
-    const COMPANY_ID                    = 'company_id';
     const EMAIL                         = 'email';
     const EMAIL_CONFIRMATION_TOKEN      = 'email_confirmation_token';
     const EMAIL_IS_VERIFIED             = 'email_is_verified';
@@ -45,7 +44,6 @@ class UserSearch extends User
     public function attributes()
     {
         return array_merge(parent::attributes(), [
-                                                   'company.company_id',
                                                    'profile.profile_id',
                                                    'logs.user_id',
 
@@ -58,7 +56,7 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [[self::COMPANY_ID,
+            [[
               self::IPV4_ADDRESS_LAST_LOGIN,
               self::PROFILE_ID,
               self::USER_ID], 'integer'],
@@ -92,7 +90,7 @@ class UserSearch extends User
     {
         $query = User::find();
 
-        $query->joinWith(['profile', 'company']);
+        $query->joinWith(['profile']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -117,7 +115,6 @@ class UserSearch extends User
         $query->andFilterWhere([
             'user.user_id'           => $this->user_id,
             'user.email_is_verified' => $this->email_is_verified,
-            'company.company_id'     => $this->company_id,
             'user.active'            => $this->active,
             'user.profile_id'        => $this->profile_id,
             'profile.profile_id'     => $this->profile_id
