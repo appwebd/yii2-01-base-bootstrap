@@ -21,7 +21,7 @@ use app\models\Controllers;
 $this->title = Yii::t('app', Controllers::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Yii::$app->ui->headerAdmin(
     'eye-open',
@@ -82,4 +82,4 @@ echo GridView::widget([
 
 echo '<br/><br/>';
 
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

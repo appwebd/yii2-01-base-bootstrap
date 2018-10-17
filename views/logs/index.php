@@ -23,7 +23,7 @@ use app\models\Status;
 $this->title = Yii::t('app', Logs::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Yii::$app->ui->headerAdmin(
     'record',
@@ -68,12 +68,13 @@ echo GridView::widget([
         FORMAT => 'raw',
     ],
     Logs::EVENT,
-    Logs::USER_AGENT,
+/*    Logs::USER_AGENT,
     [
         ATTRIBUTE => Logs::IPV4_ADDRESS,
         OPTIONS => [STR_CLASS=>'col-sm-1'],
         VALUE => Logs::IPV4_ADDRESS,
     ],
+
     [
         ATTRIBUTE => Logs::CONFIRMED,
         OPTIONS => [STR_CLASS=>'col-sm-1'],
@@ -82,6 +83,7 @@ echo GridView::widget([
             return Yii::$app->ui->yesOrNo($model->confirmed);
         }
     ],
+    */
     [
         STR_CLASS => yii\grid\DataColumn::className(),
         ATTRIBUTE => Logs::USER_ID,
@@ -93,4 +95,4 @@ echo GridView::widget([
     ],
 ]]);
 
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

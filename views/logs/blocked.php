@@ -22,7 +22,7 @@ use app\models\Blocked;
 $this->title = Yii::t('app',  Blocked::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Yii::$app->ui->headerAdmin(
     'remove-circle',
@@ -61,4 +61,4 @@ echo GridView::widget([
     ],
 ]]);
 
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

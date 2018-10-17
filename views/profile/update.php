@@ -21,22 +21,17 @@ $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 $this->params[BREADCRUMBS][] = ['label' => $model->profile_id, 'url' => ['view', 'id' => $model->profile_id]];
 $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
-echo '
-<div class="webpage ">
-    <div class="row">
-        <div class="col-sm-12 box">';
+echo HTML_WEBPAGE_OPEN;
 
-            echo Yii::$app->ui->header(
-                'globe', //Icons
-                $this->title,
-                Yii::t(
-                    'app',
-                    'Please complete all requested information.'
-                )
-            );
+echo Yii::$app->ui->header(
+    'globe', //Icons
+    $this->title,
+    Yii::t(
+        'app',
+        'Please complete all requested information.'
+    )
+);
 
-            echo $this->render('_form', ['model' => $model,]);
-            echo '
-        </div>
-    </div>
-</div>';
+echo $this->render('_form', ['model' => $model,]);
+
+echo HTML_WEBPAGE_CLOSE;

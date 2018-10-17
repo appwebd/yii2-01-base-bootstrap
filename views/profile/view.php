@@ -21,37 +21,32 @@ $this->title = Yii::t('app', Profile::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 $this->params[BREADCRUMBS][] = $model->profile_id;
 
-echo '
-<div class="webpage ">
-    <div class="row">
-        <div class="col-sm-12 box">';
+echo HTML_WEBPAGE_OPEN;
 
-            echo Yii::$app->ui->header(
-                'globe',
-                $this->title,
-                Yii::t('app', 'This view permit view detailed information of Profiles')
-            );
+echo Yii::$app->ui->header(
+    'globe',
+    $this->title,
+    Yii::t('app', 'This view permit view detailed information of Profiles')
+);
 
-            echo DetailView::widget([
-              'model' => $model,
-              'attributes' => [
-                'profile_id',
-                'profile_name',
-                'created_at',
-                'updated_at',
-                  [
-                      ATTRIBUTE => 'active',
-                      OPTIONS => [STR_CLASS=>'col-sm-1'],
-                      VALUE => function ($model) {
-                          return Yii::$app->ui->yesOrNo($model->active);
-                      },
-                      FORMAT=>'raw'
-                  ],
-                ],
-            ]);
+echo DetailView::widget([
+  'model' => $model,
+  'attributes' => [
+    'profile_id',
+    'profile_name',
+    'created_at',
+    'updated_at',
+      [
+          ATTRIBUTE => 'active',
+          OPTIONS => [STR_CLASS=>'col-sm-1'],
+          VALUE => function ($model) {
+              return Yii::$app->ui->yesOrNo($model->active);
+          },
+          FORMAT=>'raw'
+      ],
+    ],
+]);
 
-            echo Yii::$app->ui->buttonsViewBottom($model);
-            echo '
-        </div>
-    </div>
-</div>';
+echo Yii::$app->ui->buttonsViewBottom($model);
+
+echo HTML_WEBPAGE_CLOSE;

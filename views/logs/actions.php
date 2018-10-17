@@ -22,7 +22,7 @@ use app\models\Action;
 $this->title = Yii::t('app', Action::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Yii::$app->ui->headerAdmin(
     'list-alt',
@@ -71,4 +71,4 @@ echo GridView::widget([
 
 echo '<br/><br/>';
 
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

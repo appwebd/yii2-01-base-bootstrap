@@ -22,7 +22,7 @@ $this->title = Yii::t('app', Permission::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 $this->params[BREADCRUMBS][] = $model->permission_id;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Yii::$app->ui->header(
     'ok-circle',
@@ -66,4 +66,4 @@ echo DetailView::widget([
 ]);
 
 echo Yii::$app->ui->buttonsViewBottom($model);
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

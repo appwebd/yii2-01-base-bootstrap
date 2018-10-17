@@ -25,7 +25,7 @@ use app\models\search\ControllersSearch;
 $this->title = Yii::t('app', Permission::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
+echo HTML_WEBPAGE_OPEN;
 
 echo Html::beginForm(['permission/index'], 'post');
 
@@ -102,4 +102,4 @@ echo GridView::widget([
 echo '<br/><br/>';
 echo Yii::$app->ui->buttonsAdmin('111', false);
 Html::endForm();
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;
