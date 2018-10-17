@@ -1,0 +1,84 @@
+columns,table,data type,Accept null,column key,ordinal position,Description
+action_description,action,char(80),NO,,4,Description
+action_id,action,int(11),NO,PRI,1,Actions
+action_id,logs,int(11),NO,MUL,5,Action
+action_id,permission,int(11),NO,,4,Action Name
+action_name,action,char(100),NO,,3,Name
+action_permission,permission,tinyint(1),NO,,5,Action permission
+active,action,tinyint(1),NO,,5,Active
+active,company,tinyint(1),NO,,12,Active
+active,controllers,tinyint(1),NO,,6,Active
+active,profile,tinyint(1),NO,,5,Active
+active,status,tinyint(1),YES,,5,Active
+active,user,tinyint(1),NO,,17,Active
+address,company,char(100),NO,,3,Address
+auth_key,user,char(32),NO,,3,key auth
+company_id,company,int(11),NO,PRI,1,Company
+company_id,user,int(11),NO,,14,Company
+company_name,company,char(60),NO,,2,Name
+confirmed,logs,tinyint(1),NO,,10,ipv4 address confirmed
+contact_email,company,char(254),YES,,8,Contact email
+contact_person,company,char(80),NO,,4,Contact person
+contact_phone_1,company,char(20),YES,,5,Contact phone
+contact_phone_2,company,char(20),YES,,6,Phone additional
+contact_phone_3,company,char(20),YES,,7,Phone additional
+controller_description,controllers,char(80),NO,,3,Description
+controller_id,action,int(11),NO,,2,Controller
+controller_id,controllers,int(11),NO,PRI,1,Controller
+controller_id,logs,int(11),NO,MUL,4,Controller
+controller_id,permission,int(11),NO,MUL,3,Controller
+controller_name,controllers,char(100),NO,,2,Name
+created_at,action,datetime,YES,,6,date created
+created_at,blocked,datetime,NO,,6,created at
+created_at,company,datetime,NO,,10,Created at
+created_at,controllers,datetime,YES,,7,date created
+created_at,permission,datetime,NO,,6,Created at
+created_at,profile,datetime,NO,,3,Date created
+created_at,status,datetime,NO,,3,Created at
+created_at,user,datetime,NO,,15,Date created
+data,session,blob,YES,,3,data token
+date,blocked,datetime,NO,,4,date time
+date,logs,datetime,NO,,2,date
+email,user,char(254),NO,,10,Email
+email_confirmation_token,user,char(255),NO,,7,Email token of confirmation 
+email_is_verified,user,tinyint(1),NO,,11,Boolean is email verified 
+event,logs,char(80),NO,,6,Activity / Event
+expire,session,int(11),YES,,2,date time expire session
+firstName,user,char(80),NO,,8,User name
+id,blocked,int(11),NO,PRI,1,id
+id,session,char(40),NO,PRI,1,id
+ipv4_address,blocked,char(20),NO,,2,IPV4 address
+ipv4_address,logs,char(20),NO,,8,ipv4_address
+ipv4_address_int,blocked,bigint(20),NO,,3,IPV4 address integer
+ipv4_address_int,logs,bigint(20),NO,,9,ipv4_address integer
+ipv4_address_last_login,user,char(20),NO,,18,Last ipv4 address used
+lastName,user,char(80),NO,,9,Last name
+logs_id,logs,int(11),NO,PRI,1,Logs
+menu_boolean_private,controllers,tinyint(1),NO,,4,Menu is private
+menu_boolean_visible,controllers,tinyint(1),NO,,5,Menu is visible
+password_hash,user,char(255),NO,,4,password
+password_reset_token,user,char(255),YES,,5,password reset token
+password_reset_token_date,user,datetime,NO,,6,password reset token date creation
+permission_id,permission,int(11),NO,PRI,1,Permission
+profile_id,permission,int(11),NO,MUL,2,Profile
+profile_id,profile,int(11),NO,PRI,1,Profile
+profile_id,user,int(11),NO,MUL,13,Profile
+profile_name,profile,char(80),NO,,2,Name
+status_id,blocked,int(11),NO,MUL,5,Status
+status_id,logs,int(11),NO,MUL,3,Status
+status_id,status,int(11),NO,PRI,1,Status
+status_name,status,char(80),YES,,2,Status message
+telephone,user,char(15),YES,,12,Phone number 12 digits
+updated_at,action,datetime,YES,,7,date updated
+updated_at,blocked,datetime,NO,,7,updated at
+updated_at,company,datetime,NO,,11,Updated at
+updated_at,controllers,datetime,YES,,8,date updated
+updated_at,permission,datetime,NO,,7,Updated at
+updated_at,profile,datetime,NO,,4,date updated
+updated_at,status,datetime,NO,,4,Updated at
+updated_at,user,datetime,NO,,16,date updated
+username,user,char(20),NO,UNI,2,User account
+user_agent,logs,char(250),NO,,7,user agent browser
+user_id,logs,int(11),NO,MUL,11,User
+user_id,user,int(11),NO,PRI,1,User
+webpage,company,char(254),YES,,9,URL Webpage

@@ -1,0 +1,11 @@
+Nombre tabla,Descripción
+action,Actions
+blocked,Ipv4 Blocked 
+company,Company
+controllers,Controllers
+logs,Logs (user bitacora)
+permission,Permission
+profile,Profiles
+session,Sessions of this web application
+status,Informative status of events in all the platform
+user,Users
