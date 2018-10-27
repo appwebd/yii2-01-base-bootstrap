@@ -5,7 +5,7 @@
   * @package     Site controller
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-03 15:40:56
   * @version     1.0
@@ -14,16 +14,11 @@
 namespace app\controllers;
 
 use Yii;
-use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\base\Behavior;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\forms\ContactForm;
-use app\models\Logs;
-use app\models\forms\ResetPasswordForm;
 
 class SiteController extends Controller
 {

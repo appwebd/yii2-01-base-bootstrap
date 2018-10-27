@@ -5,7 +5,7 @@
   * @package     Controller of Profile table
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-08-09 14:26:44
   * @version     1.0
@@ -35,9 +35,11 @@ class ProfileController extends Controller
      */
     public function beforeAction($action)
     {
+
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
 
@@ -172,17 +174,17 @@ class ProfileController extends Controller
     public function actionIndex()
     {
 
-        $profileSearchModel  = new ProfileSearch();
-        $dataProvider = $profileSearchModel->search(Yii::$app->request->queryParams);
+        $searchModelProfile  = new ProfileSearch();
+        $dataProviderProfile = $searchModelProfile->search(Yii::$app->request->queryParams);
 
         $pageSize = Yii::$app->ui->pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
+        $dataProviderProfile->pagination->pageSize=$pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
-                SEARCH_MODEL => $profileSearchModel,
-                DATA_PROVIDER => $dataProvider,
+                'searchModelProfile' => $searchModelProfile,
+                'dataProviderProfile' => $dataProviderProfile,
                 PAGE_SIZE => $pageSize
             ]
         );

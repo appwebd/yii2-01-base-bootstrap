@@ -5,7 +5,7 @@
   * @package     Controller of SingUp process
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-06-16 23:03:06
   * @version     1.0
@@ -15,30 +15,25 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-
 use app\models\forms\SignupForm;
 
 class SingupController extends Controller
 {
+
     /**
-     * Defaults actions
+     * Before action instructions for to do before call actions
      *
+     * @param object $action
      * @return void
      */
-    public function actions()
-    {
-        return [
-            // declares "error" action using a class name
-            ERROR => 'yii\web\ErrorAction',
-        ];
-    }
-
     public function beforeAction($action)
     {
+
+        if (BaseController::checkBadAccess($action->id)) {
+            return $this->redirect(['/']);
+        }
         BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }

@@ -5,7 +5,7 @@
   * @package     Controller of Permission table
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-08-09 14:26:44
   * @version     1.0
@@ -18,11 +18,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\HtmlPurifier;
 use app\models\Action;
 use app\models\Permission;
 use app\models\search\PermissionSearch;
-use app\models\queries\Common;
 
 class PermissionController extends Controller
 {
@@ -37,9 +35,11 @@ class PermissionController extends Controller
      */
     public function beforeAction($action)
     {
+
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
 

@@ -5,7 +5,7 @@
   * @package     Controller of Company table
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-08-20 16:37:24
   * @version     1.0
@@ -20,7 +20,6 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\Company;
 use app\models\search\CompanySearch;
-use app\models\queries\Common;
 use yii\helpers\Json;
 
 class CompanyController extends Controller
@@ -42,6 +41,7 @@ class CompanyController extends Controller
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
 

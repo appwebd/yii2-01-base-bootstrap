@@ -5,7 +5,7 @@
   * @package     Controller of User
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-06-16 23:03:06
   * @version     1.0
@@ -31,6 +31,7 @@ class UserController extends Controller
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
 
@@ -39,44 +40,7 @@ class UserController extends Controller
      */
     public function behaviors()
     {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                 'only' => [
-                    ACTION_CREATE,
-                    ACTION_DELETE,
-                    ACTION_INDEX,
-                    ACTION_REMOVE,
-                    ACTION_UPDATE,
-                    ACTION_VIEW
-                    ],
-                'rules' => [
-                    [
-                        ACTIONS => [
-                           ACTION_CREATE,
-                           ACTION_DELETE,
-                           ACTION_INDEX,
-                           ACTION_REMOVE,
-                           ACTION_UPDATE,
-                           ACTION_VIEW
-                        ],
-                        ALLOW => true,
-                        ROLES => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                ACTIONS => [
-                    ACTION_CREATE => ['get', 'post'],
-                    ACTION_DELETE => ['post'],
-                    ACTION_INDEX  => ['get'],
-                    ACTION_REMOVE => ['post'],
-                    ACTION_UPDATE => ['get', 'post'],
-                    ACTION_VIEW   => ['get'],
-                ],
-            ],
-        ];
+        return BaseController::behaviorsCommon();
     }
 
     /**
@@ -88,7 +52,7 @@ class UserController extends Controller
     {
         $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
+        if ($model->load(Yii::$app->request->post()) && BaseController::transaction($model)) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->user_id]);
         }
 
@@ -207,7 +171,7 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
+        if ($model->load(Yii::$app->request->post()) && BaseController::transaction($model)) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->user_id]);
         }
 
@@ -260,36 +224,10 @@ class UserController extends Controller
      */
     private function referentialIntegrityCheck($userId)
     {
-
         return common::getNroRowsForeignkey(
             'logs',
             self::USER_ID,
             $userId
         );
-    }
-
-    private function transaction($model)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($model->save()) {
-                $transaction->commit();
-                BaseController::bitacora(
-                    Yii::t('app', 'new record {id}', ['id'=>$model->user_id]),
-                    MSG_INFO
-                );
-                return true;
-            }
-            $transaction->rollBack();
-        } catch (\Exception $errorException) {
-            BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed to create a new record'),
-                MSG_ERROR
-            );
-            $transaction->rollBack();
-            throw $errorException;
-        }
-
-        return false;
     }
 }

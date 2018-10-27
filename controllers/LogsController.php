@@ -5,7 +5,7 @@
   * @package     Controller of Logs table
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 15:34:07
   * @version     1.0
@@ -39,9 +39,11 @@ class LogsController extends Controller
      */
     public function beforeAction($action)
     {
+
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
 
