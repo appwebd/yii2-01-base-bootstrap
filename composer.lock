@@ -296,12 +296,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "c2807a4d714e23b52f2c800df940c7de49c1ec04"
+                "reference": "dbbfe597d1b84d98f752fd32fde31095448a7d47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/c2807a4d714e23b52f2c800df940c7de49c1ec04",
-                "reference": "c2807a4d714e23b52f2c800df940c7de49c1ec04",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/dbbfe597d1b84d98f752fd32fde31095448a7d47",
+                "reference": "dbbfe597d1b84d98f752fd32fde31095448a7d47",
                 "shasum": ""
             },
             "require": {
@@ -388,7 +388,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2018-09-16T23:26:42+00:00"
+            "time": "2018-09-28T12:36:44+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -784,16 +784,16 @@
         },
         {
             "name": "codeception/phpunit-wrapper",
-            "version": "7.3.0",
+            "version": "7.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/phpunit-wrapper.git",
-                "reference": "a4990126a20bbaa67ca34088ff91960c209a664b"
+                "reference": "1967be130082effb3c30510cf8f8397fbd9d8b84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/a4990126a20bbaa67ca34088ff91960c209a664b",
-                "reference": "a4990126a20bbaa67ca34088ff91960c209a664b",
+                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/1967be130082effb3c30510cf8f8397fbd9d8b84",
+                "reference": "1967be130082effb3c30510cf8f8397fbd9d8b84",
                 "shasum": ""
             },
             "require": {
@@ -823,7 +823,7 @@
                 }
             ],
             "description": "PHPUnit classes used by Codeception",
-            "time": "2018-08-28T23:24:24+00:00"
+            "time": "2018-09-28T15:36:26+00:00"
         },
         {
             "name": "codeception/specify",
@@ -1511,12 +1511,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "dfb0bf3622f59fe43c983940c7ba06b126f26289"
+                "reference": "fe4ac0103cb0f60a57baf21a1ea6a55394a57e2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/dfb0bf3622f59fe43c983940c7ba06b126f26289",
-                "reference": "dfb0bf3622f59fe43c983940c7ba06b126f26289",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/fe4ac0103cb0f60a57baf21a1ea6a55394a57e2b",
+                "reference": "fe4ac0103cb0f60a57baf21a1ea6a55394a57e2b",
                 "shasum": ""
             },
             "require": {
@@ -1566,7 +1566,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-08-21T05:26:12+00:00"
+            "time": "2018-09-07T09:46:32+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1763,12 +1763,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "df5252497e4b5fd537a2258c70b969caa6e770bf"
+                "reference": "d854f611dee76e44e5af631c764f7b0272db795a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/df5252497e4b5fd537a2258c70b969caa6e770bf",
-                "reference": "df5252497e4b5fd537a2258c70b969caa6e770bf",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d854f611dee76e44e5af631c764f7b0272db795a",
+                "reference": "d854f611dee76e44e5af631c764f7b0272db795a",
                 "shasum": ""
             },
             "require": {
@@ -1839,7 +1839,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-09-21T12:43:09+00:00"
+            "time": "2018-09-28T06:46:37+00:00"
         },
         {
             "name": "psr/http-message",
@@ -2411,16 +2411,16 @@
         },
         {
             "name": "sebastian/resource-operations",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/resource-operations.git",
-                "reference": "0f9911fea026d9737c9b357ddda0916ea3beaf1d"
+                "reference": "ce990bb21759f94aeafd30209e8cfcdfa8bc3f52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/0f9911fea026d9737c9b357ddda0916ea3beaf1d",
-                "reference": "0f9911fea026d9737c9b357ddda0916ea3beaf1d",
+                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
+                "reference": "ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
                 "shasum": ""
             },
             "require": {
@@ -2449,7 +2449,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "time": "2018-05-15T05:53:02+00:00"
+            "time": "2015-07-28T20:34:47+00:00"
         },
         {
             "name": "sebastian/version",
