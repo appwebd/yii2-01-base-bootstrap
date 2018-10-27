@@ -5,7 +5,7 @@
  * @package     Ui
  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright   (C) Copyright - Web Application development
- * @license     Private comercial license
+ * @license     Private license
  * @link        https://appwebd.github.io
  * @date        6/28/18 2:33 PM
  * @version     1.0
@@ -68,13 +68,13 @@ class UiComponent extends Component
     const STR_PAGESIZE                  = 'pageSize';
     const STR_CONFIRM                   = 'confirm';
 
-    public function badgetStatus($statusId, $status)
+    public  static function badgetStatus($statusId, $status)
     {
         $badge = Status::getStatusBadge($statusId);
         return '<span class="badge badge-'.$badge.'">'. $status . '</span>';
     }
 
-    public function button($caption, $css, $buttonToolTip, $aAction = [])
+    public  static function button($caption, $css, $buttonToolTip, $aAction = [])
     {
 
         return Html::a(
@@ -91,15 +91,17 @@ class UiComponent extends Component
 
     /**
      * @param $showButtons String with boolean values to show Create, refresh, delete buttons.
+     * @param $buttonHeader boolean Show header in view ? (true/false value)
+     * @return void
      */
 
-    public function buttonsAdmin($showButtons = '111', $buttonHeader = true)
+    public  static function buttonsAdmin($showButtons = '111', $buttonHeader = true)
     {
         $aShowButtons = str_split($showButtons, 1);
 
         $buttonCreate= '';
         if ($aShowButtons[0] && Common::getProfilePermission(ACTION_CREATE)) {
-            $buttonCreate = $this->button(
+            $buttonCreate = UiComponent::button(
                 self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
                 self::CSS_BTN_PRIMARY,
                 Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
@@ -109,7 +111,7 @@ class UiComponent extends Component
 
         $buttonDelete = '';
         if ($aShowButtons[2] && Common::getProfilePermission(ACTION_DELETE)) {
-            $buttonDelete= $this->buttonDelete(
+            $buttonDelete= UiComponent::buttonDelete(
                 [ACTION_REMOVE],
                 self::CSS_BTN_DEFAULT
             );
@@ -117,7 +119,7 @@ class UiComponent extends Component
 
         $buttonRefresh = '';
         if ($aShowButtons[1]) {
-            $buttonRefresh = $this->buttonRefresh();
+            $buttonRefresh = UiComponent::buttonRefresh();
         }
 
         if ($buttonHeader) {
@@ -128,7 +130,7 @@ class UiComponent extends Component
             self::HTML_SPACE,
             $buttonDelete;
         } else {
-            echo '<br/>',
+            echo '<br/><br/><br/>',
             $buttonDelete,
             self::HTML_SPACE,
             $buttonRefresh,
@@ -143,12 +145,12 @@ class UiComponent extends Component
      * @param $model
      */
 
-    public function buttonsViewBottom(&$model)
+    public static function buttonsViewBottom(&$model)
     {
         $primaryKey = $model->getId();
         $buttonCreate = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
-            $buttonCreate = $this->button(
+            $buttonCreate = UiComponent::button(
                 self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
@@ -158,7 +160,7 @@ class UiComponent extends Component
 
         $buttonDelete = '';
         if (Common::getProfilePermission(ACTION_DELETE)) {
-            $buttonDelete= $this->buttonDelete(
+            $buttonDelete= UiComponent::buttonDelete(
                 [ACTION_DELETE, 'id'=>$primaryKey],
                 self::CSS_BTN_DANGER
             );
@@ -166,7 +168,7 @@ class UiComponent extends Component
 
         $buttonUpdate= '';
         if (Common::getProfilePermission(ACTION_UPDATE)) {
-            $buttonUpdate = $this->button(
+            $buttonUpdate = UiComponent::button(
                 self::BUTTON_ICON_UPDATE . Yii::t('app', self::BUTTON_TEXT_UPDATE),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', 'Update the current record'),
@@ -180,7 +182,7 @@ class UiComponent extends Component
             self::HTML_SPACE,
             $buttonDelete,
             self::HTML_SPACE,
-            $this->button(
+            UiComponent::button(
                 self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
                 self::CSS_BTN_PRIMARY,
                 Yii::t('app', 'Back to administration view'),
@@ -188,11 +190,11 @@ class UiComponent extends Component
             );
     }
 
-    public function buttonsCreate($tabIndex, $showBackToIndex = true)
+    public  static function buttonsCreate($tabIndex, $showBackToIndex = true)
     {
         $buttonSave = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
-            $buttonSave = $this->buttonSave($tabIndex);
+            $buttonSave = UiComponent::buttonSave($tabIndex);
         }
 
         echo $buttonSave,
@@ -205,7 +207,7 @@ class UiComponent extends Component
 
         self::HTML_SPACE;
         if ($showBackToIndex) {
-            echo $this->button(
+            echo UiComponent::button(
                 self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', 'Back to administration view'),
@@ -214,7 +216,7 @@ class UiComponent extends Component
         }
     }
 
-    public function buttonDelete($action, $css)
+    public  static function buttonDelete($action, $css)
     {
         return Html::a(
             self::BUTTON_ICON_DELETE . Yii::t('app', self::BUTTON_TEXT_DELETE),
@@ -253,7 +255,7 @@ class UiComponent extends Component
      * Return html for button save
      *
      * @param integer $tabIndex
-     * @return void
+     * @return string declaration of buttonSave
      */
     public static function buttonSave($tabIndex)
     {
@@ -263,12 +265,12 @@ class UiComponent extends Component
                 STR_CLASS => self::CSS_BTN_PRIMARY,
                 self::HTML_TITLE => Yii::t('app', 'Save the information of this form'),
                 self::HTML_DATA_TOGGLE => self::HTML_TOOLTIP,
-                self::HTML_DATA_PLACEMENT =>self::HTML_DATA_PLACEMENT_VALUE,
+                self::HTML_DATA_PLACEMENT => self::HTML_DATA_PLACEMENT_VALUE,
                 'name'      => 'save-button',
                 'id'        => self::BUTTON_TEXT_SAVE,
                 VALUE => 'save-button',
-                AUTOFOCUS   => AUTOFOCUS,
-                TABINDEX    => $tabIndex,
+                AUTOFOCUS => AUTOFOCUS,
+                TABINDEX  => $tabIndex,
             ]
         );
     }
@@ -292,10 +294,10 @@ class UiComponent extends Component
 
     /**
      * Show a panel in bootstrap 3.3.7
-     * @param $panelTitle Header title of panel
+     * @param $panelTitle string header title of panel
      * @return string
      */
-    public function panel($panelTitle)
+    public  static function panel($panelTitle)
     {
         return '<div class="panel panel-default"><div class="panel-heading"><b>'.
         Yii::t('app', $panelTitle).'</b></div><div class="panel-body">';
@@ -313,7 +315,7 @@ class UiComponent extends Component
      *               1: Show button Delete
      * @param bool $showPageSize
      */
-    public function headerAdmin(
+    public  static function headerAdmin(
         $icon = 'user',
         $pageTitle = 'User',
         $subHeader = 'Users',
@@ -341,12 +343,12 @@ class UiComponent extends Component
                     <div class=\'col-sm-6  text-right\'>';
 
         if ($showButtons) {
-            $this->buttonsAdmin($showButtons);
+            UiComponent::buttonsAdmin($showButtons);
         }
 
         if ($showPageSize) {
-            $pageSize = $this->pageSize();
-            echo Yii::$app->ui->pageSizeDropDownList($pageSize);
+            $pageSize = UiComponent::pageSize();
+            echo UiComponent::pageSizeDropDownList($pageSize);
         }
         echo '      </div>
               </div>
@@ -389,26 +391,26 @@ class UiComponent extends Component
             array(5=> 5, 10=> 10, 15 => 15, 25=> 25, 40=>40, 65=>65, 105=>105, 170=>170, 275=>275, 445=>445),
             array(
                 'id' => self::STR_PER_PAGE,
-                'onChange'=>'window.location.reload()',
-                'title'=>$msg,
-                'class'=>'btn btn-default dropdown-toggle dropdown-toggle-split',
+                'onChange' => 'window.location.reload()',
+                'title' => $msg,
+                'class' => 'btn btn-default dropdown-toggle dropdown-toggle-split',
                 self::HTML_DATA_TOGGLE => self::HTML_TOOLTIP,
-                self::HTML_DATA_PLACEMENT =>self::HTML_DATA_PLACEMENT_VALUE,
+                self::HTML_DATA_PLACEMENT => self::HTML_DATA_PLACEMENT_VALUE,
                 )
         );
     }
 
     /**
      * Get information for dropdown list
-     * @param $model Model to get information
-     * @param $parent_model_id  key related
-     * @param $id               id to search in model
-     * @param $key              column to get column code
-     * @param $value            column to get column description
-     * @param $orderBy          Order by
-     * @return string           String
+     * @param $model model class defined in app\models to get information
+     * @param $parentModelId String column related model
+     * @param $valueId integer id to search in model
+     * @param $key integer column to get column code
+     * @param $value string column to get column description
+     * @param $orderBy String Order by column
+     * @return string String
      */
-    public function relatedDropdownList($model, $parentModelId, $valueId, $key, $value, $orderBy)
+    public  static function relatedDropdownList($model, $parentModelId, $valueId, $key, $value, $orderBy)
     {
         $rows = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
 
@@ -417,7 +419,7 @@ class UiComponent extends Component
 
         if (count($rows)>0) {
             foreach ($rows as $row) {
-                $dropdown  .= '<option value='.$row->$key.'>'.$row->$value.self::HTML_OPTION_CLOSE;
+                $dropdown  .= '<option value='.$row->$key.'>'.$row->$value . self::HTML_OPTION_CLOSE;
             }
         } else {
             $dropdown  .= self::HTML_OPTION . Yii::t('app', 'No results found').self::HTML_OPTION_CLOSE;
@@ -426,17 +428,24 @@ class UiComponent extends Component
         return $dropdown ;
     }
 
-    public function warning($msg, $error)
+    /**
+     * @param $msg Message to show in view
+     * @param $error String error message
+     * @return void
+     */
+    public  static function warning($msg, $error)
     {
 
         $msg = $msg .'\n'. print_r($error, true);
-        echo Yii::warning($msg, __METHOD__);
-        return null;
+        Yii::warning($msg, __METHOD__);
+        Yii::$app->session->setFlash('error', $msg);
     }
 
+    /**
+     * @return array
+     */
     public static function yesOrNoArray()
     {
-
         return [1=>Yii::t('app', 'Yes'), 0=>'No'];
     }
 
@@ -444,7 +453,7 @@ class UiComponent extends Component
      * Show Yes or No given a boolean value
      *
      * @param $boolean
-     * @return string
+     * @return string yes or no
      */
     public static function yesOrNo($boolean)
     {
