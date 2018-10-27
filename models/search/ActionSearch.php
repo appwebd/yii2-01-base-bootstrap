@@ -5,7 +5,7 @@
   * @package     Model Search of Action
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-08-02 20:07:02
   * @version     1.0

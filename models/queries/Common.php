@@ -5,7 +5,7 @@
   * @package     Common funcions
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-08-23 19:19:35
   * @version     1.0
@@ -23,6 +23,21 @@ use app\models\Action;
 
 class Common extends ActiveQuery
 {
+
+    public static function getDescription($table, $column, $field, $value)
+    {
+        $result = ((new Query())->select($column)
+            ->from($table)
+            ->where([$field => $value])
+            ->limit(1)->createCommand())->queryColumn();
+
+        $return = '';
+        if (isset($result[0])) {
+            $return = $result[0];
+        }
+        return $return;
+    }
+
     public static function getNroRows($table)
     {
 
@@ -49,11 +64,13 @@ class Common extends ActiveQuery
         return $return;
     }
 
-    public static function getDescription($table, $column, $field, $value)
+    /**
+     * @return string Get date time
+     * @throws yii\db\Exception
+     */
+    public static function getNow()
     {
-        $result = ((new Query())->select($column)
-            ->from($table)
-            ->where([$field => $value])
+        $result = ((new Query())->select('now()')
             ->limit(1)->createCommand())->queryColumn();
 
         $return = '';
