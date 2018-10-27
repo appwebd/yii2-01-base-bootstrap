@@ -5,7 +5,7 @@
  * @package     Base controllers
  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright   (C) Copyright - Web Application development
- * @license     Private comercial license
+ * @license     Private license
  * @link        https://appwebd.github.io
  * @date        2018-06-16 23:03:06
  * @version     1.0
@@ -14,6 +14,8 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use app\models\queries\Common;
 use app\models\Action;
@@ -23,44 +25,22 @@ use app\models\Status;
 
 class BaseController extends Controller
 {
-       
+
     const USER_ID_VISIT     = 1;
     const SHA256       = 'sha256';
     const ENCRIPTED_METHOD = 'AES-256-CBC';
     const SECRET_KEY = 'money20343';
     const SECRET_IV  = '2034312280';
-
-    /**
-     * Check if user profile has access privilege over one controller/action
-     * @param  string $action action name
-     * @return bool
-     */
-    public static function checkBadAccess($action)
-    {
-
-        if (!Common::getProfilePermission($action)) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    'Your account don\'t have priviledges for this action, 
-                    please do not repeat this requirement. All site traffic is being monitored'
-                ),
-                MSG_SECURITY_ISSUE
-            );
-            return true;
-        }
-
-        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
-        return false;
-    }
+    const DATE_FORMAT = 'php:Y-m-d';
+    const DATETIME_FORMAT = 'php:Y-m-d H:i:s';
+    const TIME_FORMAT = 'php:H:i:s';
 
     /**
      * Save in table logs all events and activities of this web application
      *
      * @param string  $event    events or activities
      * @param integer $statusId status_id related to table status
-     * @param integer $userId   user_id related user
-     * @return true|false if logs was saved
+     * @return void
      */
     public static function bitacora($event, $statusId)
     {
@@ -68,7 +48,7 @@ class BaseController extends Controller
         $model             = new Logs();
         $model->status_id  = $statusId;
         $model->event      = $event;
-        $model->user_id    = Yii::$app->user->isGuest?self::USER_ID_VISIT: Yii::$app->user->identity->getId();
+        $model->user_id    = Yii::$app->user->isGuest? self::USER_ID_VISIT: Yii::$app->user->identity->getId();
 
         $actionName        = Yii::$app->controller->action->id; // Action name
         $controllerName    = Yii::$app->controller->id;         // controller name
@@ -112,22 +92,15 @@ class BaseController extends Controller
         }
 
 
-
         if ($errorValidation) {
-            return null;
+            Yii::$app->ui->warning('Could not save new log information:', $model->errors);
+        } else {
+            $model->user_agent       = Yii::$app->request->userAgent;
+            $model->ipv4_address     = Yii::$app->getRequest()->getUserIP();
+            $model->ipv4_address_int = ip2long($model->ipv4_address);
+            $model->confirmed        = 0;
+            $model->save();
         }
-
-        $model->user_agent       = Yii::$app->request->userAgent;
-        $model->ipv4_address     = Yii::$app->getRequest()->getUserIP();
-        $model->ipv4_address_int = ip2long($model->ipv4_address);
-        $model->confirmed        = 0;
-    
-        if ($model->save()) {
-            return true;
-        }
-
-        echo Yii::$app->ui->warning('Could not save new log information:', $model->errors);
-        return null;
     }
 
     /**
@@ -144,32 +117,136 @@ class BaseController extends Controller
         Yii::$app->session->setFlash($badge, $event);
     }
 
+    public static function behaviorsCommon()
+    {
+        /** @noinspection PhpDeprecationInspection */
+        /** @noinspection PhpDeprecationInspection */
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [
+                    ACTION_CREATE,
+                    ACTION_DELETE,
+                    ACTION_INDEX,
+                    ACTION_REMOVE,
+                    ACTION_UPDATE,
+                    ACTION_VIEW
+                ],
+                'rules' => [
+                    [
+                        ACTIONS => [
+                            ACTION_CREATE,
+                            ACTION_DELETE,
+                            ACTION_INDEX,
+                            ACTION_REMOVE,
+                            ACTION_UPDATE,
+                            ACTION_VIEW
+                        ],
+                        ALLOW => true,
+                        ROLES => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                ACTIONS => [
+                    ACTION_CREATE => ['get', 'post'],
+                    ACTION_DELETE => ['post'],
+                    ACTION_INDEX  => ['get'],
+                    ACTION_REMOVE => ['post'],
+                    ACTION_UPDATE => ['get', 'post'],
+                    ACTION_VIEW   => ['get'],
+                ],
+            ],
+        ];
+    }
+
     /**
-     * Verify if the variable $result has information (used for delete records of gridview)
-     *
-     * @param string $result
+     * @param string $extension is the string extension of file to download
+     * @return string ContentType string
+     */
+    public static function contentType($extension)
+    {
+
+        switch ($extension) {
+            case 'pdf':
+                $contentType = 'application/pdf';
+                break;
+            case 'jpg':
+                $contentType = 'image/jpg';
+                break;
+            case 'jpeg':
+                $contentType = 'image/jpeg';
+                break;
+            case 'png':
+                $contentType = 'image/png';
+                break;
+            case 'tif':
+                $contentType = 'image/tiff';
+                break;
+            case 'csv':
+                $contentType = 'text/csv';
+                break;
+            case 'txt':
+                $contentType = 'text/txt';
+                break;
+            default:
+                $contentType = 'text/txt';
+                break;
+        }
+
+        return 'Content-Type: ' . $contentType;
+    }
+
+    /**
+     * Check if user profile has access privilege over one controller/action
+     * @param  string $action action name
      * @return bool
      */
-    public static function requestPostSeleccionItems($result)
+    public static function checkBadAccess($action)
     {
-        if (!isset($result)) {
-            BaseController::bitacora(
+
+        if (!Common::getProfilePermission($action)) {
+            BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
-                    'called to remove items, 
-                    but has not send selection of records to remove: Possible Security issue event?'
+                    'Your account don\'t have priviledges for this action,
+                    please do not repeat this requirement. All site traffic is being monitored'
                 ),
                 MSG_SECURITY_ISSUE
             );
-            return false;
+            return true;
         }
-        return true;
+
+        return false;
     }
-    
+
+    public static function getDirectoryUpload()
+    {
+        $uploadDirectory =  Yii::$app->params['upload_directory'];
+        if (!isset($uploadDirectory)) {
+            $uploadDirectory = '/web/uploads/';
+        }
+
+        if (!file_exists(Yii::$app->basePath . $uploadDirectory)) {
+            mkdir(Yii::$app->basePath . $uploadDirectory, 0777);
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    'To upload files was created the directory: {dir}',
+                    ['dir' => $uploadDirectory]
+                ),
+                MSG_ERROR
+            );
+        }
+
+        return $uploadDirectory;
+    }
+
     /**
      * Previous requirement to remove a records
      *
-     * @return void
+     * @return boolean
      */
     public static function previousRequirementToRemoveRecords()
     {
@@ -196,10 +273,30 @@ class BaseController extends Controller
             );
             return false;
         }
-
         return true;
     }
 
+    /**
+     * Verify if the variable $result has information (used for delete records of gridview)
+     *
+     * @param string $result
+     * @return bool
+     */
+    public static function requestPostSeleccionItems($result)
+    {
+        if (!isset($result)) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    'called to remove items,
+                    but has not send selection of records to remove: Possible Security issue event?'
+                ),
+                MSG_SECURITY_ISSUE
+            );
+            return false;
+        }
+        return true;
+    }
     /**
      * Resume of operation
      *
@@ -208,7 +305,7 @@ class BaseController extends Controller
      */
     public static function resumeOperationRemove($deleteOK, $deleteKO)
     {
-        if ($deleteOK != "") {
+        if (isset($deleteOK{1})) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
@@ -218,7 +315,8 @@ class BaseController extends Controller
                 MSG_SUCCESS
             );
         }
-        if ($deleteKO != "") {
+
+        if (isset($deleteKO{1})) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
@@ -231,6 +329,31 @@ class BaseController extends Controller
     }
 
     /**
+     * Generate a random string (default length 20 chars)
+     *
+     * @param int $length length chars to generate string
+     * @return string random string
+     */
+    public static function randomString($length = 20)
+    {
+
+        $randstr = '';
+        srand((double) microtime(true) * 1000000);
+        //our array add all letters and numbers if you wish
+        $chars = array(
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'p',
+            'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5',
+            '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+            'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $totalChars = count($chars)-1;
+        for ($rand = 0; $rand <= $length; $rand++) {
+            $random = rand(0, $totalChars);
+            $randstr .= $chars[$random];
+        }
+        return $randstr;
+    }
+
+    /**
      * Encode a string
      * @param $string
      * @return string
@@ -238,16 +361,16 @@ class BaseController extends Controller
     public static function stringEncode($string)
     {
 
-        $encrypt_method = self::ENCRIPTED_METHOD;
-        $secret_key     = self::SECRET_KEY;
-        $secret_iv      = self::SECRET_IV;
+        $encryptmethod = self::ENCRIPTED_METHOD;
+        $secretkey     = self::SECRET_KEY;
+        $secretiv       = self::SECRET_IV;
 
         // hash
-        $key    = hash(self::SHA256, $secret_key);
+        $key    = hash(self::SHA256, $secretkey);
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $iv     = substr(hash(self::SHA256, $secret_iv), 0, 16);
-        $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+        $ivencripted     = substr(hash(self::SHA256, $secretiv), 0, 16);
+        $output = openssl_encrypt($string, $encryptmethod, $key, 0, $ivencripted);
 
         return  base64_encode($output);
     }
@@ -260,15 +383,50 @@ class BaseController extends Controller
     public static function stringDecode($string)
     {
 
-        $encrypt_method = self::ENCRIPTED_METHOD;
-        $secret_key     = self::SECRET_KEY;
-        $secret_iv      = self::SECRET_IV;
+        $encryptmethod = self::ENCRIPTED_METHOD;
+        $secretkey     = self::SECRET_KEY;
+        $secretiv      = self::SECRET_IV;
 
         // hash
-        $key            = hash(self::SHA256, $secret_key);
+        $key            = hash(self::SHA256, $secretkey);
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $iv             = substr(hash(self::SHA256, $secret_iv), 0, 16);
-        return openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+        $ivencripted             = substr(hash(self::SHA256, $secretiv), 0, 16);
+        return openssl_decrypt(base64_decode($string), $encryptmethod, $key, 0, $ivencripted);
+    }
+
+    /**
+     * @param $model models class defined in @app\models\
+     * @return bool Success o failed to create/update a $model in this view
+     * @throws \yii\db\Exception Failed to save a record error: {error}
+     * @throws \Exception
+     */
+    public static function transaction($model)
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->save()) {
+                $transaction->commit();
+                BaseController::bitacora(
+                    Yii::t(
+                        'app',
+                        'record {id} was saved',
+                        ['id' => $model->getId()]
+                    ),
+                    MSG_INFO
+                );
+                return true;
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exception) {
+            BaseController::bitacoraAndFlash(
+                Yii::t('app', 'Failed to save a record error: {error}', ['error' => $exception]),
+                MSG_ERROR
+            );
+            $transaction->rollBack();
+            throw $exception;
+        }
+
+        return false;
     }
 }
