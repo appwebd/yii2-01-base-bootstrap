@@ -5,7 +5,7 @@
   * @package     Model of Users
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-06-16 16:49:58
   * @version     1.0
@@ -225,7 +225,16 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne([self::USERNAME => $username, self::ACTIVE =>self::STATUS_ACTIVE]);
     }
-
+    public static function findFirstNameLastName($userId)
+    {
+        $model = User::findIdentity($userId);
+        if ($model) {
+            $result = $model->firstName  . ' '. $model->lastName;
+        } else {
+            $result = Yii::t('app', 'Unknow');
+        }
+        return $result;
+    }
     /**
      * Get primary key id
      *

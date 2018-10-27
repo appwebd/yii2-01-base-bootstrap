@@ -5,7 +5,7 @@
   * @package     Model of Action
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-08-02 20:07:02
   * @version     1.0
@@ -164,7 +164,7 @@ class Action extends \yii\db\ActiveRecord
 
     /**
      * Get controller_name of Controllers table
-     * @return string
+     * @return Action
      */
     public static function getAction($actionName, $controllerId)
     {
@@ -173,7 +173,7 @@ class Action extends \yii\db\ActiveRecord
 
     /**
      * Get array from Actions
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getActionList()
     {

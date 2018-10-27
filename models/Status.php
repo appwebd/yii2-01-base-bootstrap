@@ -5,7 +5,7 @@
   * @package     Model of Status
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 20:29:24
   * @version     1.0
@@ -145,7 +145,7 @@ class Status extends \yii\db\ActiveRecord
     /**
      * Get status description for a status_id
      *
-     * @return void
+     * @return string
      */
     public static function getStatusBadge($statusID)
     {

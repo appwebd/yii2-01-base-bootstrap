@@ -5,7 +5,7 @@
   * @package     Model of Blocked
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 20:29:23
   * @version     1.0
@@ -39,7 +39,7 @@ class Blocked extends \yii\db\ActiveRecord
     const IPV4_ADDRESS_INT = 'ipv4_address_int';
     const STATUS_ID        = 'status_id';
     const STATUS_NAME      = 'status_name';
-    const TITLE            = 'Ipv4 Blocked ';
+    const TITLE            = 'Ipv4 Blocked';
     const STATUS_STATUS_NAME = 'status.status_name';
 
     /**

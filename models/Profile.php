@@ -5,7 +5,7 @@
   * @package     Model of Profile
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 20:29:24
   * @version     1.0
@@ -35,6 +35,8 @@ class Profile extends \yii\db\ActiveRecord
     const PROFILE_ID       = 'profile_id';
     const PROFILE_NAME     = 'profile_name';
     const TITLE            = 'Profiles';
+    const CREATED_AT       = 'created_at';
+    const UPDATE_AT        = 'updated_at';
 
     /**
     * @return array the validation rules.
@@ -77,8 +79,8 @@ class Profile extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                    ActiveRecord::EVENT_BEFORE_INSERT => [self::CREATED_AT, self::UPDATE_AT],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => [self::UPDATE_AT],
                 ],
                 'value' => new Expression('NOW()'),
             ],

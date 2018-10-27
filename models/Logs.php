@@ -5,7 +5,7 @@
   * @package     Model of Logs
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 20:29:23
   * @version     1.0
@@ -72,7 +72,6 @@ class Logs extends \yii\db\ActiveRecord
             [self::EVENT, STRING, LENGTH => [1, 80]],
             [self::IPV4_ADDRESS, STRING, LENGTH => [1, 20]],
             [self::USER_AGENT, STRING, LENGTH => [1, 250]],
-            [[self::USER_ID], 'in', RANGE=>array_keys(User::getUserList())],
             [[self::ACTION_ID,
               self::CONTROLLER_ID,
               self::IPV4_ADDRESS_INT,

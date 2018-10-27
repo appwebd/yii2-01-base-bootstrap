@@ -5,7 +5,7 @@
   * @package     Model of Controllers
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 20:29:23
   * @version     1.0
@@ -176,7 +176,7 @@ class Controllers extends \yii\db\ActiveRecord
 
     /**
      * Get controller_name of Controllers table
-     * @return string
+     * @return Controllers
      */
     public static function getControllers($controllerName)
     {
@@ -186,7 +186,7 @@ class Controllers extends \yii\db\ActiveRecord
 
     /**
      * Get array from Controllers
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getControllersList()
     {
