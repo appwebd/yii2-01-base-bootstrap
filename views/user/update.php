@@ -5,12 +5,13 @@
   * @package     Update of User
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-06-16 23:03:07
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use app\models\User;
 
 /* @var $this yii\web\View */
@@ -25,7 +26,7 @@ $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->header(
+echo UiComponent::header(
     'user',
     $this->title,
     Yii::t(

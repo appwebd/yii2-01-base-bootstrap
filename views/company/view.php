@@ -5,13 +5,13 @@
   * @package     View of Company
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-09-16 18:30:43
   * @version     1.0
 */
 
-use yii\helpers\Html;
+use app\components\UiComponent;
 use yii\widgets\DetailView;
 use app\models\Company;
 
@@ -22,8 +22,8 @@ $this->title = Yii::t('app', Company::TITLE);
 $this->params[BREADCRUMBS][] = [LABEL => $this->title, 'url' => [ACTION_INDEX]];
 $this->params[BREADCRUMBS][] = $model->company_id;
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
-echo Yii::$app->ui->header(
+echo HTML_WEBPAGE_OPEN;
+echo UiComponent::header(
     'home',
     $this->title,
     Yii::t('app', 'This view permit view detailed information of Company')
@@ -45,11 +45,11 @@ echo DetailView::widget([
                         ATTRIBUTE => Company::ACTIVE,
                         OPTIONS => [STR_CLASS=> COLSM1],
                         VALUE => function ($model) {
-                            return Yii::$app->ui->yesOrNo($model->active);
+                            return UiComponent::yesOrNo($model->active);
                         },
                 ],
     ],
 ]);
 
-echo Yii::$app->ui->buttonsViewBottom($model);
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo UiComponent::buttonsViewBottom($model);
+echo HTML_WEBPAGE_CLOSE;

@@ -5,12 +5,13 @@
   * @package     Index of Permission
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:28:34
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Permission;
@@ -29,7 +30,7 @@ echo HTML_WEBPAGE_OPEN;
 
 echo Html::beginForm(['permission/index'], 'post');
 
-echo Yii::$app->ui->headerAdmin(
+echo UiComponent::headerAdmin(
     'ok-circle',
     $this->title,
     Yii::t('app', 'This view permit Create, update or delete information related of permission'),
@@ -50,19 +51,19 @@ echo GridView::widget([
             STR_CLASS => yii\grid\DataColumn::className(),
             ATTRIBUTE => Permission::PROFILE_ID,
             FILTER => ProfileSearch::getProfileListSearch(Permission::TABLE),
-            VALUE=>'profile.profile_name',
+            VALUE => 'profile.profile_name',
             FORMAT => 'raw',
         ],
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             ATTRIBUTE => Permission::CONTROLLER_ID,
             FILTER => ControllersSearch::getControllersListSearch(Permission::TABLE),
-            VALUE=>'controllers.controller_name',
+            VALUE => 'controllers.controller_name',
             FORMAT => 'raw',
         ],
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => "action_id",
+            ATTRIBUTE => Permission::ACTION_ID,
             FILTER => ActionSearch::getActionListSearch($controller_id, Permission::TABLE),
             VALUE => 'action.action_name',
             FORMAT => 'raw',
@@ -70,13 +71,13 @@ echo GridView::widget([
 
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => Yii::$app->ui->yesOrNoArray(),
-            ATTRIBUTE => 'action_permission',
-            OPTIONS => [STR_CLASS=>'col-sm-1'],
+            FILTER => UiComponent::yesOrNoArray(),
+            ATTRIBUTE => Permission::ACTION_PERMISSION,
+            OPTIONS => [STR_CLASS => COLSM1],
             VALUE => function ($model) {
                 $url = "permission/toggle";
                 return Html::a(
-                    '<span class="'.Yii::$app->ui->yesOrNoGlyphicon($model->action_permission).'"></span>',
+                    '<span class="'.UiComponent::yesOrNoGlyphicon($model->action_permission).'"></span>',
                     $url,
                     [
                         'title' => Yii::t('yii', 'Toggle value active'),
@@ -90,16 +91,14 @@ echo GridView::widget([
             },
             FORMAT=>'raw'
         ],
-
         [
-            'header' => Yii::$app->ui->pageSizeDropDownList($pageSize),
-            STR_CLASS  => 'yii\grid\ActionColumn',
-            'contentOptions'=>[STR_CLASS=>'GridView'],
+            HEADER => UiComponent::pageSizeDropDownList($pageSize),
+            STR_CLASS => yii\grid\ActionColumn::className(),
+            'contentOptions'=>[STR_CLASS => 'GridView'],
         ],
     ]
 ]);
 
-echo '<br/><br/>';
-echo Yii::$app->ui->buttonsAdmin('111', false);
+echo UiComponent::buttonsAdmin('111', false);
 Html::endForm();
 echo HTML_WEBPAGE_CLOSE;

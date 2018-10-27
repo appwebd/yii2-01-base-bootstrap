@@ -5,12 +5,13 @@
  * @package     Index of Action
  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright   (C) Copyright - Web Application development
- * @license     Private comercial license
+ * @license     Private license
  * @link        https://appwebd.github.io
  * @date        2018-08-02 20:07:03
  * @version     1.0
  */
 
+use app\components\UiComponent;
 use yii\grid\GridView;
 use app\models\search\ControllersSearch;
 use app\models\Action;
@@ -24,7 +25,7 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->headerAdmin(
+echo UiComponent::headerAdmin(
     'list-alt',
     $this->title,
     Yii::t('app', 'This view recollect all the views or windows that exists in this web application. 
@@ -44,7 +45,7 @@ echo GridView::widget([
         [
             STR_CLASS => yii\grid\DataColumn::className(),
             ATTRIBUTE => Action::ACTION_ID,
-            OPTIONS => [STR_CLASS=>'col-sm-1'],
+            OPTIONS => [STR_CLASS => COLSM1],
             FORMAT => 'raw'
         ],
         [
@@ -58,11 +59,11 @@ echo GridView::widget([
         Action::ACTION_DESCRIPTION,
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => Yii::$app->ui->yesOrNoArray(),
+            FILTER => UiComponent::yesOrNoArray(),
             ATTRIBUTE => Action::ACTIVE,
-            OPTIONS => [STR_CLASS => 'col-sm-1'],
+            OPTIONS => [STR_CLASS => COLSM1],
             VALUE => function ($model) {
-                return Yii::$app->ui->yesOrNo($model->active);
+                return UiComponent::yesOrNo($model->active);
             },
             FORMAT=>'raw'
         ],

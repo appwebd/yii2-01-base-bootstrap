@@ -5,16 +5,18 @@
   * @package     Index of Logs
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:23:23
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\grid\GridView;
 use app\models\search\LogsSearch;
 use app\models\Logs;
 use app\models\Status;
+use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\LogsSearch */
@@ -25,7 +27,7 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->headerAdmin(
+echo UiComponent::headerAdmin(
     'record',
     $this->title,
     Yii::t('app', 'This view is the event log of the web application.'),
@@ -68,31 +70,22 @@ echo GridView::widget([
         FORMAT => 'raw',
     ],
     Logs::EVENT,
-/*    Logs::USER_AGENT,
-    [
-        ATTRIBUTE => Logs::IPV4_ADDRESS,
-        OPTIONS => [STR_CLASS=>'col-sm-1'],
-        VALUE => Logs::IPV4_ADDRESS,
-    ],
-
-    [
-        ATTRIBUTE => Logs::CONFIRMED,
-        OPTIONS => [STR_CLASS=>'col-sm-1'],
-        FILTER => Yii::$app->ui->yesOrNoArray(),
-        VALUE => function ($model) {
-            return Yii::$app->ui->yesOrNo($model->confirmed);
-        }
-    ],
-    */
     [
         STR_CLASS => yii\grid\DataColumn::className(),
         ATTRIBUTE => Logs::USER_ID,
         FILTER => LogsSearch::getUserList(),
         VALUE => function ($model) {
-            return $model->user->firstName . ' ' .$model->user->lastName;
+            
+            $model=  User::getUsername($model->user_id);
+            if ($model) {
+                $return = $model->username;
+            } else {
+                $return = Yii::t('app', 'Unkown');
+            }
+            return $return;            
         },
         FORMAT => 'raw',
     ],
 ]]);
-
+echo '<br/><br/>';
 echo HTML_WEBPAGE_CLOSE;

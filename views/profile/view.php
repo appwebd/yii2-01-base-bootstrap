@@ -5,12 +5,13 @@
   * @package     View of Profile
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:28:34
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\widgets\DetailView;
 use app\models\Profile;
 
@@ -23,7 +24,7 @@ $this->params[BREADCRUMBS][] = $model->profile_id;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->header(
+echo UiComponent::header(
     'globe',
     $this->title,
     Yii::t('app', 'This view permit view detailed information of Profiles')
@@ -32,21 +33,20 @@ echo Yii::$app->ui->header(
 echo DetailView::widget([
   'model' => $model,
   'attributes' => [
-    'profile_id',
-    'profile_name',
-    'created_at',
-    'updated_at',
-      [
-          ATTRIBUTE => 'active',
-          OPTIONS => [STR_CLASS=>'col-sm-1'],
-          VALUE => function ($model) {
-              return Yii::$app->ui->yesOrNo($model->active);
-          },
-          FORMAT=>'raw'
-      ],
+        Profile::PROFILE_ID,
+        Profile::PROFILE_NAME,
+        Profile::CREATED_AT,        
+        [
+            ATTRIBUTE => Profile::ACTIVE,
+            OPTIONS => [STR_CLASS=> COLSM1],
+            VALUE => function ($model) {
+                return UiComponent::yesOrNo($model->active);
+            },
+            FORMAT=>'raw'
+        ],
     ],
 ]);
 
-echo Yii::$app->ui->buttonsViewBottom($model);
+echo UiComponent::buttonsViewBottom($model);
 
 echo HTML_WEBPAGE_CLOSE;

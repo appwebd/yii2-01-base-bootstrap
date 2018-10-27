@@ -5,7 +5,7 @@
  * @package     @app/view/partials/menuAdmin.php
  * @authors     Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright   (C) Copyright - Web Application development
- * @license     Private comercial license
+ * @license     Private license
  * @link        https://appwebd.github.io
  * @date        6/18/18 10:34 AM
  * @version     1.0

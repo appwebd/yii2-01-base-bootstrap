@@ -5,12 +5,13 @@
   * @package     Create of Company
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-09-16 18:30:43
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use app\models\Company;
 
 /* @var $this yii\web\View */
@@ -20,8 +21,8 @@ $this->title = Yii::t('app', Company::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 $this->params[BREADCRUMBS][] = Yii::t('app', 'Create');
 
-echo Yii::$app->ui::HTML_WEBPAGE_OPEN;
-echo Yii::$app->ui->header(
+echo HTML_WEBPAGE_OPEN;
+echo UiComponent::header(
     'home',
     $this->title,
     Yii::t(
@@ -31,4 +32,4 @@ echo Yii::$app->ui->header(
 );
 
 echo $this->render('_form', ['model' => $model,]);
-echo Yii::$app->ui::HTML_WEBPAGE_CLOSE;
+echo HTML_WEBPAGE_CLOSE;

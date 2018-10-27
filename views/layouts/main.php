@@ -5,7 +5,7 @@
  * @package     @app/view/layout/main.php
  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright   (C) Copyright - Web Application development
- * @license     Private comercial license
+ * @license     Private license
  * @link        https://appwebd.github.io
  * @date        6/18/18 10:34 AM
  * @version     1.0
@@ -29,8 +29,7 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -55,9 +54,11 @@ AppAsset::register($this);
     echo '<div class="webpage">';
         echo Alert::widget() ;
     echo '</div>';
-
+    
+    echo '<div class="webpage">';
     echo $content;
-
+    echo '</div>';
+    
     echo Yii::$app->view->render('@app/views/partials/_footer');
 
     $this->endBody() ;

@@ -5,12 +5,13 @@
   * @package     Index of Profile
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-08-26 17:15:29
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use app\models\queries\Common;
@@ -27,7 +28,7 @@ $this->params[BREADCRUMBS][] = $this->title;
 echo HTML_WEBPAGE_OPEN;
 
 echo Html::beginForm(['profile/index'], 'post');
-echo Yii::$app->ui->headerAdmin(
+echo UiComponent::headerAdmin(
     'user',
     $this->title,
     Yii::t('app', 'This view permit Create a new User, update or delete information related of user'),
@@ -37,8 +38,8 @@ echo Yii::$app->ui->headerAdmin(
 );
 
 echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
+    'dataProvider' => $dataProviderProfile,
+    'filterModel' => $searchModelProfile,
     'layout'=>'{items}{summary}{pager}',
     'filterSelector' => 'select[name="per-page"]',
     'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
@@ -47,25 +48,24 @@ echo GridView::widget([
         Profile::PROFILE_NAME,
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => Yii::$app->ui->yesOrNoArray(),
+            FILTER => UiComponent::yesOrNoArray(),
             ATTRIBUTE => Profile::ACTIVE,
             OPTIONS => [STR_CLASS=>'col-sm-1'],
             VALUE => function ($model) {
-                return Yii::$app->ui->yesOrNo($model->active);
+                return UiComponent::yesOrNo($model->active);
             },
             FORMAT=>'raw'
         ],
         [
-            STR_CLASS => 'yii\grid\ActionColumn',
-            HEADER => Yii::$app->ui->pageSizeDropDownList($pageSize),
+            STR_CLASS => yii\grid\ActionColumn::className(),
+            HEADER => UiComponent::pageSizeDropDownList($pageSize),
             'template' => $template,
             'contentOptions' => [STR_CLASS => 'GridView'],
         ]
     ]
 ]);
 
-echo '<br/><br/>';
-echo Yii::$app->ui->buttonsAdmin('111', false);
+echo UiComponent::buttonsAdmin('111', false);
 Html::endForm();
 
 echo HTML_WEBPAGE_CLOSE;

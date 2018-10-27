@@ -5,13 +5,13 @@
   * @package     View of Permission
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:28:34
   * @version     1.0
 */
 
-use yii\helpers\Html;
+use app\components\UiComponent;
 use yii\widgets\DetailView;
 use app\models\Permission;
 
@@ -24,7 +24,7 @@ $this->params[BREADCRUMBS][] = $model->permission_id;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->header(
+echo UiComponent::header(
     'ok-circle',
     $this->title,
     Yii::t('app', 'This view permit view detailed information of Permission')
@@ -34,36 +34,33 @@ echo DetailView::widget([
     'model' => $model,
     'attributes' => [
         [
-            ATTRIBUTE => 'profile.profile_name',
+            ATTRIBUTE => Permission::PROFILE_NAME,
             VALUE => function ($model) {
                 return $model->profile->profile_name;
-            },
-            //LABEL =>'Profile'
+            },            
         ],
         [
-            ATTRIBUTE => 'controllers.controller_name',
+            ATTRIBUTE => Permission::CONTROLLER_ID,
             VALUE => function ($model) {
                     return $model->controllers->controller_name;
-            },
-            LABEL =>'View'
+            },            
         ],
         [
-            ATTRIBUTE => 'action.action_name',
+            ATTRIBUTE => Permission::ACTION_ID,
             VALUE => function ($model) {
                     return $model->action->action_name;
-            },
-            LABEL =>'action'
+            },            
         ],
         [
-            ATTRIBUTE => 'action_permission',
-            OPTIONS => [STR_CLASS=>'col-sm-1'],
+            ATTRIBUTE => Permission::ACTION_PERMISSION,
+            OPTIONS => [STR_CLASS => COLSM1],
             VALUE => function ($model) {
-                return Yii::$app->ui->yesOrNo($model->action_permission);
+                return UiComponent::yesOrNo($model->action_permission);
             },
             FORMAT=>'raw'
         ],
     ],
 ]);
 
-echo Yii::$app->ui->buttonsViewBottom($model);
+echo UiComponent::buttonsViewBottom($model);
 echo HTML_WEBPAGE_CLOSE;

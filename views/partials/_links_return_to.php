@@ -5,7 +5,7 @@
   * @package      Links view "return to" view
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-06-16 16:49:58
   * @version     1.0

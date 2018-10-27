@@ -5,12 +5,13 @@
   * @package     form of Permission
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:28:33
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use app\models\Action;
@@ -79,8 +80,7 @@ echo '
                 [
                     AUTOFOCUS => AUTOFOCUS,
                     TABINDEX => 3,
-                    REQUIRED => REQUIRED,
-                    //AUTOCOMPLETE => 'off',
+                    REQUIRED => REQUIRED,                    
                     PROMPT => Yii::t('app', 'Select Action'),
                 ]
             )->label();
@@ -103,15 +103,14 @@ echo '
 
         echo $form->field($model, Permission::ACTION_PERMISSION)->checkbox(
             [
-                UNCHECK => 0,
-                LABEL => Yii::t('app', '&nbsp; Assign access ?'),
+                UNCHECK => 0,                
                 AUTOFOCUS   => AUTOFOCUS,
                 TABINDEX    => 4,
             ]
         );
 
         echo '<div class=\'form-group\'>';
-            echo Yii::$app->ui->buttonsCreate(5);
+            echo UiComponent::buttonsCreate(5);
             echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
         echo '</div>';
         ActiveForm::end();

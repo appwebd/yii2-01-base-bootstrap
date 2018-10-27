@@ -5,16 +5,15 @@
  * @package     _form Update/create information for table user
  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright   (C) Copyright - Web Application development
- * @license     Private commercial license
+ * @license     Private license
  * @link        https://appwebd.github.io
  * @date        2018-06-16 23:03:06
  * @version     1.0
  */
 
+use app\components\UiComponent;
 use yii\bootstrap\ActiveForm;
 use app\models\Profile;
-use app\models\Company;
-use app\models\User;
 
 /* @var $model app\models\User */
 /* @var $form yii\widgets\ActiveForm */
@@ -123,7 +122,7 @@ use app\models\User;
 
     echo HTML_DIV_CLOSEX2, '<br/>';
     echo '<div class=\'form-group\'>';
-        echo Yii::$app->ui->buttonsCreate(10);
+        echo UiComponent::buttonsCreate(10);
         echo $form->errorSummary($model, array(STR_CLASS => "error-summary"));
     echo '</div>';
     ActiveForm::end();

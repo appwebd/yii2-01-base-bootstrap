@@ -5,12 +5,13 @@
   * @package     Index of Blocked
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:17:13
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\grid\GridView;
 use \app\models\search\BlockedSearch;
 use app\models\Blocked;
@@ -24,7 +25,7 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->headerAdmin(
+echo UiComponent::headerAdmin(
     'remove-circle',
     $this->title,
     Yii::t(
@@ -41,13 +42,13 @@ echo GridView::widget([
 'filterModel' => $searchModel,
 'layout'=>'{items}{summary}{pager}',
 'filterSelector' => 'select[name="per-page"]',
-'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
+'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
 'columns' => [
     [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS=>'width10px']],
     [
         STR_CLASS => yii\grid\DataColumn::className(),
         ATTRIBUTE => Blocked::ID,
-        OPTIONS => [STR_CLASS=>'col-sm-1'],
+        OPTIONS => [STR_CLASS => 'col-sm-1'],
         FORMAT => 'raw'
     ],
     Blocked::IPV4_ADDRESS,

@@ -72,7 +72,7 @@ $this->params[BREADCRUMBS][] = $this->title;
                 <div class="form-group">
 
                     <?= Html::submitButton(
-                        Yii::t('app', 'Login'),
+                        Yii::t('app', 'Submit'),
                         [
                             STR_CLASS => 'btn btn-primary',
                             'name' => 'login-button',

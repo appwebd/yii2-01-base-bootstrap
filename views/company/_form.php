@@ -5,15 +5,14 @@
   * @package     form of Company
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-09-16 18:30:41
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\bootstrap\ActiveForm;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use app\models\Company;
 
 /* @var $this yii\web\View */
@@ -145,11 +144,11 @@ echo '
                 ])->checkbox([
                     UNCHECK=>0,
                     LABELOPTIONS => array(STR_CLASS => COLSM1),
-                ])->label('Active');
+                ])->label();
 
         echo HTML_DIV_CLOSEX2,
              '<br><br><div class=\'form-group\'>';
-        echo Yii::$app->ui->buttonsCreate(10);
+        echo UiComponent::buttonsCreate(10);
         echo $form->errorSummary($model);
         echo '</div>';
         ActiveForm::end();

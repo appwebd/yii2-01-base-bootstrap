@@ -5,12 +5,13 @@
   * @package     Index of Status
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:28:34
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\grid\GridView;
 use app\models\Status;
 
@@ -23,7 +24,7 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->headerAdmin(
+echo UiComponent::headerAdmin(
     'road',
     $this->title,
     Yii::t('app', 'This view exists for to do more easy the stadistica process in the web application'),
@@ -48,11 +49,11 @@ echo GridView::widget([
         Status::STATUS_NAME,
         [
             STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => Yii::$app->ui->yesOrNoArray(),
+            FILTER => UiComponent::yesOrNoArray(),
             ATTRIBUTE => Status::ACTIVE,
             OPTIONS => [STR_CLASS=> COLSM1],
             VALUE => function ($model) {
-                return Yii::$app->ui->yesOrNo($model->active);
+                return UiComponent::yesOrNo($model->active);
             },
             FORMAT=>'raw'
         ],

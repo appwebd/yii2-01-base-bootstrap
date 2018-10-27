@@ -5,12 +5,13 @@
   * @package     Update of Permission
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:28:34
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use app\models\Permission;
 
 /* @var $this yii\web\View */
@@ -23,7 +24,7 @@ $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
 echo HTML_WEBPAGE_OPEN;
 
-echo Yii::$app->ui->header(
+echo UiComponent::header(
     'ok-circle', //Icons
     $this->title,
     Yii::t(

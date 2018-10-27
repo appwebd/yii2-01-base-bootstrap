@@ -5,15 +5,14 @@
   * @package     form of Profile
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
   * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
+  * @license     Private license
   * @link        https://appwebd.github.io
   * @date        2018-07-30 19:28:33
   * @version     1.0
 */
 
+use app\components\UiComponent;
 use yii\bootstrap\ActiveForm;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Profile */
@@ -39,8 +38,7 @@ echo '
             ]
         );
 
-
-        echo $form->field($model, 'profile_name')->textInput(
+        echo $form->field($model, Profile::PROFILE_NAME)->textInput(
             [
                     MAXLENGTH => true,
                     AUTOFOCUS => AUTOFOCUS,
@@ -50,7 +48,7 @@ echo '
             ]
         )->label();
 
-        echo $form->field($model, 'active')->checkbox(
+        echo $form->field($model, Profile::ACTIVE)->checkbox(
             [
                 UNCHECK => 0,
                 AUTOFOCUS => AUTOFOCUS,
@@ -61,8 +59,8 @@ echo '
         )->label();
 
         echo '<div class=\'form-group\'>';
-            echo Yii::$app->ui->buttonsCreate(3);
-            echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
+            echo UiComponent::buttonsCreate(3);
+            echo $form->errorSummary($model, array(STR_CLASS => "error-summary"));
         echo '</div>';
         ActiveForm::end();
 
