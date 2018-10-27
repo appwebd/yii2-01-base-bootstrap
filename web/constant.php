@@ -7,9 +7,7 @@ defined('YII_ENV') || define('YII_ENV', 'dev'); // 'prod' is for production envi
 
 defined('DISABLE_CACHE') || define('DISABLE_CACHE', true);
 
-if (YII_DEBUG) {
-    error_reporting(E_ALL);
-}
+
 // BEGIN GLOBAL CONSTANTS of this web application --------------------------------------------------
 
 defined('ACTION_CREATE') || define('ACTION_CREATE', 'create');
@@ -28,19 +26,54 @@ defined('AUTOCOMPLETE') || define('AUTOCOMPLETE', 'autocomplete');
 defined('AUTOFOCUS') || define('AUTOFOCUS', 'autofocus');
 defined('BREADCRUMBS') || define('BREADCRUMBS', 'breadcrumbs');
 defined('COLSM1') || define('COLSM1', 'col-sm-1');
+defined('CONTENT') || define('CONTENT', 'content');
 defined('ERROR')   || define('ERROR', 'error');
 
 defined('DATA_PROVIDER')   || define('DATA_PROVIDER', 'dataProvider');
 defined('DATEFORMAT')   || define('DATEFORMAT', 'dd-MM-yyyy');
 defined('HEADER') || define('HEADER', 'header');
+
 defined('HTML_ROW_DIV6') || define('HTML_ROW_DIV6', '<div class="row"><div class="col-sm-6">');
-defined('HTML_DIV_CLOSE_DIV6_OPEN') || define('HTML_DIV_CLOSE_DIV6_OPEN', '</div><div class="col-sm-6">');
+defined('HTML_DIV_CLOSE_DIV6_OPEN') || define(
+                                                        'HTML_DIV_CLOSE_DIV6_OPEN',
+                                                        '</div><div class="col-sm-6">'
+);
+defined('HTML_BTN_BTN_DEFAULT') || define('HTML_BTN_BTN_DEFAULT', 'btn btn-default');
+
+defined('HTML_WEBPAGE_OPEN') || define(
+    'HTML_WEBPAGE_OPEN',
+    '<div class=" box">'
+);
+defined('HTML_WEBPAGE_CLOSE') || define('HTML_WEBPAGE_CLOSE', '</div></div></div>');
+
+defined('HTML_WEBPAGE_OPEN_COL_SM_8') || define(
+    'HTML_WEBPAGE_OPEN_COL_SM_8',
+    '<div class="webpage"><div class="row"><div class="col-sm-8 box">'
+);
+defined('HTML_WEBPAGE_CLOSE_OPEN_COL_SM_4') || define(
+    'HTML_WEBPAGE_CLOSE_OPEN_COL_SM_4',
+    '</div><div class="col-sm-4">'
+);
+
+defined('HTML_ROW_OPEN_COL_SM_4') || define(
+    'HTML_ROW_OPEN_COL_SM_4',
+    '<div class="row"><div class="col-sm-4">'
+);
+defined('HTML_CLOSE_DIV_OPEN_COL_SM_8') || define(
+    'HTML_CLOSE_DIV_OPEN_COL_SM_8',
+    '</div><div class="col-sm-8">'
+);
 defined('HTML_DIV_CLOSEX2') || define('HTML_DIV_CLOSEX2', '</div></div>');
 defined('HTML_DIV_CLOSE') || define('HTML_DIV_CLOSE', '</div>');
+defined('HTML_SPACEX2') || define('HTML_SPACEX2', '&nbsp; &nbsp;');
+defined('HTML_MODEL_LG') || define('HTML_MODEL_LG', 'model-lg');
 
 defined('FILTER') || define('FILTER', 'filter');
 defined('FORMAT') || define('FORMAT', 'format');
-defined('GRIDVIEW_CSS') || define('GRIDVIEW_CSS', 'table maxwidth items table-striped table-condensed');
+defined('GRIDVIEW_CSS') || define(
+    'GRIDVIEW_CSS',
+    'table maxwidth items table-striped table-condensed'
+);
 defined('ITEMS') || define('ITEMS', 'items');
 defined('INFO') || define('INFO', 'info');
 defined('INPUT_OPTIONS') || define('INPUT_OPTIONS', 'inputOptions');
@@ -70,7 +103,8 @@ defined('PATTERN') || define('PATTERN', 'pattern');
 defined('PLACEHOLDER') || define('PLACEHOLDER', 'placeholder');
 defined('PATTERN_PHONE') || define('PATTERN_PHONE', '[0-9]{3}-[0-9]{4}-[0-9]{4}');
 defined('PATTERN_DATETIME') || define('PATTERN_DATETIME', 'Y-m-d H:m:i');
-defined('PATTERN_DATE') || define('PATTERN_DATE', 'm-d-Y');
+defined('PATTERN_DATE') || define('PATTERN_DATE', 'd-m-Y');
+defined('PATTERN_DATE_YMD') || define('PATTERN_DATE_YMD', 'Y-m-d');
 
 defined('PROMPT') || define('PROMPT', 'prompt');
 defined('RANGE')   || define('RANGE', 'range');
