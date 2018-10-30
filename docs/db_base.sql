@@ -310,7 +310,6 @@ ALTER TABLE `controllers`
 ALTER TABLE `logs`
   ADD PRIMARY KEY (`logs_id`),
   ADD KEY `fk_logs_controllers1_idx` (`controller_id`),
-  ADD KEY `fk_logs_user1_idx` (`user_id`),
   ADD KEY `fk_logs_status1_idx` (`status_id`),
   ADD KEY `fk_logs_action1_idx` (`action_id`);
 
@@ -421,8 +420,7 @@ ALTER TABLE `blocked`
 --
 ALTER TABLE `logs`
   ADD CONSTRAINT `fk_logs_controllers1` FOREIGN KEY (`controller_id`) REFERENCES `controllers` (`controller_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_logs_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_logs_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_logs_status1` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `permission`
