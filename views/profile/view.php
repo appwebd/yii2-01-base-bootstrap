@@ -30,22 +30,33 @@ echo UiComponent::header(
     Yii::t('app', 'This view permit view detailed information of Profiles')
 );
 
-echo DetailView::widget([
-  'model' => $model,
-  'attributes' => [
-        Profile::PROFILE_ID,
-        Profile::PROFILE_NAME,
-        Profile::CREATED_AT,        
-        [
-            ATTRIBUTE => Profile::ACTIVE,
-            OPTIONS => [STR_CLASS=> COLSM1],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
+try {
+    echo DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            Profile::PROFILE_ID,
+            Profile::PROFILE_NAME,
+            Profile::CREATED_AT,
+            [
+                ATTRIBUTE => Profile::ACTIVE,
+                OPTIONS => [STR_CLASS => COLSM1],
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+                FORMAT => 'raw'
+            ],
         ],
-    ],
-]);
+    ]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo UiComponent::buttonsViewBottom($model);
 

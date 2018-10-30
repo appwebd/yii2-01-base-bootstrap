@@ -11,14 +11,15 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\queries\Common;
 use app\models\Company;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\CompanySearch */
+/* @var $searchModel app\models\search\CompanySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', Company::TITLE);
@@ -37,15 +38,15 @@ echo UiComponent::headerAdmin(
     '111',
     false
 );
-
-echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
-    'layout'=>'{items}{summary}{pager}',
-    'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
-    'columns' => [
-        [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS => 'width10px']],
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'layout'=>'{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
+            [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS => 'width10px']],
             Company::COMPANY_ID,
             Company::COMPANY_NAME,
             Company::ADDRESS,
@@ -56,25 +57,35 @@ echo GridView::widget([
             Company::CONTACT_EMAIL,
             Company::WEBPAGE,
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
-                FILTER => UiComponent::yesOrNoArray(),
                 ATTRIBUTE =>  ACTIVE,
+                FILTER => UiComponent::yesOrNoArray(),
+                FORMAT=>'raw',
                 OPTIONS => [STR_CLASS=> COLSM1],
+                STR_CLASS => yii\grid\DataColumn::className(),
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
-                FORMAT=>'raw'
             ],
-
-        [
-            STR_CLASS => yii\grid\ActionColumn::className(),
-            HEADER => UiComponent::pageSizeDropDownList($pageSize),
-            'template' => $template,
-            'contentOptions' => [STR_CLASS => 'GridView'],
+            [
+                'contentOptions' => [STR_CLASS => 'GridView'],
+                HEADER => UiComponent::pageSizeDropDownList($pageSize),
+                STR_CLASS => yii\grid\ActionColumn::className(),
+                'template' => $template,
+            ]
         ]
-    ]
-]);
+    ]);
 
-echo UiComponent::buttonsAdminBottom('111', false);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
+
+UiComponent::buttonsAdmin('111', false);
 Html::endForm();
 echo HTML_WEBPAGE_CLOSE;

@@ -11,8 +11,9 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\Status;
 
 /* @var $this yii\web\View */
@@ -33,33 +34,44 @@ echo UiComponent::headerAdmin(
     true
 );
 
-echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
-    'layout'=>'{items}{summary}{pager}',
-    'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
-    'columns' => [
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => Status::STATUS_ID,
-            OPTIONS => [STR_CLASS=> COLSM1],
-            FORMAT=>'raw'
-        ],
-        Status::STATUS_NAME,
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => Status::ACTIVE,
-            OPTIONS => [STR_CLASS=> COLSM1],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
-        ],
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'layout' => '{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                ATTRIBUTE => Status::STATUS_ID,
+                OPTIONS => [STR_CLASS => COLSM1],
+                FORMAT => 'raw'
+            ],
+            Status::STATUS_NAME,
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                FILTER => UiComponent::yesOrNoArray(),
+                ATTRIBUTE => Status::ACTIVE,
+                OPTIONS => [STR_CLASS => COLSM1],
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+                FORMAT => 'raw'
+            ],
 
-    ]
-]);
+        ]
+    ]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo '<br/><br/>';
 echo HTML_WEBPAGE_CLOSE;

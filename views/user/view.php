@@ -13,6 +13,7 @@
 
 use app\components\UiComponent;
 use yii\widgets\DetailView;
+use app\controllers\BaseController;
 use app\models\User;
 
 /* @var $this yii\web\View */
@@ -31,29 +32,40 @@ echo UiComponent::header(
     Yii::t('app', 'This view permit view detailed information of User')
 );
 
-echo DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-        User::USER_ID,
-        User::USERNAME,
-        User::FIRSTNAME,
-        User::LASTNAME,
-        User::EMAIL,
-        User::TELEPHONE,
-        User::IPV4_ADDRESS_LAST_LOGIN,
-        'profile.profile_name',
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => User::ACTIVE,
-            OPTIONS => [STR_CLASS=>'col-sm-1'],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
+try {
+    echo DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            User::USER_ID,
+            User::USERNAME,
+            User::FIRSTNAME,
+            User::LASTNAME,
+            User::EMAIL,
+            User::TELEPHONE,
+            User::IPV4_ADDRESS_LAST_LOGIN,
+            'profile.profile_name',
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                FILTER => UiComponent::yesOrNoArray(),
+                ATTRIBUTE => User::ACTIVE,
+                OPTIONS => [STR_CLASS => 'col-sm-1'],
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+                FORMAT => 'raw'
+            ],
         ],
-    ],
-]);
+    ]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo UiComponent::buttonsViewBottom($model);
 echo HTML_WEBPAGE_CLOSE;

@@ -11,15 +11,16 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\search\LogsSearch;
 use app\models\Logs;
 use app\models\Status;
 use app\models\User;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\LogsSearch */
+/* @var $searchModel app\models\search\LogsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', Logs::TITLE);
@@ -36,56 +37,67 @@ echo UiComponent::headerAdmin(
     true
 );
 
-echo GridView::widget([
-'dataProvider' => $dataProvider,
-'filterModel' => $searchModel,
-'layout'=>'{items}{summary}{pager}',
-'filterSelector' => 'select[name="per-page"]',
-'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
-'columns' => [
-    Logs::LOGS_ID,
-    Logs::DATE,
-    [
-        STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => Logs::STATUS_ID,
-        FILTER => LogsSearch::getStatusListSearch(),
-        VALUE => function ($model) {
-            $status = Status::getStatusName($model->status_id);
-            return Yii::$app->ui->badgetStatus($model->status_id, $status);
-        },
-        FORMAT => 'raw',
-    ],
-    [
-        STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => Logs::CONTROLLER_ID,
-        FILTER => LogsSearch::getControllersListSearch(),
-        VALUE => Logs::CONTROLLER_CONTROLLER_NAME,
-        FORMAT => 'raw',
-    ],
-    [
-        STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => Logs::ACTION_ID,
-        FILTER => LogsSearch::getActionListSearch($controller_id),
-        VALUE => Logs::ACTION_ACTION_NAME,
-        FORMAT => 'raw',
-    ],
-    Logs::EVENT,
-    [
-        STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => Logs::USER_ID,
-        FILTER => LogsSearch::getUserList(),
-        VALUE => function ($model) {
-            
-            $model=  User::getUsername($model->user_id);
-            if ($model) {
-                $return = $model->username;
-            } else {
-                $return = Yii::t('app', 'Unkown');
-            }
-            return $return;            
-        },
-        FORMAT => 'raw',
-    ],
-]]);
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'layout' => '{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
+            Logs::LOGS_ID,
+            Logs::DATE,
+            [
+                ATTRIBUTE => Logs::STATUS_ID,
+                FILTER => LogsSearch::getStatusListSearch(),
+                FORMAT => 'raw',
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => function ($model) {
+                    $status = Status::getStatusName($model->status_id);
+                    return Yii::$app->ui->badgetStatus($model->status_id, $status);
+                },
+            ],
+            [
+                ATTRIBUTE => Logs::CONTROLLER_ID,
+                FILTER => LogsSearch::getControllersListSearch(),
+                FORMAT => 'raw',
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => Logs::CONTROLLER_CONTROLLER_NAME,
+            ],
+            [
+                ATTRIBUTE => Logs::ACTION_ID,
+                FILTER => LogsSearch::getActionListSearch($controller_id),
+                FORMAT => 'raw',
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => Logs::ACTION_ACTION_NAME,
+            ],
+            Logs::EVENT,
+            [
+                ATTRIBUTE => Logs::USER_ID,
+                FILTER => LogsSearch::getUserList(),
+                FORMAT => 'raw',
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => function ($model) {
+                    if (($model = User::getUsername($model->user_id)) !== null) {
+                        $return = $model->username;
+                    } else {
+                        $return = Yii::t('app', 'Unkown');
+                    }
+                    return $return;
+                },
+
+            ],
+        ]]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
+
 echo '<br/><br/>';
 echo HTML_WEBPAGE_CLOSE;

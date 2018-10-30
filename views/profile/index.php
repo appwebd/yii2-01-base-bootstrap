@@ -37,33 +37,44 @@ echo UiComponent::headerAdmin(
     false
 );
 
-echo GridView::widget([
-    'dataProvider' => $dataProviderProfile,
-    'filterModel' => $searchModelProfile,
-    'layout'=>'{items}{summary}{pager}',
-    'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
-    'columns' => [
-        [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS => 'width10px']],
-        Profile::PROFILE_NAME,
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => Profile::ACTIVE,
-            OPTIONS => [STR_CLASS=>'col-sm-1'],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
-        ],
-        [
-            STR_CLASS => yii\grid\ActionColumn::className(),
-            HEADER => UiComponent::pageSizeDropDownList($pageSize),
-            'template' => $template,
-            'contentOptions' => [STR_CLASS => 'GridView'],
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProviderProfile,
+        'filterModel' => $searchModelProfile,
+        'layout' => '{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
+            [STR_CLASS => 'yii\grid\CheckboxColumn', 'options' => [STR_CLASS => 'width10px']],
+            Profile::PROFILE_NAME,
+            [
+                ATTRIBUTE => Profile::ACTIVE,
+                FILTER => UiComponent::yesOrNoArray(),
+                FORMAT => 'raw',
+                OPTIONS => [STR_CLASS => 'col-sm-1'],
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+            ],
+            [
+                'contentOptions' => [STR_CLASS => 'GridView'],
+                HEADER => UiComponent::pageSizeDropDownList($pageSize),
+                STR_CLASS => yii\grid\ActionColumn::className(),
+                'template' => $template,
+            ]
         ]
-    ]
-]);
+    ]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo UiComponent::buttonsAdmin('111', false);
 Html::endForm();

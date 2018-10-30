@@ -11,8 +11,9 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\Controllers;
 
 /* @var $this yii\web\View */
@@ -33,53 +34,64 @@ echo UiComponent::headerAdmin(
     true
 );
 
-echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
-    'layout'=>'{items}{summary}{pager}',
-    'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
-    'columns' => [
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => Controllers::CONTROLLER_ID,
-            OPTIONS => [STR_CLASS=>COLSM1],
-            FORMAT=>'raw'
-        ],
-        Controllers::CONTROLLER_NAME,
-        Controllers::CONTROLLER_DESCRIPTION,
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => Controllers::MENU_BOOLEAN_PRIVATE,
-            OPTIONS => [STR_CLASS=>'col-sm-2'],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
-        ],
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => Controllers::MENU_BOOLEAN_VISIBLE,
-            OPTIONS => [STR_CLASS=>COLSM1],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
-        ],
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => Controllers::ACTIVE,
-            OPTIONS => [STR_CLASS=>COLSM1],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
-        ],
-    ]
-]);
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'layout' => '{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
+            [
+                ATTRIBUTE => Controllers::CONTROLLER_ID,
+                FORMAT => 'raw',
+                OPTIONS => [STR_CLASS => COLSM1],
+                STR_CLASS => yii\grid\DataColumn::className(),
+            ],
+            Controllers::CONTROLLER_NAME,
+            Controllers::CONTROLLER_DESCRIPTION,
+            [
+                ATTRIBUTE => Controllers::MENU_BOOLEAN_PRIVATE,
+                FILTER => UiComponent::yesOrNoArray(),
+                FORMAT => 'raw',
+                OPTIONS => [STR_CLASS => 'col-sm-2'],
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+            ],
+            [
+                ATTRIBUTE => Controllers::MENU_BOOLEAN_VISIBLE,
+                FILTER => UiComponent::yesOrNoArray(),
+                FORMAT => 'raw',
+                OPTIONS => [STR_CLASS => COLSM1],
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+            ],
+            [
+                ATTRIBUTE => Controllers::ACTIVE,
+                FILTER => UiComponent::yesOrNoArray(),
+                FORMAT => 'raw',
+                OPTIONS => [STR_CLASS => COLSM1],
+                STR_CLASS => yii\grid\DataColumn::className(),
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+            ],
+        ]
+    ]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo '<br/><br/>';
 

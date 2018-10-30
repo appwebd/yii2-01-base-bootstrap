@@ -11,8 +11,9 @@
  * @version     1.0
  */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\search\ControllersSearch;
 use app\models\Action;
 
@@ -35,40 +36,51 @@ echo UiComponent::headerAdmin(
     true
 );
 
-echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
-    'layout' => '{items}{summary}{pager}',
-    'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
-    'columns' => [
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => Action::ACTION_ID,
-            OPTIONS => [STR_CLASS => COLSM1],
-            FORMAT => 'raw'
-        ],
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => Action::CONTROLLER_ID,
-            FILTER => ControllersSearch::getControllersListSearch(Action::TABLE),
-            VALUE => Action::CONTROLLER_CONTROLLER_NAME,
-            FORMAT => 'raw',
-        ],
-        Action::ACTION_NAME,
-        Action::ACTION_DESCRIPTION,
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => Action::ACTIVE,
-            OPTIONS => [STR_CLASS => COLSM1],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
-        ],
-    ]
-]);
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'layout' => '{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                ATTRIBUTE => Action::ACTION_ID,
+                OPTIONS => [STR_CLASS => COLSM1],
+                FORMAT => 'raw'
+            ],
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                ATTRIBUTE => Action::CONTROLLER_ID,
+                FILTER => ControllersSearch::getControllersListSearch(Action::TABLE),
+                VALUE => Action::CONTROLLER_CONTROLLER_NAME,
+                FORMAT => 'raw',
+            ],
+            Action::ACTION_NAME,
+            Action::ACTION_DESCRIPTION,
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                FILTER => UiComponent::yesOrNoArray(),
+                ATTRIBUTE => Action::ACTIVE,
+                OPTIONS => [STR_CLASS => COLSM1],
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+                FORMAT => 'raw'
+            ],
+        ]
+    ]);
+} catch (Exception $errorException) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorException]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo '<br/><br/>';
 

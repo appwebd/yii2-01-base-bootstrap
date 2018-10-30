@@ -11,9 +11,10 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
-use \app\models\search\BlockedSearch;
+use app\components\UiComponent;
+use app\controllers\BaseController;
+use app\models\search\BlockedSearch;
 use app\models\Blocked;
 
 /* @var $this yii\web\View */
@@ -37,29 +38,40 @@ echo UiComponent::headerAdmin(
     true
 );
 
-echo GridView::widget([
-'dataProvider' => $dataProvider,
-'filterModel' => $searchModel,
-'layout'=>'{items}{summary}{pager}',
-'filterSelector' => 'select[name="per-page"]',
-'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
-'columns' => [
-    [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS=>'width10px']],
-    [
-        STR_CLASS => yii\grid\DataColumn::className(),
-        ATTRIBUTE => Blocked::ID,
-        OPTIONS => [STR_CLASS => 'col-sm-1'],
-        FORMAT => 'raw'
-    ],
-    Blocked::IPV4_ADDRESS,
-    Blocked::DATE,
-    [
-        "class" => yii\grid\DataColumn::className(),
-        "attribute" => Blocked::STATUS_ID,
-        'filter' => BlockedSearch::getStatusListSearch(),
-        "value" => Blocked::STATUS_STATUS_NAME,
-        "format" => "raw",
-    ],
-]]);
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'layout' => '{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
+            [STR_CLASS => 'yii\grid\CheckboxColumn', 'options' => [STR_CLASS => 'width10px']],
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                ATTRIBUTE => Blocked::ID,
+                OPTIONS => [STR_CLASS => 'col-sm-1'],
+                FORMAT => 'raw'
+            ],
+            Blocked::IPV4_ADDRESS,
+            Blocked::DATE,
+            [
+                "class" => yii\grid\DataColumn::className(),
+                "attribute" => Blocked::STATUS_ID,
+                'filter' => BlockedSearch::getStatusListSearch(),
+                "value" => Blocked::STATUS_STATUS_NAME,
+                "format" => "raw",
+            ],
+        ]]);
+} catch (Exception $errorException) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorException]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo HTML_WEBPAGE_CLOSE;

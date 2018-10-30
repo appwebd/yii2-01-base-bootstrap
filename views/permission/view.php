@@ -30,37 +30,48 @@ echo UiComponent::header(
     Yii::t('app', 'This view permit view detailed information of Permission')
 );
 
-echo DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-        [
-            ATTRIBUTE => Permission::PROFILE_NAME,
-            VALUE => function ($model) {
-                return $model->profile->profile_name;
-            },            
-        ],
-        [
-            ATTRIBUTE => Permission::CONTROLLER_ID,
-            VALUE => function ($model) {
+try {
+    echo DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            [
+                ATTRIBUTE => Permission::PROFILE_NAME,
+                VALUE => function ($model) {
+                    return $model->profile->profile_name;
+                },
+            ],
+            [
+                ATTRIBUTE => Permission::CONTROLLER_ID,
+                VALUE => function ($model) {
                     return $model->controllers->controller_name;
-            },            
-        ],
-        [
-            ATTRIBUTE => Permission::ACTION_ID,
-            VALUE => function ($model) {
+                },
+            ],
+            [
+                ATTRIBUTE => Permission::ACTION_ID,
+                VALUE => function ($model) {
                     return $model->action->action_name;
-            },            
+                },
+            ],
+            [
+                ATTRIBUTE => Permission::ACTION_PERMISSION,
+                OPTIONS => [STR_CLASS => COLSM1],
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->action_permission);
+                },
+                FORMAT => 'raw'
+            ],
         ],
-        [
-            ATTRIBUTE => Permission::ACTION_PERMISSION,
-            OPTIONS => [STR_CLASS => COLSM1],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->action_permission);
-            },
-            FORMAT=>'raw'
-        ],
-    ],
-]);
+    ]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
 
 echo UiComponent::buttonsViewBottom($model);
 echo HTML_WEBPAGE_CLOSE;

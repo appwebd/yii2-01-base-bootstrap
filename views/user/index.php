@@ -14,6 +14,7 @@
 use app\components\UiComponent;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use app\controllers\BaseController;
 use app\models\Profile;
 use app\models\User;
 use app\models\search\ProfileSearch;
@@ -38,49 +39,61 @@ echo UiComponent::headerAdmin(
     false
 );
 
-echo GridView::widget([
-    'dataProvider' => $dataProviderUser,
-    'filterModel' => $searchModelUser,
-    'layout'=>'{items}{summary}{pager}',
-    'filterSelector' => 'select[name="per-page"]',
-    'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
-    'columns' => [
+try {
+    echo GridView::widget([
+        'dataProvider' => $dataProviderUser,
+        'filterModel' => $searchModelUser,
+        'layout' => '{items}{summary}{pager}',
+        'filterSelector' => 'select[name="per-page"]',
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
+        'columns' => [
 
-        [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS=>'width:10px'] ],
+            [STR_CLASS => 'yii\grid\CheckboxColumn', 'options' => [STR_CLASS => 'width:10px']],
 
-        User::USERNAME,
-        User::FIRSTNAME,
-        User::LASTNAME,
-        User::EMAIL,
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            ATTRIBUTE => User::PROFILE_ID,
-            FILTER => ProfileSearch::getProfileListSearch('user'),
-            VALUE => function ($model) {
-                $profile_name = Profile::getProfileName($model->profile_id);
-                return UiComponent::badgetStatus($model->profile_id, $profile_name);
-            },
-            FORMAT => 'raw',
+            User::USERNAME,
+            User::FIRSTNAME,
+            User::LASTNAME,
+            User::EMAIL,
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                ATTRIBUTE => User::PROFILE_ID,
+                FILTER => ProfileSearch::getProfileListSearch('user'),
+                VALUE => function ($model) {
+                    $profile_name = Profile::getProfileName($model->profile_id);
+                    return UiComponent::badgetStatus($model->profile_id, $profile_name);
+                },
+                FORMAT => 'raw',
+            ],
+            [
+                STR_CLASS => yii\grid\DataColumn::className(),
+                FILTER => UiComponent::yesOrNoArray(),
+                ATTRIBUTE => User::ACTIVE,
+                OPTIONS => [STR_CLASS => COLSM1],
+                VALUE => function ($model) {
+                    return UiComponent::yesOrNo($model->active);
+                },
+                FORMAT => 'raw'
+            ],
+            [
+                STR_CLASS => yii\grid\ActionColumn::className(),
+                'header' => UiComponent::pageSizeDropDownList($pageSize),
+                'template' => '{view} {update} {delete}',
+                'contentOptions' => [STR_CLASS => 'GridView'],
+            ],
         ],
-        [
-            STR_CLASS => yii\grid\DataColumn::className(),
-            FILTER => UiComponent::yesOrNoArray(),
-            ATTRIBUTE => User::ACTIVE,
-            OPTIONS => [STR_CLASS => COLSM1],
-            VALUE => function ($model) {
-                return UiComponent::yesOrNo($model->active);
-            },
-            FORMAT=>'raw'
-        ],
-        [
-            STR_CLASS => yii\grid\ActionColumn::className(),
-            'header'=> UiComponent::pageSizeDropDownList($pageSize),
-            'template' => '{view} {update} {delete}',
-            'contentOptions'=>[STR_CLASS=>'GridView'],
-        ],
-    ],
-]);
+    ]);
+} catch (Exception $errorexception) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            'Failed to show information, error: {error}',
+            ['error' => $errorexception]
+        ),
+        MSG_ERROR
+    );
+}
 
-echo UiComponent::buttonsAdmin('111', false);
+
+UiComponent::buttonsAdmin('111', false);
 Html::endForm();
 echo HTML_WEBPAGE_CLOSE;
