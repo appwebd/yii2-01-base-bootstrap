@@ -14,6 +14,9 @@
 namespace app\controllers;
 
 use Yii;
+use yii\db\Exception;
+use yii\db\StaleObjectException;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -40,7 +43,18 @@ class PermissionController extends Controller
             return $this->redirect(['/']);
         }
         BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
-        return parent::beforeAction($action);
+        try {
+            return parent::beforeAction($action);
+        } catch (BadRequestHttpException $exception) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    'Failed to {module}, error: {error}',
+                    ['module'=> '@app\controllers\PermissionController::beforeAction', 'error' => $exception]
+                ),
+                MSG_ERROR
+            );
+        }
     }
 
     /**
@@ -142,15 +156,16 @@ class PermissionController extends Controller
         $model = $this->findModel($id);
 
         if ($this->referentialIntegrityCheck($model->permission_id)==0) {
-            $model->delete();
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    'Record {id} has been deleted',
-                    ['id'=>$model->permission_id]
-                ),
-                MSG_SUCCESS
-            );
+            if (BaseController::transactionDelete($model)) {
+                BaseController::bitacora(
+                    Yii::t(
+                        'app',
+                        'record {id} was deleted',
+                        ['id' => $model->permission_id]
+                    ),
+                    MSG_INFO
+                );
+            }
         } else {
             BaseController::bitacoraAndFlash(
                 Yii::t(
@@ -216,7 +231,7 @@ class PermissionController extends Controller
         $nroSelections = sizeof($result);
         for ($i = 0; $i < $nroSelections; $i++) {
             if (($model = Permission::findOne($result[$i])) !== null) {
-                if ($model->delete()) {
+                if (BaseController::transactionDelete($model)) {
                     $deleteOK .= $model->permission_id . ", ";
                 } else {
                     $deleteKO .= $model->permission_id . ", ";
@@ -239,6 +254,7 @@ class PermissionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
 
         if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->permission_id]);
