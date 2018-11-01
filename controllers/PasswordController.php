@@ -13,14 +13,11 @@
 
 namespace app\controllers;
 
-use Faker\Provider\Base;
 use Yii;
+use yii\db\Exception;
 use yii\web\Controller;
-use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\controllers\BaseController;
-use app\models\queries\Common;
 use app\models\forms\PasswordResetRequestForm;
 use app\models\forms\PasswordResetForm;
 
@@ -76,18 +73,23 @@ class PasswordController extends Controller
     public function actionIndex()
     {
         $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isPost) {
-            if ($model->sendEmail($model->email)) {
-                return $this->render('requested-password-reset');
-            }
+        if ($model->load(Yii::$app->request->post()) &&
+            Yii::$app->request->isPost &&
+            $model->sendEmail($model->email)) {
+            return $this->render('requested-password-reset');
         }
 
-        return $this->render('index', [MODEL => $model]);
+        return $this->render(ACTION_INDEX, ['model' => $model]);
     }
+
+    /**
+     * @param $token string encoded with token for change password
+     * @return \yii\web\Response
+     */
     public function wrongToken($token)
     {
         BaseController::bitacora(
-            Yii::t('app', 'Error, token password reset wrong {$token}', ['token' => $token]),
+            Yii::t('app', 'Error, token password reset wrong {token}', ['token' => $token]),
             MSG_SECURITY_ISSUE
         );
         return $this->redirect([ACTION_INDEX]);
@@ -102,23 +104,36 @@ class PasswordController extends Controller
     {
         $tokendecode = BaseController::stringDecode($token);
         $model = new PasswordResetRequestForm();
-        if ($model->tokenIsValid($tokendecode)) {
-            $this->wrongToken($token);
+        try {
+            if ($model->tokenIsValid($tokendecode)) {
+                $this->wrongToken($token);
+            }
+        } catch (Exception $exception) {
+            BaseController::bitacora(
+                Yii::t('app', 'Error, {module} {error}', ['module'=>'actionReset', 'error' => $exception]),
+                MSG_SECURITY_ISSUE
+            );
         }
 
         $userId = $model->getUserid($tokendecode);
         return $this->redirect(['password/resetpassword', 'userId' => $userId]);
     }
 
+    /**
+     * @param $userId integer primary key of table user
+     * @return mixed
+     * @throws \Exception
+     */
     public function actionResetpassword($userId)
     {
         $model = new PasswordResetForm();
-        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isPost) {
-            if ($model->passwordUpdate($model)) {
-                return $this->render('password-reset-was-changed');
-            }
+        if ($model->load(Yii::$app->request->post()) &&
+            Yii::$app->request->isPost &&
+            $model->passwordUpdate($model)) {
+            return $this->render('password-reset-was-changed');
         }
+
         $model->user_id = BaseController::stringEncode($userId);
-        return $this->render('password-reset', [MODEL => $model]);
+        return $this->render('password-reset', ['model' => $model]);
     }
 }
