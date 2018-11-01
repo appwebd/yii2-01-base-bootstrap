@@ -18,14 +18,11 @@ use yii\web\Controller;
 use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\forms\PasswordResetRequestForm;
-use app\models\forms\ResetPasswordForm;
 use app\models\forms\LoginForm;
 
 class LoginController extends Controller
 {
     const LOGOUT               = 'logout';
-    const ACTION_RESET_REQUEST = 'Resetrequest';
 
     /**
      * {@inheritdoc}
@@ -35,11 +32,11 @@ class LoginController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => [ACTION_INDEX, self::LOGOUT, self::ACTION_RESET_REQUEST],
+                'only' => [ACTION_INDEX, self::LOGOUT],
                 'rules' => [
                     [
                         ALLOW => true,
-                        ACTIONS => [ACTION_INDEX,self::ACTION_RESET_REQUEST],
+                        ACTIONS => [ACTION_INDEX],
                         ROLES => ['?'],
                     ],
                     [
@@ -53,7 +50,6 @@ class LoginController extends Controller
                 'class' => VerbFilter::className(),
                 ACTIONS => [
                     ACTION_INDEX => ['get','post'],
-                    self::ACTION_RESET_REQUEST => ['get'],
                     self::LOGOUT => ['post'],
                 ],
             ],
@@ -113,38 +109,5 @@ class LoginController extends Controller
         }
 
         return $this->render('email-confirmation-failed');
-    }
-
-    /**
-     * @return string|\yii\web\Response the form to request a password reset or
-     * a redirect response
-     */
-    public function actionResetrequest()
-    {
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->sendEmail()) {
-            return $this->render('requested-password-reset');
-        }
-
-        return $this->render('request-password-reset', [MODEL=> $model,]);
-    }
-
-    /**
-     * @return string|\yii\web\Response the form to reset the password or a
-     * redirect response
-     */
-    public function actionResetPassword($token)
-    {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->resetPassword()) {
-            return $this->render('password-was-reset');
-        }
-
-        return $this->render('reset-password', [MODEL=> $model]);
     }
 }
