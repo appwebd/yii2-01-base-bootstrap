@@ -304,6 +304,15 @@ class UiComponent extends Component
     }
 
     /**
+     * Close a Panel in view
+     * @return string
+     */
+    public static function panelClose()
+    {
+        return '</div></div>';
+    }
+
+    /**
      * Show page header and navigation buttons of the index page.
      * @param string $icon
      * @param string $pageTitle
