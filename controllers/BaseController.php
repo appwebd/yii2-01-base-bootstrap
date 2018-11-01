@@ -429,4 +429,30 @@ class BaseController extends Controller
 
         return false;
     }
+    /**
+     * @param $model models class defined in @app\models\
+     * @return bool Success o failed to create/update a $model in this view
+     * @throws \yii\db\Exception Failed to save a record error: {error}
+     * @throws \Exception
+     */
+    public static function transactionDelete($model)
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($model->delete()) {
+                $transaction->commit();
+                return true;
+            }
+            $transaction->rollBack();
+        } catch (\Exception $exception) {
+            BaseController::bitacoraAndFlash(
+                Yii::t('app', 'Failed to delete record error: {error}', ['error' => $exception]),
+                MSG_ERROR
+            );
+            $transaction->rollBack();
+            throw $exception;
+        }
+
+        return false;
+    }
 }
