@@ -34,7 +34,7 @@ class CompanyController extends Controller
      * Before action instructions for to do before call actions
      *
      * @param object $action
-     * @return void
+     * @return mixed
      */
     public function beforeAction($action)
     {
@@ -131,7 +131,6 @@ class CompanyController extends Controller
     /**
     * Search modal view of Company
     *
-    * @param intenger company_id integer primary key of table company
     * @return void
     */
     public function actionCompanysearchmodal()
@@ -231,7 +230,7 @@ class CompanyController extends Controller
     /**
      * Delete many records of this table Company
      *
-     * @return void
+     * @return mixed
      */
     public function actionRemove()
     {
@@ -353,13 +352,13 @@ class CompanyController extends Controller
                 return true;
             }
             $transaction->rollBack();
-        } catch (\Exception $errorException) {
+        } catch (\Exception $errorexception) {
             BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed to create a new record'),
+                Yii::t('app', 'Failed to create a new record, error {error}', ['error' => $errorexception]),
                 MSG_ERROR
             );
             $transaction->rollBack();
-            throw $errorException;
+            throw $errorexception;
         }
 
         return false;
