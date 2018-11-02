@@ -254,7 +254,7 @@ CREATE TABLE `user` (
   `password_hash` char(255) CHARACTER SET utf8 NOT NULL COMMENT 'password',
   `password_reset_token` char(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'password reset token',
   `password_reset_token_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'password reset token date creation',
-  `email_confirmation_token` char(255) CHARACTER SET utf8 NOT NULL COMMENT 'Email token of confirmation ',
+  `email_confirmation_token` char(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'Email token of confirmation ',
   `firstName` char(80) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT 'User name',
   `lastName` char(80) COLLATE utf8_bin NOT NULL COMMENT 'Last name',
   `email` char(254) CHARACTER SET utf8 NOT NULL COMMENT 'Email',
