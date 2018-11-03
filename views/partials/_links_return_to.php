@@ -18,7 +18,6 @@ echo '
         <br/>';
         echo Yii::t('app', 'Return to:'),'
         &nbsp;',
-        Html::a( Yii::t('app', 'Login'), ['login/']),'.&nbsp; | &nbsp;',
+        Html::a(Yii::t('app', 'Login'), ['login/']),'.&nbsp; | &nbsp;',
         Html::a(Yii::t('app', 'Home'), ['/']),'.',
 '</div>';
-
