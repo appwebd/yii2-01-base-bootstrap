@@ -16,6 +16,7 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\helpers\HtmlPurifier;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -117,7 +118,7 @@ class Blocked extends \yii\db\ActiveRecord
 
     /**
      * Get array from Informative status of events in all the platform
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getStatusList()
     {

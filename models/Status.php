@@ -115,7 +115,7 @@ class Status extends \yii\db\ActiveRecord
     /**
      * Get status description for a status_id
      *
-     * @return void
+     * @return string description od StatusId
      */
     public static function getStatusName($statusID)
     {
@@ -174,7 +174,7 @@ class Status extends \yii\db\ActiveRecord
     }
     /**
      * Get array from Informative status of events in all the platform
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getStatusList()
     {

@@ -28,7 +28,7 @@ use yii\helpers\HtmlPurifier;
  * @property char(80)        profile_name     Name
  *
  */
-class Profile extends \yii\db\ActiveRecord
+class Profile extends ActiveRecord
 {
 
     const ACTIVE           = 'active';
@@ -131,13 +131,14 @@ class Profile extends \yii\db\ActiveRecord
 
     /**
      * Get array from Profiles
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getProfileList()
     {
         $droptions = Profile::find(['active'=>1])->orderBy(self::PROFILE_NAME)->asArray()->all();
         return ArrayHelper::map($droptions, self::PROFILE_ID, self::PROFILE_NAME);
     }
+
     /**
      * Get primary key id
      *

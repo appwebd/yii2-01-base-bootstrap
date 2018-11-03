@@ -14,11 +14,13 @@
 namespace app\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
 use yii\helpers\HtmlPurifier;
+use app\controllers\BaseController;
 use app\models\queries\UserQuery;
 
 /**
@@ -44,28 +46,29 @@ use app\models\queries\UserQuery;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_ACTIVE=1;
-    const STATUS_DELETED=0;
-    const PROFILE_USER=20;
-    const STATUS_FALSE=0;
-    const STATUS_TRUE=1;
+
     const ACTIVE                        = 'active';
     const AUTH_KEY                      = 'auth_key';
     const EMAIL                         = 'email';
     const EMAIL_CONFIRMATION_TOKEN      = 'email_confirmation_token';
     const EMAIL_IS_VERIFIED             = 'email_is_verified';
+    const EMAIL_IS_VERIFIES_VALUE       = 1;
     const FIRSTNAME                     = 'firstName';
     const IPV4_ADDRESS_LAST_LOGIN       = 'ipv4_address_last_login';
     const LASTNAME                      = 'lastName';
     const PASSWORD_HASH                 = 'password_hash';
     const PASSWORD_RESET_TOKEN          = 'password_reset_token';
     const PASSWORD_RESET_TOKEN_DATE     = 'password_reset_token_date';
+    const PROFILE_USER                  = 20;
     const PROFILE_ID                    = 'profile_id';
+    const STATUS_ACTIVE                 = 1;
+    const STATUS_DELETED                = 0;
+    const STATUS_FALSE                  = 0;
+    const STATUS_TRUE                   = 1;
     const TELEPHONE                     = 'telephone';
+    const TITLE                         = 'Users';
     const USERNAME                      = 'username';
     const USER_ID                       = 'user_id';
-
-    const TITLE                         = 'Users';
 
     /**
      * @var string|null the current password value from form input
@@ -83,10 +86,8 @@ class User extends ActiveRecord implements IdentityInterface
             [[self::ACTIVE,
               self::AUTH_KEY,
               self::EMAIL,
-              self::EMAIL_CONFIRMATION_TOKEN,
               self::EMAIL_IS_VERIFIED,
               self::FIRSTNAME,
-              self::IPV4_ADDRESS_LAST_LOGIN,
               self::LASTNAME,
               self::PASSWORD_HASH,
               self::PROFILE_ID,
@@ -175,28 +176,52 @@ class User extends ActiveRecord implements IdentityInterface
             ],
         ];
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+
+    public function getProfile()
+    {
+        return $this->hasOne(
+            Profile::className(),
+            [self::PROFILE_ID => self::PROFILE_ID]
+        );
+    }
+
+    /**
+     * @return UserQuery custom query class with user scopes
+     */
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
+    }
 
     /**
      * Get array table user
      *
-     * @return arrayHelper::map
+     * @return array
      */
+    /*
     public static function getUserList()
     {
         $droptions   = User::find([self::ACTIVE=>1])->asArray()->all();
         return ArrayHelper::map($droptions, self::USER_ID, self::USERNAME);
     }
-
+*/
+    /**
+     * @param $userId integer primary key of table User
+     * @return User|null
+     */
     public static function getUsername($userId)
     {
-        return static::findOne([self::USERNAME=> $userId]);
+        return static::findOne([self::USER_ID=> $userId]);
     }
     /**
      * Find user by AccessToken
      *
      * @param $token string
      *
-     * @return Static
+     * @return User
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
@@ -207,7 +232,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Find Identity
      *
      * @param  $usu_usuarios_id integer Primary key table
-     * @return Static
+     * @return User
      */
 
     public static function findIdentity($userId)
@@ -225,16 +250,18 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne([self::USERNAME => $username, self::ACTIVE =>self::STATUS_ACTIVE]);
     }
+/*
     public static function findFirstNameLastName($userId)
     {
         $model = User::findIdentity($userId);
         if ($model) {
-            $result = $model->firstName  . ' '. $model->lastName;
+            $result = $model->firstName . ' '. $model->lastName;
         } else {
             $result = Yii::t('app', 'Unknow');
         }
         return $result;
     }
+*/
     /**
      * Get primary key id
      *
@@ -259,7 +286,18 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generateAuthKey()
     {
-        $this->auth_key = Yii::$app->security->generateRandomString();
+        try {
+            $this->auth_key = Yii::$app->security->generateRandomString();
+        } catch (Exception $errorexception) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE => '@app\models\User\generateAuthKey', ERROR => $errorexception]
+                ),
+                MSG_ERROR
+            );
+        }
     }
 
     /**
@@ -269,7 +307,19 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken($save)
     {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        try {
+            $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        } catch (Exception $errorexception) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE => '@app\models\User\generatePasswordResetToken', ERROR => $errorexception]
+                ),
+                MSG_ERROR
+            );
+        }
+
         if ($save) {
             return $this->save();
         }
@@ -283,7 +333,18 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generateEmailConfirmationToken($save)
     {
-        $this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
+        try {
+            $this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
+        } catch (Exception $errorexception) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE=> '@app\models\User\generateEmailConfirmationToken', ERROR => $errorexception]
+                ),
+                MSG_ERROR
+            );
+        }
         if ($save) {
             return $this->save();
         }
@@ -320,7 +381,18 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->_password = $password;
         if (!empty($password)) {
-            $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+            try {
+                $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+            } catch (Exception $errorexception) {
+                BaseController::bitacora(
+                    Yii::t(
+                        'app',
+                        ERROR_MODULE,
+                        [MODULE=> '@app\models\User\setPassword', ERROR => $errorexception]
+                    ),
+                    MSG_ERROR
+                );
+            }
         }
     }
 
@@ -342,16 +414,5 @@ class User extends ActiveRecord implements IdentityInterface
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProfile()
-    {
-        return $this->hasOne(
-            Profile::className(),
-            [self::PROFILE_ID => self::PROFILE_ID]
-        );
     }
 }

@@ -29,7 +29,7 @@ use yii\helpers\ArrayHelper;
  * @property int(11)         profile_id            Profile
  *
  */
-class Permission extends \yii\db\ActiveRecord
+class Permission extends ActiveRecord
 {
     const ACTION_ID             = 'action_id';
     const ACTION_NAME           = 'action_name';
@@ -37,6 +37,8 @@ class Permission extends \yii\db\ActiveRecord
     const CONTROLLER_ID         = 'controller_id';
     const CONTROLLER_NAME       = 'controller_name';
     const PERMISSION_ID         = 'permission_id';
+    const PERMISSION_GRANT      = true;
+    const PERMISSION_DENY       = false;
     const PROFILE_ID            = 'profile_id';
     const PROFILE_NAME          = 'profile_name';
     const TABLE                 = 'permission';
@@ -145,40 +147,33 @@ class Permission extends \yii\db\ActiveRecord
     }
 
     /**
-     * Get array from Action
-     * @return Arrayhelper::map
+     * @param $actionId integer primary key table action
+     * @param $controllerId integer primary key table controllers
+     * @param $profileId integer primary key table profile
+     * @throws \yii\db\Exception
      */
-    public static function getActionList()
+    public static function getPermission($actionId, $controllerId, $profileId)
     {
-
-        $droptions = Action::find([ACTIVE=>1])
-            ->orderBy([self::ACTION_NAME => SORT_ASC])
-            ->asArray()->all();
-        return ArrayHelper::map($droptions, self::ACTION_ID, self::ACTION_NAME);
-    }
-
-    /**
-     * Get array from Controllers
-     * @return Arrayhelper::map
-     */
-    public static function getControllersList()
-    {
-
-        $droptions = Controllers::find([ACTIVE=>1])
-               ->orderBy([self::CONTROLLER_NAME => SORT_ASC])
-               ->asArray()->all();
-        return ArrayHelper::map($droptions, self::CONTROLLER_ID, self::CONTROLLER_NAME);
-    }
-
-    /**
-     * Get array from Users
-     * @return Arrayhelper::map
-     */
-    public static function getProfileList()
-    {
-        $droptions = Profile::find(['active'=>1])
-            ->orderBy([self::PROFILE_NAME => SORT_ASC])
-            ->asArray()->all();
-        return ArrayHelper::map($droptions, self::PROFILE_ID, self::PROFILE_NAME);
+        try {
+            $actionPermission = Yii::$app->db->createCommand(
+                "SELECT action_permission
+                     FROM permission
+                     WHERE action_id=" . $actionId . "
+                   and controller_id=" . $controllerId . " and profile_id=" . $profileId
+            )->queryOne();
+            if (isset($actionPermission[0])) {
+                return $actionPermission[0];
+            }
+        } catch (Exception $errorException) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE => 'getPermission', ERROR => $errorException]
+                ),
+                MSG_ERROR
+            );
+        }
+        return Permission::PERMISSION_DENY;
     }
 }

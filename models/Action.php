@@ -14,23 +14,26 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 use yii\helpers\HtmlPurifier;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use app\components\UiComponent;
+use app\models\queries\Common;
 
 /**
  * Action
  * Actions
  *
- * @property char(80)        action_description     Description
- * @property int(11)         action_id              Actions
- * @property char(100)       action_name            Name
+ * @property string          action_description     Description
+ * @property int             action_id              Actions
+ * @property string          action_name            Name
  * @property tinyint(1)      active                 Active
  *
  */
-class Action extends \yii\db\ActiveRecord
+class Action extends ActiveRecord
 {
     const ACTION_DESCRIPTION = 'action_description';
     const ACTION_NAME   = 'action_name';
@@ -83,10 +86,12 @@ class Action extends \yii\db\ActiveRecord
     /**
      * Permits add a Action
      *
+     * @param $controllerId int primary key of controllers
      * @param string $actionName Action Name
      * @param string $actionDesc A description of action
      * @param boolean $active Indicates records active
-     * @return void
+     * @return int
+     * @throws \yii\db\Exception
      */
     public static function addAction(
         $controllerId,
@@ -100,7 +105,7 @@ class Action extends \yii\db\ActiveRecord
         $model->action_description = $actionDesc;
         $model->active = $active;
 
-        if ($model->save()) {
+        if (Common::transaction($model, 'save')) {
             Yii::info(
                 Yii::t(
                     'app',
@@ -112,7 +117,7 @@ class Action extends \yii\db\ActiveRecord
             return true;
         }
 
-        Yii::$app->ui->warning(
+        UiComponent::warning(
             Yii::t('app', 'Could not save new Action:'),
             $model->errors
         );
@@ -143,7 +148,7 @@ class Action extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'action';
+        return Action::TABLE;
     }
 
 
@@ -164,6 +169,8 @@ class Action extends \yii\db\ActiveRecord
 
     /**
      * Get controller_name of Controllers table
+     * @param $actionName string name of action_name
+     * @param $controllerId int primary key of table controllers
      * @return Action
      */
     public static function getAction($actionName, $controllerId)
@@ -171,6 +178,35 @@ class Action extends \yii\db\ActiveRecord
         return static::findOne([self::ACTION_NAME => $actionName, self::CONTROLLER_ID=>$controllerId]);
     }
 
+    /**
+     * get column action_id of table action given action_name
+     *
+     * @param string $actionName column action_name of table actions
+     * @return int column of action_id
+     * @throws \yii\db\Exception
+     */
+    public static function getActionId($actionName)
+    {
+        try {
+            $actionId = ((new Query())->select('action_id')
+                ->from(Action::TABLE)
+                ->where(["action_name" => $actionName])
+                ->limit(1)->createCommand())->queryColumn();
+            if (isset($actionId[0])) {
+                return $actionId[0];
+            }
+        } catch (Exception $errorexception) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE => 'getActionId', ERROR => $errorexception]
+                ),
+                MSG_ERROR
+            );
+        }
+        return null;
+    }
     /**
      * Get array from Actions
      * @return array
@@ -182,24 +218,12 @@ class Action extends \yii\db\ActiveRecord
     }
     /**
      * Get array from Actions
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getActionListById($actionId)
     {
         $droptions = Action::find([self::CONTROLLER_ID=>$actionId])->asArray()->all();
         return ArrayHelper::map($droptions, self::ACTION_ID, self::ACTION_NAME);
-    }
-
-    /**
-     * Get array from Controller
-     * @return Arrayhelper::map
-     */
-    public static function getControllersList()
-    {
-        $droptions = Controllers::find([self::ACTIVE=>1])
-                    ->orderBy([self::CONTROLLER_NAME => SORT_ASC])
-                    ->asArray()->all();
-        return ArrayHelper::map($droptions, self::CONTROLLER_ID, self::CONTROLLER_NAME);
     }
 
     /**

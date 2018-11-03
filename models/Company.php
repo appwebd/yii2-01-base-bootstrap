@@ -18,6 +18,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\HtmlPurifier;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use app\models\Contact;
 use app\models\Product;
 
 /**
@@ -164,7 +165,7 @@ class Company extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param $company_id
+     * @param $companyId integer primary key in table Company
      */
     public static function getCompanyName($companyId)
     {
@@ -179,7 +180,7 @@ class Company extends \yii\db\ActiveRecord
 
     /**
      * Get array from Company (1692)
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getCompanyList()
     {

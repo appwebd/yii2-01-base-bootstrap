@@ -14,10 +14,12 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 use yii\helpers\HtmlPurifier;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use app\components\Uicomponent;
 
 /**
  * Controllers
@@ -76,7 +78,7 @@ class Controllers extends \yii\db\ActiveRecord
      * @param boolean $menuBooleanPrivate Indicates Menu is Private?
      * @param boolean $menuBooleanVisible Indicates Menu is Visible?
      * @param boolean $active Indicates records active
-     * @return void
+     * @return boolean
      */
     public static function addControllers(
         $controllerName,
@@ -97,7 +99,7 @@ class Controllers extends \yii\db\ActiveRecord
             return true;
         }
 
-        Yii::$app->ui->warning('Could not save new Controller:', $model->errors);
+        UiComponent::warning('Could not save new Controller:', $model->errors);
         return false;
     }
 
@@ -183,7 +185,34 @@ class Controllers extends \yii\db\ActiveRecord
         return static::findOne([self::CONTROLLER_NAME => $controllerName]);
     }
 
-
+    /**
+     * get field controller_id of table controllers given controller_name
+     *
+     * @param string $controllerName column controller_name of table controllers
+     * @return integer column controller_id
+     */
+    public static function getControllerId($controllerName)
+    {
+        try {
+            $controllerId = ((new Query())->select('controller_id')
+                ->from('controllers')
+                ->where(["controller_name" => $controllerName])
+                ->limit(1)->createCommand())->queryColumn();
+            if (isset($controllerId[0])) {
+                return $controllerId[0];
+            }
+        } catch (Exception $errorexception) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE => 'getControllerId', ERROR => $errorexception]
+                ),
+                MSG_ERROR
+            );
+        }
+        return null;
+    }
     /**
      * Get array from Controllers
      * @return array
