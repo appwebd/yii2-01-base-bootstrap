@@ -11,6 +11,8 @@
  * @version     1.0
  */
 
+use \app\components\UiComponent;
+
 /* @var yii\web\View $this */
 /* @var \frontend\models\User $model */
 
@@ -24,7 +26,7 @@ echo '
         <div class="col-sm-6 box">
 
             <div class=" ">';
-                echo Yii::$app->ui->header(
+                echo UiComponent::header(
                     'user',
                     Yii::t(
                         'app',
@@ -34,9 +36,8 @@ echo '
                     true,
                     false
                 );
-                echo '
-                <br>
-                <p class="alert alert-info">';
+                echo '                
+                <p>';
                 echo Yii::t(
                     'app',
                     'We have sent an email with a link for your confirmation, please check your inbox'
