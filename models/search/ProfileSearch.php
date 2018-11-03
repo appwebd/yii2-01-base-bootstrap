@@ -106,7 +106,7 @@ class ProfileSearch extends Profile
 
     /**
      * Get array from Profile
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getProfileListSearch($table)
     {

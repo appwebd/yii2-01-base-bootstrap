@@ -89,15 +89,14 @@ class UserSearch extends User
     public function search($params)
     {
         $query = User::find();
-
         $query->joinWith(['profile']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination'=>[
-                'pageSize'=>5,
+            'pagination' => [
+                'pageSize' => 5,
             ],
-            'sort'=>['attributes'=>['user_id desc']]
+            'sort'=>['attributes' => ['user_id desc']]
         ]);
 
         /**
@@ -133,7 +132,7 @@ class UserSearch extends User
 
     /**
      * Get array from Sub categories
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getUserListSearch($table)
     {
@@ -148,4 +147,3 @@ class UserSearch extends User
         return ArrayHelper::map($droptions, self::USER_ID, self::USERNAME);
     }
 }
-

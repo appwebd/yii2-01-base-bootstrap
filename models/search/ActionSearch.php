@@ -117,7 +117,7 @@ class ActionSearch extends Action
 
     /**
      * Get array from Action
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getActionListSearch($controllerID, $table)
     {
@@ -136,8 +136,7 @@ class ActionSearch extends Action
                     ORDER BY ".self::ACTION_NAME;
         }
 
-        $droptions = Action::findBySql($sqlcode)
-                     ->asArray()->all();
+        $droptions = Action::findBySql($sqlcode)->asArray()->all();
         return ArrayHelper::map($droptions, self::ACTION_ID, self::ACTION_NAME);
     }
 }

@@ -118,7 +118,7 @@ class ControllersSearch extends Controllers
     }
     /**
      * Get array from Controllers
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getControllersListSearch($table)
     {

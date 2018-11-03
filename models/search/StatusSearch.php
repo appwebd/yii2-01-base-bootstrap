@@ -107,7 +107,7 @@ class StatusSearch extends Status
     }
     /**
      * Get array from Status (Only records that exists on table $table)
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getStatusListSearch($table)
     {

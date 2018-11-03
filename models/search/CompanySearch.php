@@ -138,7 +138,7 @@ class CompanySearch extends Company
     
     /**
      * Get array from Company
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getCompanyListSearch($table)
     {

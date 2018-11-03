@@ -146,7 +146,7 @@ class LogsSearch extends Logs
 
     /**
      * Get array from Action
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getActionListSearch($controllerId)
     {
@@ -171,7 +171,7 @@ class LogsSearch extends Logs
 
     /**
      * Get array from Controllers
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getControllersListSearch()
     {
@@ -187,7 +187,7 @@ class LogsSearch extends Logs
 
     /**
      * Get array from Status
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getStatusListSearch()
     {
@@ -202,7 +202,7 @@ class LogsSearch extends Logs
 
     /**
      * Get array from Users
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getUserList()
     {

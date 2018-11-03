@@ -116,7 +116,7 @@ class BlockedSearch extends Blocked
 
     /**
      * Get array from Status
-     * @return Arrayhelper::map
+     * @return array
      */
     public static function getStatusListSearch()
     {
