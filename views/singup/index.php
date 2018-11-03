@@ -13,7 +13,8 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-use app\models\forms\SignupForm;
+use app\components\UiComponent;
+use app\models\forms\SingupForm;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
@@ -30,7 +31,7 @@ echo '
 
             <div class="webpage ">';
 
-                echo Yii::$app->ui->header(
+                echo UiComponent::header(
                     'user',
                     $this->title,
                     Yii::t(
@@ -48,7 +49,7 @@ echo '
                     ]
                 );
 
-                echo $form->field($model, SignupForm::FIRST_NAME, [
+                echo $form->field($model, SingupForm::FIRST_NAME, [
                     INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS,
                         TABINDEX => '1',
                         'title' => 'First name is required information!',
@@ -63,7 +64,7 @@ echo '
                                         </div>',
                 ])->textInput()->label(false);
 
-                echo $form->field($model, SignupForm::LAST_NAME, [
+                echo $form->field($model, SingupForm::LAST_NAME, [
                     INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS,
                         TABINDEX => '1',
                         'title' => 'Last name is required!',
@@ -79,7 +80,7 @@ echo '
                 ])->textInput()->label(false);
 
 
-                echo $form->field($model, 'username', [
+                echo $form->field($model, SingupForm::USERNAME, [
                     INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '2'],
                     INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
@@ -90,7 +91,7 @@ echo '
                 ])->textInput([PLACEHOLDER => Yii::t('app', ' User account')])->label(false);
 
 
-                echo  $form->field($model, 'password', [
+                echo  $form->field($model, SingupForm::PASSWORD, [
                     INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '3'],
                     INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
@@ -98,11 +99,11 @@ echo '
                                             </span>
                                             {input}
                                         </div>',
-                ])->passwordInput(['autocomplete' => 'new-password',
+                ])->passwordInput(['autocomplete' => SingupForm::NEW_PASSWORD,
                     PLACEHOLDER => Yii::t('app', ' Password')])->label(false);
 
 
-                echo $form->field($model, 'email', [
+                echo $form->field($model, SingupForm::EMAIL, [
                     INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '4'],
                     INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
@@ -118,7 +119,7 @@ echo '
                         Html::submitButton(Yii::t('app', 'Signup'), [STR_CLASS => 'btn btn-primary',
                             'name' => 'signup-button', AUTOFOCUS => AUTOFOCUS, TABINDEX => '5',
                         ]),
-                        $form->errorSummary($model, array(STR_CLASS => "alert alert-danger")),
+                        $form->errorSummary($model, array(STR_CLASS => "error-summary")),
                     '</div>';
                 ActiveForm::end();
 
