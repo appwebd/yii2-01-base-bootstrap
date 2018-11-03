@@ -13,6 +13,7 @@
 
 use app\components\UiComponent;
 use yii\bootstrap\ActiveForm;
+use app\models\Profile;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Profile */
