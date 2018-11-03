@@ -12,16 +12,28 @@
  */
 
 namespace app\components;
+
 use yii\base\BootstrapInterface;
 
+/**
+ * Class LanguageSelector
+ * @package app\components
+ */
 class LanguageSelector implements BootstrapInterface
 {
-    public $supportedLanguages = ['es_ES', 'en_EN'];
+    /**
+     * @var array
+     */
+    public $suppLanguages = ['es', 'en'];
+
+    /**
+     * @param \yii\base\Application $app
+     */
     public function bootstrap($app)
     {
 
-        $preferredLanguage = $app->request->getPreferredLanguage($this->supportedLanguages);
+        $preflang = $app->request->getPreferredLanguage($this->suppLanguages);
 
-        $app->language = $preferredLanguage;
+        $app->language = $preflang;
     }
 }
