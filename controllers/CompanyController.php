@@ -18,23 +18,37 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use app\components\UiComponent;
+use app\models\queries\Common;
 use app\models\Company;
 use app\models\search\CompanySearch;
 use yii\helpers\Json;
 
+/**
+ * Class CompanyController
+ *
+ * @package     Ui
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        11/1/18 11:37 AM
+ * @version     1.0
+ */
 class CompanyController extends Controller
 {
     const COMPANY_ID                = 'company_id';
     const COMPANY_NAME              = 'company_name';
-    const COMPANY_AUTOCOMPLETE      = 'companyautocomplete';
-    const COMPANY_SEARCH_MODAL      = 'companysearchmodal';
-    const COMPANY_CREATE_MODAL      = 'companycreatemodal';
+    const COMPANY_AUTOCOMPLETE      = 'autocomplete';
+    const COMPANY_SEARCH_MODAL      = 'searchmodal';
+    const COMPANY_CREATE_MODAL      = 'createmodal';
 
     /**
      * Before action instructions for to do before call actions
      *
      * @param object $action
      * @return mixed
+     * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action)
     {
@@ -93,12 +107,12 @@ class CompanyController extends Controller
         ];
     }
 
-     /**
+    /**
      * Search Company
      * @param string $term pattern to search
-     * @return JSON
+     * @return void
      */
-    public function actionCompanyautocomplete($term)
+    public function actionAutocomplete($term)
     {
         if (Yii::$app->request->isAjax) {
             $results = [];
@@ -131,14 +145,14 @@ class CompanyController extends Controller
     /**
     * Search modal view of Company
     *
-    * @return void
+    * @return mixed
     */
-    public function actionCompanysearchmodal()
+    public function actionSearchmodal()
     {
 
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->renderAjax(
@@ -155,43 +169,44 @@ class CompanyController extends Controller
      * Creates a new Company model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws \yii\db\Exception
      */
     public function actionCreate()
     {
         $model = new Company();
 
-        if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
+        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->company_id]);
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
     }
 
-   /**
+    /**
      * Deletes an existing row of Company model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
 
-        if (! BaseController::previousRequirementToRemoveRecords()) {
+        if (! BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $model = $this->findModel($id);
-        if ($this->referentialIntegrityCheck()==0) {
-            $model->delete();
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    'Record {id} has been deleted',
-                    ['id'=>$model->company_id]
-                ),
-                MSG_SUCCESS
-            );
+        if ($this->fkCheck()==0) {
+            if (Common::transaction($model, 'delete')) {
+                BaseController::bitacoraAndFlash(
+                    Yii::t(
+                        'app',
+                        'Record {id} has been deleted',
+                        ['id'=>$model->company_id]
+                    ),
+                    MSG_SUCCESS
+                );
+            }
         } else {
             BaseController::bitacoraAndFlash(
                 Yii::t(
@@ -214,8 +229,8 @@ class CompanyController extends Controller
 
         $companySearchModel  = new CompanySearch();
         $dataProvider = $companySearchModel->search(Yii::$app->request->queryParams);
-        $pageSize = Yii::$app->ui->pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
+        $pageSize = UiComponent::pageSize();
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
             ACTION_INDEX,
@@ -231,14 +246,15 @@ class CompanyController extends Controller
      * Delete many records of this table Company
      *
      * @return mixed
+     * @throws \yii\db\StaleObjectException Common::transaction
      */
     public function actionRemove()
     {
 
         $result = Yii::$app->request->post('selection');
 
-        if (! BaseController::previousRequirementToRemoveRecords() ||
-            ! BaseController::requestPostSeleccionItems($result)
+        if (! BaseController::okRequirements(ACTION_DELETE) ||
+            ! BaseController::okSeleccionItems($result)
         ) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -252,16 +268,17 @@ class CompanyController extends Controller
             $companyId = $result[$i];
 
             if (($model = Company::findOne($companyId)) !== null) {
-                if ($this->referentialIntegrityCheck() <= 0) {
-                    $deleteOK .= $companyId . ", ";
-                    $model->delete();
+                if ($this->fkCheck() <= 0) {
+                    if (Common::transaction($model, 'delete')) {
+                        $deleteOK .= $companyId . ", ";
+                    }
                 } else {
                     $deleteKO .= $companyId . ", ";
                 }
             }
         }
 
-        BaseController::resumeOperationRemove($deleteOK, $deleteKO);
+        BaseController::summaryDisplay($deleteOK, $deleteKO);
 
         return $this->redirect([ACTION_INDEX]);
     }
@@ -270,7 +287,7 @@ class CompanyController extends Controller
     /**
      * Finds the Company model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $company_id
+     * @param $companyId
      * @return Company the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -286,18 +303,20 @@ class CompanyController extends Controller
         );
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
     /**
      * Updates an existing Company model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \yii\db\Exception driven in common::transaction
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
+        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->company_id]);
         }
 
@@ -324,43 +343,11 @@ class CompanyController extends Controller
     /**
      * Check nro. records found in other tables related.
      *
-     * @param $profileId Primary Key of table Profile
      * @return int numbers of rows in other tables with integrity referential found.
      */
-    private function referentialIntegrityCheck()
+    private function fkCheck()
     {
 
         return 0;
-    }
-
-
-    /**
-     * @param $model
-     * @return bool Success o failed to create/update a $model in this view
-     * @throws \yii\db\Exception
-     */
-    private function transaction($model)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($model->save()) {
-                $transaction->commit();
-                BaseController::bitacora(
-                    Yii::t('app', 'new record {id}', ['id'=>$model->company_id]),
-                    MSG_INFO
-                );
-                return true;
-            }
-            $transaction->rollBack();
-        } catch (\Exception $errorexception) {
-            BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed to create a new record, error {error}', ['error' => $errorexception]),
-                MSG_ERROR
-            );
-            $transaction->rollBack();
-            throw $errorexception;
-        }
-
-        return false;
     }
 }

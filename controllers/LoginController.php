@@ -1,25 +1,25 @@
 <?php
-/**
-  * Login process
-  *
-  * @package     Controller of Login (using table user)
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-06-16 23:03:06
-  * @version     1.0
-*/
 
 namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\web\BadRequestHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\forms\LoginForm;
+use app\models\User;
 
+/**
+ * Class LoginController
+ *
+ * @package     login
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        11/1/18 10:07 PM
+ * @version     1.0
+ */
 class LoginController extends Controller
 {
     const LOGOUT               = 'logout';
@@ -61,10 +61,6 @@ class LoginController extends Controller
      */
     public function actionIndex()
     {
-        $supportedLanguages = ['en', 'es'];
-        $languages = Yii::$app->request->getPreferredLanguage($supportedLanguages);
-        Yii::$app->language = $languages;
-
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -83,29 +79,23 @@ class LoginController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 
-
-//  --------------------------------------------------------------------------------------------------
     /**
+     * @param $token string encoded of email confirmation token
      * @return string|\yii\web\Response the confirmation failure message or a
      * redirect response
      */
-    public function actionConfirmEmail($token)
+    public function actionConfirmemail($token)
     {
-        if (Yii::$app->session->hasFlash('user-confirmed-email')) {
-            return $this->render('confirmed-email');
-        }
 
-        $user = User::find()
-            ->emailConfirmationToken($token)
-            ->one();
+        $token = BaseController::stringDecode($token);
+        $model = User::find()->emailConfirmationToken($token)->one();
 
-        if ($user !== null && $user->confirmEmail()) {
-            Yii::$app->session->setFlash('user-confirmed-email');
-            return $this->refresh();
+        if ($model!==null && LoginForm::removeTokenEmail($model->user_id, true)) {
+            Yii::$app->getUser()->login($model);
+            return $this->goHome();
         }
 
         return $this->render('email-confirmation-failed');

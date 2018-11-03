@@ -1,42 +1,27 @@
 <?php
-/**
-  * Singup process
-  *
-  * @package     Controller of SingUp process
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-06-16 23:03:06
-  * @version     1.0
-*/
 
 namespace app\controllers;
 
 use Yii;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\forms\SignupForm;
+use app\models\forms\SingupForm;
 
+/**
+ * Class SingupController
+ *
+ * @package     Signup
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        11/1/18 10:33 PM
+ * @version     1.0
+ */
 class SingupController extends Controller
 {
-
-    /**
-     * Before action instructions for to do before call actions
-     *
-     * @param object $action
-     * @return void
-     */
-    public function beforeAction($action)
-    {
-
-        if (BaseController::checkBadAccess($action->id)) {
-            return $this->redirect(['/']);
-        }
-        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
-        return parent::beforeAction($action);
-    }
 
     /**
      * {@inheritdoc}
@@ -65,17 +50,18 @@ class SingupController extends Controller
     }
 
      /**
-     * @return string|\yii\web\Response the signup form, the signup message or
+     * @return string|\yii\web\Response the singup form, the singup message or
      * a redirect response
      */
     public function actionIndex()
     {
 
-        $model = new SignupForm;
-        if ($model->load(Yii::$app->request->post()) && $model->signup() !== null) {
+        $model = new SingupForm;
+        if ($model->load(Yii::$app->request->post()) && $model->singup() !== null) {
             return $this->render('signed-up');
         }
 
+        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return $this->render(ACTION_INDEX, ['model'=> $model]);
     }
 }

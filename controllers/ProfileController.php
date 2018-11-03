@@ -18,10 +18,22 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use app\components\UiComponent;
 use app\models\Profile;
 use app\models\search\ProfileSearch;
 use app\models\queries\Common;
 
+/**
+ * Class ProfileController
+ *
+ * @package     Ui
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        11/1/18 4:25 PM
+ * @version     1.0
+ */
 class ProfileController extends Controller
 {
     const ACTION_TOGGLE_ACTIVE = 'toggle';
@@ -31,7 +43,8 @@ class ProfileController extends Controller
      * Before action instructions for to do before call actions
      *
      * @param object $action
-     * @return void
+     * @return mixed
+     * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action)
     {
@@ -39,6 +52,7 @@ class ProfileController extends Controller
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+
         BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
@@ -91,49 +105,51 @@ class ProfileController extends Controller
         ];
     }
 
-
-
     /**
      * Creates a new Profile model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws \yii\db\Exception
      */
     public function actionCreate()
     {
 
         $model = new Profile();
 
-        if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
+        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->profile_id]);
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
     }
 
-   /**
+    /**
      * Deletes an existing row of Profile model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \yii\db\Exception
      */
     public function actionDelete($id)
     {
-        if (! BaseController::previousRequirementToRemoveRecords()) {
+        if (! BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $model = $this->findModel($id);
-        if ($this->referentialIntegrityCheck($model->profile_id)==0) {
-            $model->delete();
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    'Record {id} has been deleted',
-                    ['id'=>$model->profile_id]
-                ),
-                MSG_SUCCESS
-            );
+        $profileId = $model->profile_id;
+        if ($this->fkCheck($profileId)==0) {
+            if (Common::transaction($model, 'delete')) {
+                BaseController::bitacoraAndFlash(
+                    Yii::t(
+                        'app',
+                        'Record {id} has been deleted',
+                        ['id' => $model->profile_id]
+                    ),
+                    MSG_SUCCESS
+                );
+            }
         } else {
             BaseController::bitacoraAndFlash(
                 Yii::t(
@@ -150,7 +166,7 @@ class ProfileController extends Controller
     /**
      * Finds the Profile model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $profile_id
+     * @param $profileId
      * @return Profile the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -177,7 +193,7 @@ class ProfileController extends Controller
         $searchModelProfile  = new ProfileSearch();
         $dataProviderProfile = $searchModelProfile->search(Yii::$app->request->queryParams);
 
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProviderProfile->pagination->pageSize=$pageSize;
 
         return $this->render(
@@ -185,7 +201,7 @@ class ProfileController extends Controller
             [
                 'searchModelProfile' => $searchModelProfile,
                 'dataProviderProfile' => $dataProviderProfile,
-                PAGE_SIZE => $pageSize
+                'pageSize' => $pageSize
             ]
         );
     }
@@ -193,15 +209,16 @@ class ProfileController extends Controller
     /**
      * Delete many records of this table Profile
      *
-     * @return void
+     * @return mixed
+     * @throws \yii\db\Exception
      */
     public function actionRemove()
     {
 
         $result = Yii::$app->request->post('selection');
 
-        if (! BaseController::previousRequirementToRemoveRecords() ||
-            ! BaseController::requestPostSeleccionItems($result)
+        if (! BaseController::okRequirements(ACTION_DELETE) ||
+            ! BaseController::okSeleccionItems($result)
         ) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -213,25 +230,27 @@ class ProfileController extends Controller
             $profileId = $result[$i];
 
             if (($model = Profile::findOne($profileId)) !== null) {
-                if ($this->referentialIntegrityCheck($model->profile_id) <= 0) {
-                    $deleteOK .= $profileId . ", ";
-                    $model->delete();
+                $profileId = $model->profile_id;
+                if ($this->fkCheck($profileId) <= 0) {
+                    if (Common::transaction($model, 'delete')) {
+                        $deleteOK .= $profileId . ", ";
+                    }
                 } else {
                     $deleteKO .= $profileId . ", ";
                 }
             }
         }
 
-        BaseController::resumeOperationRemove($deleteOK, $deleteKO);
-
+        BaseController::summaryDisplay($deleteOK, $deleteKO);
         return $this->redirect([ACTION_INDEX]);
     }
 
     /**
      * Toggle the value active in the table Profile
      *
-     * @param $id primary Key
+     * @param $id integer primary Key of table profile
      * @return \yii\web\Response
+     * @throws \Exception
      */
     public function actionToggle($id)
     {
@@ -240,13 +259,14 @@ class ProfileController extends Controller
             return $this->redirect([ACTION_INDEX]);
         }
 
-        $sqlcode = "UPDATE profile SET active=not(active) WHERE profile_id = ". $id;
-        if (! Yii::$app->db->createCommand($sqlcode)->execute()) {
+        $sqlcode = "UPDATE profile SET active=not(active) WHERE profile_id = " . $id;
+
+        if (!Common::sqlCreateCommand($sqlcode)) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
                     'Record {id} was not possible to update the value active',
-                    ['id'=>$id]
+                    ['id' => $id]
                 ),
                 MSG_ERROR
             );
@@ -261,13 +281,14 @@ class ProfileController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \yii\db\Exception
      */
     public function actionUpdate($id)
     {
 
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
+        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->profile_id]);
         }
 
@@ -282,7 +303,6 @@ class ProfileController extends Controller
      */
     public function actionView($id)
     {
-
         $model = $this->findModel($id);
         BaseController::bitacora(
             Yii::t('app', 'view record {id}', ['id'=>$model->profile_id]),
@@ -294,10 +314,10 @@ class ProfileController extends Controller
     /**
      * Check nro. records found in other tables related.
      *
-     * @param $profileId Primary Key of table Profile
+     * @param $profileId integer Primary Key of table Profile
      * @return int numbers of rows in other tables with integrity referential found.
      */
-    private function referentialIntegrityCheck($profileId)
+    private function fkCheck($profileId)
     {
         $nroRegs = common::getNroRowsForeignkey(
             'permission',
@@ -310,35 +330,5 @@ class ProfileController extends Controller
             self::PROFILE_ID,
             $profileId
         );
-    }
-
-    /**
-     * @param $model
-     * @return bool Success o failed to create/update a $model in this view
-     * @throws \yii\db\Exception
-     */
-    private function transaction($model)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($model->save()) {
-                $transaction->commit();
-                BaseController::bitacora(
-                    Yii::t('app', 'new record {id}', ['id'=>$model->profile_id]),
-                    MSG_INFO
-                );
-                return true;
-            }
-            $transaction->rollBack();
-        } catch (\Exception $errorException) {
-            BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed to create a new record'),
-                MSG_ERROR
-            );
-            $transaction->rollBack();
-            throw $errorException;
-        }
-
-        return false;
     }
 }

@@ -1,16 +1,4 @@
 <?php
-/**
-  * Site
-  *
-  * @package     Site controller
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-03 15:40:56
-  * @version     1.0
-*/
-
 namespace app\controllers;
 
 use Yii;
@@ -20,6 +8,17 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\forms\ContactForm;
 
+/**
+ * Class SiteController
+ *
+ * @package     Ui
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        11/1/18 10:31 PM
+ * @version     1.0
+ */
 class SiteController extends Controller
 {
     const STR_ABOUT         = 'about';
@@ -134,9 +133,8 @@ class SiteController extends Controller
     public function actionError()
     {
         $exception = Yii::$app->errorHandler->exception;
-
         if ($exception instanceof \yii\web\NotFoundHttpException) {
-            return $this->render('404');
+            return $this->render('404', ['message' => $exception]);
         } else {
             return $this->render(ERROR, ['exception' => $exception]);
         }
@@ -158,7 +156,7 @@ class SiteController extends Controller
      * @return string|\yii\web\Response the maintenance page or a redirect
      * response if not in maintenance mode
      */
-    public function actionMaintenance()
+    public function actionMaintenanc()
     {
         if (empty(Yii::$app->catchAll)) {
             return $this->redirect(Yii::$app->homeUrl);

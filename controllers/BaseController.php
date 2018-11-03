@@ -1,15 +1,4 @@
 <?php
-/**
- * Base Controllers
- *
- * @package     Base controllers
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        2018-06-16 23:03:06
- * @version     1.0
- */
 
 namespace app\controllers;
 
@@ -17,12 +6,24 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use app\components\UiComponent;
 use app\models\queries\Common;
 use app\models\Action;
 use app\models\Logs;
 use app\models\Controllers;
 use app\models\Status;
 
+/**
+ * Class BaseController
+ *
+ * @package     Ui
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        11/1/18 8:13 PM
+ * @version     1.0
+ */
 class BaseController extends Controller
 {
 
@@ -44,11 +45,11 @@ class BaseController extends Controller
      */
     public static function bitacora($event, $statusId)
     {
-        $errorValidation   = false;
+        $error   = false;
         $model             = new Logs();
         $model->status_id  = $statusId;
         $model->event      = $event;
-        $model->user_id    = Yii::$app->user->isGuest? self::USER_ID_VISIT: Yii::$app->user->identity->getId();
+        $model->user_id    = Yii::$app->user->isGuest ? self::USER_ID_VISIT : Yii::$app->user->identity->getId();
 
         $actionName        = Yii::$app->controller->action->id; // Action name
         $controllerName    = Yii::$app->controller->id;         // controller name
@@ -62,13 +63,13 @@ class BaseController extends Controller
             if ($modelControllers) {
                 $model->controller_id = $modelControllers->controller_id;
             } else {
-                $msg =Yii::t(
+                $message = Yii::t(
                     'app',
                     'Error creating controlller name: {controller_name}',
-                    ['controller_name'=>$controllerName]
+                    ['controllerName' => $controllerName]
                 );
-                Yii::warning($msg, __METHOD__);
-                $errorValidation = true;
+                Yii::warning($message, __METHOD__);
+                $error = true;
             }
         }
 
@@ -77,23 +78,23 @@ class BaseController extends Controller
             $model->action_id    = $modelAction->action_id;
         } else {
             Action::addAction($model->controller_id, $actionName, 'not verified', 1);
-            $modelAction= Action::getAction($actionName, $model->controller_id);
+            $modelAction = Action::getAction($actionName, $model->controller_id);
             if ($modelAction) {
                 $model->action_id = $modelAction->action_id;
             } else {
-                $msg =Yii::t(
+                $mesage = Yii::t(
                     'app',
                     'Error creating action name: {action_name}',
-                    ['action_name'=>$actionName]
+                    ['action_name' => $actionName]
                 );
-                Yii::warning($msg, __METHOD__);
-                $errorValidation = true;
+                Yii::warning($mesage, __METHOD__);
+                $error = true;
             }
         }
 
 
-        if ($errorValidation) {
-            Yii::$app->ui->warning('Could not save new log information:', $model->errors);
+        if ($error) {
+            UiComponent::warning('Could not save new log information:', $model->errors);
         } else {
             $model->user_agent       = Yii::$app->request->userAgent;
             $model->ipv4_address     = Yii::$app->getRequest()->getUserIP();
@@ -117,6 +118,9 @@ class BaseController extends Controller
         Yii::$app->session->setFlash($badge, $event);
     }
 
+    /**
+     * @return array
+     */
     public static function behaviorsCommon()
     {
         /** @noinspection PhpDeprecationInspection */
@@ -221,34 +225,38 @@ class BaseController extends Controller
         return false;
     }
 
+    /**
+     * @return string
+     */
     public static function getDirectoryUpload()
     {
-        $uploadDirectory =  Yii::$app->params['upload_directory'];
-        if (!isset($uploadDirectory)) {
-            $uploadDirectory = '/web/uploads/';
+        $upload_directory =  Yii::$app->params['upload_directory'];
+        if (!isset($upload_directory)) {
+            $upload_directory = '/web/uploads/';
         }
 
-        if (!file_exists(Yii::$app->basePath . $uploadDirectory)) {
-            mkdir(Yii::$app->basePath . $uploadDirectory, 0777);
+        if (!file_exists(Yii::$app->basePath . $upload_directory)) {
+            mkdir(Yii::$app->basePath . $upload_directory, 0777);
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
                     'To upload files was created the directory: {dir}',
-                    ['dir' => $uploadDirectory]
+                    ['dir' => $upload_directory ]
                 ),
                 MSG_ERROR
             );
         }
 
-        return $uploadDirectory;
+        return $upload_directory;
     }
 
     /**
      * Previous requirement to remove a records
      *
+     * @param $action string for valid if this request is Post and get profile permission
      * @return boolean
      */
-    public static function previousRequirementToRemoveRecords()
+    public static function okRequirements($action)
     {
         if (!Yii::$app->request->isPost) {
             BaseController::bitacoraAndFlash(
@@ -262,7 +270,7 @@ class BaseController extends Controller
             return false;
         }
 
-        if (!Common::getProfilePermission(ACTION_DELETE)) {
+        if (!Common::getProfilePermission($action)) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
@@ -282,7 +290,7 @@ class BaseController extends Controller
      * @param string $result
      * @return bool
      */
-    public static function requestPostSeleccionItems($result)
+    public static function okSeleccionItems($result)
     {
         if (!isset($result)) {
             BaseController::bitacora(
@@ -303,7 +311,7 @@ class BaseController extends Controller
      * @param $deleteOK String with all the records deleted
      * @param $deleteKO string with all the records not deleted for some reason.
      */
-    public static function resumeOperationRemove($deleteOK, $deleteKO)
+    public static function summaryDisplay($deleteOK, $deleteKO)
     {
         if (isset($deleteOK{1})) {
             BaseController::bitacoraAndFlash(
@@ -345,8 +353,8 @@ class BaseController extends Controller
             'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5',
             '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
             'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
-        $totalChars = count($chars)-1;
-        for ($rand = 0; $rand <= $length; $rand++) {
+        $totalChars = count($chars) - 1;
+        for ($iterator = 0; $iterator <= $length; $iterator++) {
             $random = rand(0, $totalChars);
             $randstr .= $chars[$random];
         }
@@ -366,11 +374,11 @@ class BaseController extends Controller
         $secretiv       = self::SECRET_IV;
 
         // hash
-        $key    = hash(self::SHA256, $secretkey);
+        $keyValue    = hash(self::SHA256, $secretkey);
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $ivencripted     = substr(hash(self::SHA256, $secretiv), 0, 16);
-        $output = openssl_encrypt($string, $encryptmethod, $key, 0, $ivencripted);
+        $output = openssl_encrypt($string, $encryptmethod, $keyValue, 0, $ivencripted);
 
         return  base64_encode($output);
     }
@@ -378,7 +386,7 @@ class BaseController extends Controller
     /**
      * Decode a string
      * @param $string
-     * @return string
+     * @return string decoded
      */
     public static function stringDecode($string)
     {
@@ -388,71 +396,10 @@ class BaseController extends Controller
         $secretiv      = self::SECRET_IV;
 
         // hash
-        $key            = hash(self::SHA256, $secretkey);
+        $keyValue     = hash(self::SHA256, $secretkey);
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $ivencripted             = substr(hash(self::SHA256, $secretiv), 0, 16);
-        return openssl_decrypt(base64_decode($string), $encryptmethod, $key, 0, $ivencripted);
-    }
-
-    /**
-     * @param $model models class defined in @app\models\
-     * @return bool Success o failed to create/update a $model in this view
-     * @throws \yii\db\Exception Failed to save a record error: {error}
-     * @throws \Exception
-     */
-    public static function transaction($model)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($model->save()) {
-                $transaction->commit();
-                BaseController::bitacora(
-                    Yii::t(
-                        'app',
-                        'record {id} was saved',
-                        ['id' => $model->getId()]
-                    ),
-                    MSG_INFO
-                );
-                return true;
-            }
-            $transaction->rollBack();
-        } catch (\Exception $exception) {
-            BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed to save a record error: {error}', ['error' => $exception]),
-                MSG_ERROR
-            );
-            $transaction->rollBack();
-            throw $exception;
-        }
-
-        return false;
-    }
-    /**
-     * @param $model models class defined in @app\models\
-     * @return bool Success o failed to create/update a $model in this view
-     * @throws \yii\db\Exception Failed to save a record error: {error}
-     * @throws \Exception
-     */
-    public static function transactionDelete($model)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($model->delete()) {
-                $transaction->commit();
-                return true;
-            }
-            $transaction->rollBack();
-        } catch (\Exception $exception) {
-            BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed to delete record error: {error}', ['error' => $exception]),
-                MSG_ERROR
-            );
-            $transaction->rollBack();
-            throw $exception;
-        }
-
-        return false;
+        return openssl_decrypt(base64_decode($string), $encryptmethod, $keyValue, 0, $ivencripted);
     }
 }

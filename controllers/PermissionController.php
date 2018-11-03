@@ -15,13 +15,11 @@ namespace app\controllers;
 
 use Yii;
 use yii\db\Exception;
-use yii\db\StaleObjectException;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\Action;
+use app\components\UiComponent;
 use app\models\Permission;
 use app\models\search\PermissionSearch;
 
@@ -34,7 +32,7 @@ class PermissionController extends Controller
      * Before action instructions for to do before call actions
      *
      * @param object $action
-     * @return void
+     * @return mixed
      */
     public function beforeAction($action)
     {
@@ -43,18 +41,7 @@ class PermissionController extends Controller
             return $this->redirect(['/']);
         }
         BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
-        try {
-            return parent::beforeAction($action);
-        } catch (BadRequestHttpException $exception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    'Failed to {module}, error: {error}',
-                    ['module'=> '@app\controllers\PermissionController::beforeAction', 'error' => $exception]
-                ),
-                MSG_ERROR
-            );
-        }
+        return parent::beforeAction($action);
     }
 
     /**
@@ -105,21 +92,6 @@ class PermissionController extends Controller
         ];
     }
 
-    /**
-     *
-     */
-    public function actionActiondropdown($id)
-    {
-        echo Yii::$app->ui->relatedDropdownList(
-            Action::className(),
-            self::CONTROLLER_ID,
-            $id,
-            'action_id',
-            'action_name',
-            'action_name'
-        );
-    }
-
      /**
      * Creates a new Permission model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -129,7 +101,7 @@ class PermissionController extends Controller
     {
         $model = new Permission();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
             BaseController::bitacora(
                 Yii::t('app', 'new record {id}', ['id'=>$model->permission_id]),
                 MSG_INFO
@@ -149,30 +121,20 @@ class PermissionController extends Controller
      */
     public function actionDelete($id)
     {
-        if (! BaseController::previousRequirementToRemoveRecords()) {
+        if (! BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $model = $this->findModel($id);
 
-        if ($this->referentialIntegrityCheck($model->permission_id)==0) {
-            if (BaseController::transactionDelete($model)) {
-                BaseController::bitacora(
-                    Yii::t(
-                        'app',
-                        'record {id} was deleted',
-                        ['id' => $model->permission_id]
-                    ),
-                    MSG_INFO
-                );
-            }
-        } else {
-            BaseController::bitacoraAndFlash(
+        if (Common::transaction($model, 'delete')) {
+            BaseController::bitacora(
                 Yii::t(
                     'app',
-                    'Record could not be deleted because it is being used in the system'
+                    'record {id} was deleted',
+                    ['id' => $model->permission_id]
                 ),
-                MSG_ERROR
+                MSG_INFO
             );
         }
 
@@ -189,21 +151,22 @@ class PermissionController extends Controller
         $permissionSearchModel  = new PermissionSearch();
         $dataProvider = $permissionSearchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
         $request= Yii::$app->request->get('PermissionSearch');
 
         if (isset($request[self::CONTROLLER_ID])) {
             $controllerId = $request[self::CONTROLLER_ID];
         } else {
-            $controllerId =null;
+            $controllerId = null;
         }
+
         return $this->render(
             ACTION_INDEX,
             [
                 SEARCH_MODEL => $permissionSearchModel,
                 DATA_PROVIDER => $dataProvider,
-                PAGE_SIZE => $pageSize,
+                'pageSize' => $pageSize,
                 self::CONTROLLER_ID => $controllerId
             ]
         );
@@ -219,19 +182,18 @@ class PermissionController extends Controller
 
         $result = Yii::$app->request->post('selection');
 
-        if (! BaseController::previousRequirementToRemoveRecords() ||
-            ! BaseController::requestPostSeleccionItems($result)
+        if (! BaseController::okRequirements(ACTION_DELETE) ||
+            ! BaseController::okSeleccionItems($result)
         ) {
             return $this->redirect([ACTION_INDEX]);
         }
-
 
         $deleteOK = "";
         $deleteKO = "";
         $nroSelections = sizeof($result);
         for ($i = 0; $i < $nroSelections; $i++) {
             if (($model = Permission::findOne($result[$i])) !== null) {
-                if (BaseController::transactionDelete($model)) {
+                if (Common::transaction($model, 'delete')) {
                     $deleteOK .= $model->permission_id . ", ";
                 } else {
                     $deleteKO .= $model->permission_id . ", ";
@@ -239,7 +201,7 @@ class PermissionController extends Controller
             }
         }
 
-        BaseController:: resumeOperationRemove($deleteOK, $deleteKO);
+        BaseController:: summaryDisplay($deleteOK, $deleteKO);
 
         return $this->redirect([ACTION_INDEX]);
     }
@@ -255,8 +217,7 @@ class PermissionController extends Controller
     {
         $model = $this->findModel($id);
 
-
-        if ($model->load(Yii::$app->request->post()) && $this->transaction($model)) {
+        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
             return $this->redirect([ACTION_VIEW, 'id' => $model->permission_id]);
         }
 
@@ -296,34 +257,5 @@ class PermissionController extends Controller
             MSG_ERROR
         );
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
-    }
-    /**
-     * @param $model
-     * @return bool Success o failed to create/update a $model in this view
-     * @throws \yii\db\Exception
-     */
-    private function transaction($model)
-    {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($model->save()) {
-                $transaction->commit();
-                BaseController::bitacora(
-                    Yii::t('app', 'new record {id}', ['id'=>$model->permission_id]),
-                    MSG_INFO
-                );
-                return true;
-            }
-            $transaction->rollBack();
-        } catch (\Exception $errorException) {
-            BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed to create a new record'),
-                MSG_ERROR
-            );
-            $transaction->rollBack();
-            throw $errorException;
-        }
-
-        return false;
     }
 }

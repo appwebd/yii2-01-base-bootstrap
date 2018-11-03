@@ -14,6 +14,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -43,6 +44,7 @@ class LogsController extends Controller
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+
         BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
