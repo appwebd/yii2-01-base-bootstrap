@@ -28,16 +28,15 @@ defined('BREADCRUMBS') || define('BREADCRUMBS', 'breadcrumbs');
 defined('COLSM1') || define('COLSM1', 'col-sm-1');
 defined('CONTENT') || define('CONTENT', 'content');
 defined('ERROR')   || define('ERROR', 'error');
+defined('ERROR_MODULE') || define('ERROR_MODULE', 'Failed to {module}, error: {error}');
 
 defined('DATA_PROVIDER')   || define('DATA_PROVIDER', 'dataProvider');
 defined('DATEFORMAT')   || define('DATEFORMAT', 'dd-MM-yyyy');
+
 defined('HEADER') || define('HEADER', 'header');
 
 defined('HTML_ROW_DIV6') || define('HTML_ROW_DIV6', '<div class="row"><div class="col-sm-6">');
-defined('HTML_DIV_CLOSE_DIV6_OPEN') || define(
-                                                        'HTML_DIV_CLOSE_DIV6_OPEN',
-                                                        '</div><div class="col-sm-6">'
-);
+defined('HTML_DIV_CLOSE_DIV6_OPEN') || define('HTML_DIV_CLOSE_DIV6_OPEN', '</div><div class="col-sm-6">');
 defined('HTML_BTN_BTN_DEFAULT') || define('HTML_BTN_BTN_DEFAULT', 'btn btn-default');
 
 defined('HTML_WEBPAGE_OPEN') || define(
@@ -89,10 +88,11 @@ defined('METHOD') || define('METHOD', 'method');
 // Begin Status declaracion variables
 // see table app\models\Status.php subroutines:  getStatusName, getStatusBadge, getStatusList
 // app\components\UiComponent.php subroutine: badgetStatus
-defined('MSG_INFO')    || define('MSG_INFO', 10);
-defined('MSG_SUCCESS')    || define('MSG_SUCCESS', 20);
+defined('MODULE') || define('MODULE', 'module');
+defined('MSG_INFO') || define('MSG_INFO', 10);
+defined('MSG_SUCCESS') || define('MSG_SUCCESS', 20);
 defined('MSG_WARNING') || define('MSG_WARNING', 30);
-defined('MSG_ERROR')   || define('MSG_ERROR', 40);
+defined('MSG_ERROR') || define('MSG_ERROR', 40);
 defined('MSG_SECURITY_ISSUE')   || define('MSG_SECURITY_ISSUE', 50);
 // End Status declaracion variables
 
