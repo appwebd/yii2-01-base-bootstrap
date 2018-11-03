@@ -1,13 +1,15 @@
 <?php
 
+use yii\web\View;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use app\components\UiComponent;
+use app\models\forms\PasswordResetForm;
 
-/* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
-/* @var \app\models\forms\PasswordResetRequestForm $model */
+/* @var \app\models\forms\PasswordResetForm $model */
 
-$this->title = Yii::t('app', 'Request password reset');
+$this->title = Yii::t('app', 'Password reset');
 $this->params[BREADCRUMBS][] = $this->title;
 
 echo '
@@ -18,12 +20,12 @@ echo '
 
             <div class="webpage ">';
 
-                echo Yii::$app->ui->header(
-                    'user',
+                echo UiComponent::header(
+                    'lock',
                     $this->title,
                     Yii::t(
                         'app',
-                        'Please, write your registered mail in this platform to reset your password'
+                        'Please, write your new password'
                     )
                 );
 
@@ -33,36 +35,36 @@ echo '
                     'options' => ['class' => 'form-horizontal webpage'],
                 ]);
 
-                echo $form->field($model, 'email', [
+                echo $form->field($model, PasswordResetForm::USER_ID)->hiddenInput(
+                    [
+                        VALUE => $model->user_id,
+                    ]
+                )->label(false);
+
+                echo $form->field($model, PasswordResetForm::PASSW0RD, [
                     'inputTemplate' => '<div class="input-group">
                                             <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-envelope"></span>
+                                                <span class="glyphicon-glyphicon-lock"></span>
                                             </span>
                                             {input}
                                         </div>'
-                ])->textInput([
+                ])->passwordInput([
+                    'id' =>'passwd',
                     'placeholder'=> Yii::t(
                         'app',
-                        ' valid email account, Ex: account@domain.com'
+                        'New password, Minimum password length are 8 chars and max. 50.'
                     )
                 ])->label(false);
 
-                echo '
-                <div class="form-group">
-                    <div class="help-block text-justify">';
-                echo Yii::t(
-                    'app',
-                    'A link to reset the password will be sent to your email account.'
-                );
-                echo '
-                    </div>';
+                echo '<input type="checkbox" onclick="js:showPassword()">&nbsp;&nbsp;', Yii::t('app', 'show password');
+
+                echo '<br/><br/><br/>';
 
                 echo Html::submitButton(
                     Yii::t('app', 'Submit'),
                     ['class' => 'btn btn-primary']
                 );
-
-                echo '&nbsp;
+                echo '<br/><br/><br/>
                 </div>';
 
                 ActiveForm::end();
@@ -74,3 +76,16 @@ echo '
     </div>
 </div>
 </div>';
+
+$script=<<< JS
+function showPassword() {
+    var object = document.getElementById("passwd");
+    if (object.type === "password") {
+        object.type = "text";
+    } else {
+        object.type = "password";
+    }
+}
+JS;
+
+$this->registerJs($script, View::POS_HEAD);

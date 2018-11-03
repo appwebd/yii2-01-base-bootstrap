@@ -1,5 +1,7 @@
 <?php
-use yii\helpers\Html;
+
+use app\components\UiComponent;
+
 
 /* @var yii\web\View $this */
 /* @var \app\models\User $model */
@@ -13,15 +15,13 @@ echo '
         <div class="col-sm-3 "> &nbsp; </div>
         <div class="col-sm-6 box">';
 
-            echo Yii::$app->ui->header('black', 'user', 'Request password reset', Yii::t('app', 'Thanks you'));
-            echo '<br>
-                <p class="alert alert-info">';
-                echo Yii::t(
+            echo UiComponent::header('user', Yii::t('app', 'Request password reset'), Yii::t('app', 'Requested password reset'));
+            echo '<div class="success"><h4>',
+                Yii::t(
                     'app',
                     'We have sent you an email with a reset link. Please check your Inbox'
-                );
-                echo '
-                </p>';
+                ),
+                '<br/><br/><br/></h4></div>';
 
                 echo Yii::$app->view->render('@app/views/partials/_links_return_to');
 
