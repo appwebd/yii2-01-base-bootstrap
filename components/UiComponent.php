@@ -1,6 +1,6 @@
 <?php
 /**
- * Ui
+ * Class UiComponent
  *
  * @package     Ui
  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
@@ -19,26 +19,31 @@ use yii\helpers\Html;
 use app\models\queries\Common;
 use app\models\Status;
 
+/**
+ * Class UiComponent
+ *
+ * @package     Ui
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        11/1/18 11:01 AM
+ * @version     1.0
+ */
 class UiComponent extends Component
 {
-
-
-    const COLOR_PRIMARY                 = ' text-primary '; // add one space blank before and after the color
 
     const BOOL_TEXT                     = true;
     const BOOL_ACTIONS_TEXT             = false;
     const BOOL_TOOLTIP                  = true;
-
     const BOOL_ACTION_TEXT              = false;
     const BOOL_ACTION_TOOLTIP           = false;
-
     const BUTTON_ICON_BACK_INDEX        = '<span class="glyphicon glyphicon-list"></span>&nbsp;';
     const BUTTON_ICON_DELETE            = '<span class="glyphicon glyphicon-trash"></span>&nbsp;';
     const BUTTON_ICON_CREATE            = '<span class="glyphicon glyphicon-plus"></span>&nbsp;';
     const BUTTON_ICON_REFRESH           = '<span class="glyphicon glyphicon-refresh"></span>&nbsp;';
     const BUTTON_ICON_UPDATE            = '<span class="glyphicon glyphicon-pencil"></span>&nbsp;';
     const BUTTON_ICON_SAVE              = '<span class="glyphicon glyphicon-save"></span>&nbsp;';
-
     const BUTTON_TEXT_BACK_INDEX        = 'Back to admin list';
     const BUTTON_TEXT_CREATE            = 'New';
     const BUTTON_TEXT_DELETE            = 'Delete';
@@ -46,15 +51,12 @@ class UiComponent extends Component
     const BUTTON_TEXT_REFRESH_FORM      = 'Refresh';
     const BUTTON_TEXT_UPDATE            = 'Update';
     const BUTTON_TEXT_SAVE              = 'Save';
-
-
     const BUTTON_TEXT_TOOLTIP           = 'Create a new record';
-
+    const COLOR_PRIMARY                 = ' text-primary '; // add one space blank before and after the color
     const CSS_ICON_COLOR                = "slategray";
     const CSS_BTN_DEFAULT               = 'btn btn-default';
     const CSS_BTN_PRIMARY               = 'btn btn-primary';
     const CSS_BTN_DANGER                = 'btn btn-danger';
-
     const HTML_TOOLTIP                  = 'tooltip';
     const HTML_DATA_TOGGLE              = 'data-toggle';
     const HTML_DATA_PLACEMENT           = 'data-placement';
@@ -63,18 +65,29 @@ class UiComponent extends Component
     const HTML_SPACE                    = '&nbsp;';
     const HTML_OPTION                   = '<option>';
     const HTML_OPTION_CLOSE             = '</option>';
-
     const STR_PER_PAGE                  = 'per-page';
     const STR_PAGESIZE                  = 'pageSize';
     const STR_CONFIRM                   = 'confirm';
 
-    public  static function badgetStatus($statusId, $status)
+    /**
+     * @param $statusId
+     * @param $status
+     * @return string
+     */
+    public static function badgetStatus($statusId, $status)
     {
         $badge = Status::getStatusBadge($statusId);
         return '<span class="badge badge-'.$badge.'">'. $status . '</span>';
     }
 
-    public  static function button($caption, $css, $buttonToolTip, $aAction = [])
+    /**
+     * @param $caption string caption of button
+     * @param $css     string style of button
+     * @param $buttonToolTip  string help tooltip
+     * @param array $aAction  array of string with action to do
+     * @return string
+     */
+    public static function button($caption, $css, $buttonToolTip, $aAction = [])
     {
 
         return Html::a(
@@ -91,17 +104,16 @@ class UiComponent extends Component
 
     /**
      * @param $showButtons String with boolean values to show Create, refresh, delete buttons.
-     * @param $buttonHeader boolean Show header in view ? (true/false value)
+     * @param $button_header boolean Show header in view ? (true/false value)
      * @return void
      */
-
-    public  static function buttonsAdmin($showButtons = '111', $buttonHeader = true)
+    public static function buttonsAdmin($showButtons = '111', $button_header = true)
     {
-        $aShowButtons = str_split($showButtons, 1);
+        $show_buttons = str_split($showButtons, 1);
 
-        $buttonCreate= '';
-        if ($aShowButtons[0] && Common::getProfilePermission(ACTION_CREATE)) {
-            $buttonCreate = UiComponent::button(
+        $button_create = '';
+        if ($show_buttons[0] && Common::getProfilePermission(ACTION_CREATE)) {
+            $button_create = UiComponent::button(
                 self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
                 self::CSS_BTN_PRIMARY,
                 Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
@@ -109,48 +121,48 @@ class UiComponent extends Component
             );
         }
 
-        $buttonDelete = '';
-        if ($aShowButtons[2] && Common::getProfilePermission(ACTION_DELETE)) {
-            $buttonDelete= UiComponent::buttonDelete(
+        $button_delete = '';
+        if ($show_buttons[2] && Common::getProfilePermission(ACTION_DELETE)) {
+            $button_delete= UiComponent::buttonDelete(
                 [ACTION_REMOVE],
                 self::CSS_BTN_DEFAULT
             );
         }
 
-        $buttonRefresh = '';
-        if ($aShowButtons[1]) {
-            $buttonRefresh = UiComponent::buttonRefresh();
+        $button_refresh = '';
+        if ($show_buttons[1]) {
+            $button_refresh = UiComponent::buttonRefresh();
         }
 
-        if ($buttonHeader) {
+        if ($button_header) {
             echo '<br/>',
-            $buttonCreate,
+            $button_create,
             self::HTML_SPACE,
-            $buttonRefresh,
+            $button_refresh,
             self::HTML_SPACE,
-            $buttonDelete;
+            $button_delete;
         } else {
             echo '<br/><br/><br/>',
-            $buttonDelete,
+            $button_delete,
             self::HTML_SPACE,
-            $buttonRefresh,
+            $button_refresh,
             self::HTML_SPACE,
-            $buttonCreate;
+            $button_create;
         }
     }
 
     /**
      * Show actions with buttons
      *
-     * @param $model
+     * @param $model mixed
      */
 
     public static function buttonsViewBottom(&$model)
     {
-        $primaryKey = $model->getId();
-        $buttonCreate = '';
+        $primary_key = $model->getId();
+        $button_create = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
-            $buttonCreate = UiComponent::button(
+            $button_create = UiComponent::button(
                 self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
@@ -158,29 +170,29 @@ class UiComponent extends Component
             );
         }
 
-        $buttonDelete = '';
+        $button_delete = '';
         if (Common::getProfilePermission(ACTION_DELETE)) {
-            $buttonDelete= UiComponent::buttonDelete(
-                [ACTION_DELETE, 'id'=>$primaryKey],
+            $button_delete= UiComponent::buttonDelete(
+                [ACTION_DELETE, 'id' => $primary_key],
                 self::CSS_BTN_DANGER
             );
         }
 
-        $buttonUpdate= '';
+        $button_update= '';
         if (Common::getProfilePermission(ACTION_UPDATE)) {
-            $buttonUpdate = UiComponent::button(
+            $button_update = UiComponent::button(
                 self::BUTTON_ICON_UPDATE . Yii::t('app', self::BUTTON_TEXT_UPDATE),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', 'Update the current record'),
-                [ACTION_UPDATE, 'id'=>$primaryKey]
+                [ACTION_UPDATE, 'id' => $primary_key]
             );
         }
 
-        echo $buttonCreate,
+        echo $button_create,
             self::HTML_SPACE,
-            $buttonUpdate,
+            $button_update,
             self::HTML_SPACE,
-            $buttonDelete,
+            $button_delete,
             self::HTML_SPACE,
             UiComponent::button(
                 self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
@@ -190,14 +202,18 @@ class UiComponent extends Component
             );
     }
 
-    public  static function buttonsCreate($tabIndex, $showBackToIndex = true)
+    /**
+     * @param $tabIndex
+     * @param bool $showBackToIndex
+     */
+    public static function buttonsCreate($tabIndex, $showBackToIndex = true)
     {
-        $buttonSave = '';
+        $button_save = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
-            $buttonSave = UiComponent::buttonSave($tabIndex);
+            $button_save = UiComponent::buttonSave($tabIndex);
         }
 
-        echo $buttonSave,
+        echo $button_save,
         self::HTML_SPACE,
         '<button type=\'reset\' class=\'', self::CSS_BTN_DEFAULT,'\' ',
                 self::HTML_TITLE,'=\'', Yii::t('app', self::BUTTON_TEXT_REFRESH),'\' ',
@@ -216,7 +232,12 @@ class UiComponent extends Component
         }
     }
 
-    public  static function buttonDelete($action, $css)
+    /**
+     * @param $action string action
+     * @param $css    string style
+     * @return string
+     */
+    public static function buttonDelete($action, $css)
     {
         return Html::a(
             self::BUTTON_ICON_DELETE . Yii::t('app', self::BUTTON_TEXT_DELETE),
@@ -233,9 +254,11 @@ class UiComponent extends Component
             ]
         );
     }
+
     /**
      * Button Refresh view
-     *
+     * @param string $caption
+     * @return string
      */
     public static function buttonRefresh($caption = self::BUTTON_TEXT_REFRESH)
     {
@@ -275,6 +298,11 @@ class UiComponent extends Component
         );
     }
 
+    /**
+     * @param string $icon name of glyphicon glyphicon-
+     * @param string $pageTitle Title of view
+     * @param string $subHeader subtitle of view
+     */
     public static function header(
         $icon = 'user',
         $pageTitle = 'User',
@@ -297,7 +325,7 @@ class UiComponent extends Component
      * @param $panelTitle string header title of panel
      * @return string
      */
-    public  static function panel($panelTitle)
+    public static function panel($panelTitle)
     {
         return '<div class="panel panel-default"><div class="panel-heading"><b>'.
         Yii::t('app', $panelTitle).'</b></div><div class="panel-body">';
@@ -324,7 +352,7 @@ class UiComponent extends Component
      *               1: Show button Delete
      * @param bool $showPageSize
      */
-    public  static function headerAdmin(
+    public static function headerAdmin(
         $icon = 'user',
         $pageTitle = 'User',
         $subHeader = 'Users',
@@ -332,7 +360,7 @@ class UiComponent extends Component
         $showButtons = '111',
         $showPageSize = false
     ) {
-        $nroRows = Common::getNroRows($table);
+        $nro_rows = Common::getNroRows($table);
 
         echo '<div class=\'row \'>
                     <div class=\'col-sm-6  \'>',
@@ -346,7 +374,7 @@ class UiComponent extends Component
                                 'app',
                                 'Registers entered (It is updated when the form is loaded)'
                             ), '\' ', self::HTML_DATA_TOGGLE, '=', self::HTML_TOOLTIP, ' ',
-                            self::HTML_DATA_PLACEMENT, '=',self::HTML_DATA_PLACEMENT_VALUE, '>', $nroRows,
+                            self::HTML_DATA_PLACEMENT, '=',self::HTML_DATA_PLACEMENT_VALUE, '>', $nro_rows,
                         '</span></h3>',
                     '</div>
                     <div class=\'col-sm-6  text-right\'>';
@@ -356,8 +384,8 @@ class UiComponent extends Component
         }
 
         if ($showPageSize) {
-            $pageSize = UiComponent::pageSize();
-            echo UiComponent::pageSizeDropDownList($pageSize);
+            $page_size = UiComponent::pageSize();
+            echo UiComponent::pageSizeDropDownList($page_size);
         }
         echo '      </div>
               </div>
@@ -365,43 +393,50 @@ class UiComponent extends Component
     }
 
 
+    /**
+     * @return array|mixed
+     */
     public static function pageSize()
     {
 
         $session = Yii::$app->session;
-        $pageSize = Yii::$app->request->get(self::STR_PER_PAGE);
+        $page_size = Yii::$app->request->get(self::STR_PER_PAGE);
 
-        if (isset($pageSize)) {
-            $pageSize = Yii::$app->request->get(self::STR_PER_PAGE);
+        if (isset($page_size)) {
+            $page_size = Yii::$app->request->get(self::STR_PER_PAGE);
         } else {
-            $pageSize = Yii::$app->request->post(self::STR_PER_PAGE);
-            if (isset($pageSize)) {
-                $pageSize = Yii::$app->request->post(self::STR_PER_PAGE);
+            $page_size = Yii::$app->request->post(self::STR_PER_PAGE);
+            if (isset($page_size)) {
+                $page_size = Yii::$app->request->post(self::STR_PER_PAGE);
             } else {
                 if (isset($session[self::STR_PAGESIZE])) {
-                    $pageSize  = $session[self::STR_PAGESIZE];
+                    $page_size  = $session[self::STR_PAGESIZE];
                 } else {
-                    $pageSize=Yii::$app->params['pageSizeDefault'];
-                    $session->set(self::STR_PAGESIZE, $pageSize);
+                    $page_size=Yii::$app->params['pageSizeDefault'];
+                    $session->set(self::STR_PAGESIZE, $page_size);
                 }
             }
         }
 
-        $session->set(self::STR_PAGESIZE, $pageSize);
-        return $pageSize;
+        $session->set(self::STR_PAGESIZE, $page_size);
+        return $page_size;
     }
 
-    public static function pageSizeDropDownList($pageSize)
+    /**
+     * @param $page_size
+     * @return string
+     */
+    public static function pageSizeDropDownList($page_size)
     {
-        $msg = Yii::t('app', 'Number of rows to display per page');
+        $title= Yii::t('app', 'Number of rows to display per page');
         return Html::dropDownList(
             self::STR_PER_PAGE,
-            $pageSize,
+            $page_size,
             array(5=> 5, 10=> 10, 15 => 15, 25=> 25, 40=>40, 65=>65, 105=>105, 170=>170, 275=>275, 445=>445),
             array(
                 'id' => self::STR_PER_PAGE,
                 'onChange' => 'window.location.reload()',
-                'title' => $msg,
+                'title' => $title,
                 'class' => 'btn btn-default dropdown-toggle dropdown-toggle-split',
                 self::HTML_DATA_TOGGLE => self::HTML_TOOLTIP,
                 self::HTML_DATA_PLACEMENT => self::HTML_DATA_PLACEMENT_VALUE,
@@ -410,44 +445,15 @@ class UiComponent extends Component
     }
 
     /**
-     * Get information for dropdown list
-     * @param $model model class defined in app\models to get information
-     * @param $parentModelId String column related model
-     * @param $valueId integer id to search in model
-     * @param $key integer column to get column code
-     * @param $value string column to get column description
-     * @param $orderBy String Order by column
-     * @return string String
-     */
-    public  static function relatedDropdownList($model, $parentModelId, $valueId, $key, $value, $orderBy)
-    {
-        $rows = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
-
-        $dropdown = Yii::t('app', 'Please select one option');
-        $dropdown  = self::HTML_OPTION . $dropdown . self::HTML_OPTION_CLOSE;
-
-        if (count($rows)>0) {
-            foreach ($rows as $row) {
-                $dropdown  .= '<option value='.$row->$key.'>'.$row->$value . self::HTML_OPTION_CLOSE;
-            }
-        } else {
-            $dropdown  .= self::HTML_OPTION . Yii::t('app', 'No results found').self::HTML_OPTION_CLOSE;
-        }
-
-        return $dropdown ;
-    }
-
-    /**
-     * @param $msg Message to show in view
-     * @param $error String error message
+     * @param $message string
+     * @param $error array of string error message
      * @return void
      */
-    public  static function warning($msg, $error)
+    public static function warning($message, $error)
     {
-
-        $msg = $msg .'\n'. print_r($error, true);
-        Yii::warning($msg, __METHOD__);
-        Yii::$app->session->setFlash('error', $msg);
+        $message = $message.'\n'. print_r($error, true);
+        Yii::warning($message, __METHOD__);
+        Yii::$app->session->setFlash('error', $message);
     }
 
     /**
