@@ -15,7 +15,9 @@ use app\components\UiComponent;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use app\models\Action;
+use app\models\Controllers;
 use app\models\Permission;
+use app\models\Profile;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Permission */
@@ -40,7 +42,7 @@ echo '
         );
 
 
-        $items = $model->getProfileList();
+        $items = Profile::getProfileList();
         echo $form->field($model, Permission::PROFILE_ID)->RadioList(
             $items,
             [
@@ -52,7 +54,7 @@ echo '
             ]
         )->label();
 
-        $items = $model->getControllersList();
+        $items = Controllers::getControllersList();
         echo $form->field($model, Permission::CONTROLLER_ID)->dropDownList(
             $items,
             [
