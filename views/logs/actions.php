@@ -29,8 +29,11 @@ echo HTML_WEBPAGE_OPEN;
 echo UiComponent::headerAdmin(
     'list-alt',
     $this->title,
-    Yii::t('app', 'This view recollect all the views or windows that exists in this web application. 
-    (for a proposal of privileges and access control)'),
+    Yii::t(
+        'app',
+        'This view recollect all the views or windows that exists in this web application.
+        (for a proposal of privileges and access control)'
+    ),
     'action',
     '000',
     true

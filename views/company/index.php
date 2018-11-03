@@ -80,7 +80,7 @@ try {
         Yii::t(
             'app',
             'Failed to show information, error: {error}',
-            ['error' => $errorexception]
+            [ERROR => $errorexception]
         ),
         MSG_ERROR
     );
