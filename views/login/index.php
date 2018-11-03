@@ -92,14 +92,14 @@ $this->params[BREADCRUMBS][] = $this->title;
                             'app',
                             'forget your password?'
                         ),
-                        ['/login/resetrequest']
+                        ['/password/index']
                     );?>.
 
                     &nbsp; | &nbsp;
                     <?=
                     Yii::t('app', 'You do not have an account?'),
                     '&nbsp;',
-                    Html::a(Yii::t('app', 'Signup'), ['singup/']);
+                    Html::a(Yii::t('app', 'Signup'), ['/singup/index']);
                     ?>
                 </div>
 
