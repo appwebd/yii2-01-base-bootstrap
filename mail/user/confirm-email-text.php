@@ -7,10 +7,10 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\controllers\BaseController;
 
-$url = Url::to(['/user/confirm-email',
-    'token' => $model->email_confirmation_token,
-], true);
+$token = BaseController::stringEncode($model->email_confirmation_token);
+$url = Url::to(['/login/confirmemail', 'token' => $token], true);
 ?>
 
 Hello <?= Html::encode($model->username) ?>,

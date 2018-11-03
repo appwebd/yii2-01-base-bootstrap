@@ -1,11 +1,16 @@
 <?php
 
+use app\controllers\BaseController;
+use app\models\forms\PasswordResetRequestForm;
+
 /* @var $this yii\web\View */
 /* @var $user common\models\UserAccount */
 
-$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
+$token = PasswordResetRequestForm::generateToken($model->password_reset_token, $model->user_id);
+$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['password/reset', 'token' => $token]);
+
 ?>
-Hello <?= $user->firstName .' ' .$user->lastName; ?>
+Hello <?= $model->firstName .' ' .$model->lastName; ?>
 
 Follow the link below to reset your password:
 
