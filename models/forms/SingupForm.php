@@ -17,22 +17,44 @@ use Yii;
 use yii\base\Model;
 use app\models\User;
 use app\helpers\Mail;
+use app\components\UiComponent;
 
 /**
  * User signup form
  */
-class SignupForm extends Model
+class SingupForm extends Model
 {
     const EMAIL      = 'email';
     const FIRST_NAME = 'firstName';
     const LAST_NAME  = 'lastName';
     const STRING     = 'string';
     const USERNAME   = 'username';
+    const PASSWORD   = 'password';
+    const NEW_PASSWORD = 'new-password';
+    const COMPANY_EMPTY = 0;
+    const USER_ACTIVE = 1;
+    const PROFILE_USER = 20;
+    const EMAIL_IS_VERIFIED_FALSE= 0;
 
+    /**
+     * @var
+     */
     public $username;
+    /**
+     * @var
+     */
     public $email;
+    /**
+     * @var
+     */
     public $password;
+    /**
+     * @var
+     */
     public $firstName;
+    /**
+     * @var
+     */
     public $lastName;
 
     /**
@@ -41,7 +63,7 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            [[self::EMAIL, self::FIRST_NAME, self::LAST_NAME, self::USERNAME, 'password'], 'required'],
+            [[self::EMAIL, self::FIRST_NAME, self::LAST_NAME, self::USERNAME, self::PASSWORD], 'required'],
             [[self::EMAIL, self::FIRST_NAME, self::LAST_NAME, self::USERNAME], 'trim'],
 
             [self::USERNAME, 'unique', 'targetClass' => User::className()],
@@ -55,16 +77,16 @@ class SignupForm extends Model
             [self::FIRST_NAME, self::STRING, LENGTH => [1, 80]],
             [self::LAST_NAME, self::STRING, LENGTH => [1, 80]],
 
-            ['password', self::STRING, LENGTH => [5, 254]],
+            [self::PASSWORD, self::STRING, LENGTH => [5, 254]],
         ];
     }
 
     /**
      * Signs up new user
      *
-     * @return app\model\User|null the saved user model or null if saving fails
+     * @return mixed app\model\User|null the saved user model or null if saving fails
      */
-    public function signup()
+    public function singup()
     {
         if (!$this->checkFromEmail() || !$this->validate()) {
             return null;
@@ -73,18 +95,18 @@ class SignupForm extends Model
         $user = new User();
         $user->username                 = $this->username;
         $user->email                    = $this->email;
-        $user->email_is_verified        = 0;
-        $user->email_confirmation_token = ' ';
+        $user->email_is_verified        = SingupForm::EMAIL_IS_VERIFIED_FALSE;
+        $user->email_confirmation_token = null;
         $user->firstName                = $this->firstName;
         $user->lastName                 = $this->lastName;
         $user->telephone                = '';
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailConfirmationToken(true);
-        $user->profile_id               = 20; // 20: Usuario comun
+        $user->profile_id               = SingupForm::PROFILE_USER; // 20: Usuario comun
         $user->ipv4_address_last_login  = Yii::$app->getRequest()->getUserIP();
-        $user->active                   = 1;
-        $user->company_id               = 0;
+        $user->active                   = SingupForm::USER_ACTIVE;
+        $user->company_id               = SingupForm::COMPANY_EMPTY;
         $user->generatePasswordResetToken(true);
 
         if ($user->validate() && $user->save()) {
@@ -96,7 +118,7 @@ class SignupForm extends Model
             return $user;
         }
 
-        Yii::$app->ui->warning('Could not save new user:', $user->errors);
+        UiComponent::warning('Could not save new user:', $user->errors);
         return null;
     }
 
