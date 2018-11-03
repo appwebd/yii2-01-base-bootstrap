@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\web\NotFoundHttpException;
 use app\models\User;
+use app\models\queries\Common;
 
 /**
  * LoginForm is the model behind the login form.
@@ -18,7 +19,7 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
-    private $_user = false;
+    private $userPrivateLocalClass = false;
 
     const USERNAME = 'username';
     const PASSWORD =  'password';
@@ -46,23 +47,6 @@ class LoginForm extends Model
             self::REMEMBER_ME => Yii::t('app', 'Remember me'),
         ];
     }
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
-    public function validatePassword($attribute, $params)
-    {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
-            }
-        }
-    }
 
     /**
      * Logs in a user using the provided username and password.
@@ -87,6 +71,21 @@ class LoginForm extends Model
             throw new NotFoundHttpException('Something is wrong with your user/pass');
         }
     }
+    /**
+     * Validates the password.
+     * This method serves as the inline validation for password.
+     */
+    public function validatePassword()
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+
+            if (!$user || !$user->validatePassword($this->password)) {
+                $this->addError('password', 'Incorrect username or password.');
+            }
+        }
+    }
+
 
     /**
      * Finds user by [[username]]
@@ -95,10 +94,27 @@ class LoginForm extends Model
      */
     public function getUser()
     {
-        if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+        if ($this->userPrivateLocalClass === false) {
+            $this->userPrivateLocalClass = User::findByUsername($this->username);
         }
 
-        return $this->_user;
+        return $this->userPrivateLocalClass;
+    }
+    /**
+     * Removes email confirmation token and sets is_email_verified to true
+     * @param bool $save whether to save the record. Default is `false`.
+     * @return bool|null whether the save was successful or null if $save was false.
+     */
+    public static function removeTokenEmail($userId)
+    {
+        $model = User::findIdentity($userId);
+        if ($model !==null) {
+            $model->email_confirmation_token = null;
+            $model->email_is_verified = 1;
+            if (Common::transaction($model, 'save')) {
+                return true;
+            }
+        }
+        return false;
     }
 }
