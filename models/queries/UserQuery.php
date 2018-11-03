@@ -58,6 +58,7 @@ class UserQuery extends ActiveQuery
     }
 
     /**
+     * @param $username
      * @return static the query with condition for given username applied
      */
     public function username($username)
