@@ -104,50 +104,52 @@ class UiComponent extends Component
 
     /**
      * @param $showButtons String with boolean values to show Create, refresh, delete buttons.
-     * @param $button_header boolean Show header in view ? (true/false value)
+     * @param bool $buttonHeader
      * @return void
+     * @throws \yii\db\Exception
      */
-    public static function buttonsAdmin($showButtons = '111', $button_header = true)
+    public static function buttonsAdmin($showButtons = '111', $buttonHeader = true)
     {
-        $show_buttons = str_split($showButtons, 1);
+        try {
+            $showButtons = str_split($showButtons, 1);
 
-        $button_create = '';
-        if ($show_buttons[0] && Common::getProfilePermission(ACTION_CREATE)) {
-            $button_create = UiComponent::button(
-                self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
-                self::CSS_BTN_PRIMARY,
-                Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
-                [ACTION_CREATE]
+            $buttonCreate = '';
+            if ($showButtons[0] && Common::getProfilePermission(ACTION_CREATE)) {
+                $buttonCreate = UiComponent::button(
+                    self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
+                    self::CSS_BTN_PRIMARY,
+                    Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
+                    [ACTION_CREATE]
+                );
+            }
+
+            $buttonDelete = '';
+            if ($showButtons[2] && Common::getProfilePermission(ACTION_DELETE)) {
+                $buttonDelete= UiComponent::buttonDelete(
+                    [ACTION_REMOVE],
+                    self::CSS_BTN_DEFAULT
+                );
+            }
+
+            $buttonRefresh = '';
+            if ($showButtons[1]) {
+                $buttonRefresh = UiComponent::buttonRefresh();
+            }
+
+            if ($buttonHeader) {
+                echo '<br/>', $buttonCreate, self::HTML_SPACE, $buttonRefresh, self::HTML_SPACE, $buttonDelete;
+            } else {
+                echo '<br/><br/><br/>', $buttonDelete, self::HTML_SPACE, $buttonRefresh, self::HTML_SPACE, $buttonCreate;
+            }
+        } catch (Exception $e) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE=> 'app\components\UiComponent::buttonsAdmin', ERROR => $e]
+                ),
+                MSG_ERROR
             );
-        }
-
-        $button_delete = '';
-        if ($show_buttons[2] && Common::getProfilePermission(ACTION_DELETE)) {
-            $button_delete= UiComponent::buttonDelete(
-                [ACTION_REMOVE],
-                self::CSS_BTN_DEFAULT
-            );
-        }
-
-        $button_refresh = '';
-        if ($show_buttons[1]) {
-            $button_refresh = UiComponent::buttonRefresh();
-        }
-
-        if ($button_header) {
-            echo '<br/>',
-            $button_create,
-            self::HTML_SPACE,
-            $button_refresh,
-            self::HTML_SPACE,
-            $button_delete;
-        } else {
-            echo '<br/><br/><br/>',
-            $button_delete,
-            self::HTML_SPACE,
-            $button_refresh,
-            self::HTML_SPACE,
-            $button_create;
         }
     }
 
@@ -159,10 +161,10 @@ class UiComponent extends Component
 
     public static function buttonsViewBottom(&$model)
     {
-        $primary_key = $model->getId();
-        $button_create = '';
+        $primaryKey = $model->getId();
+        $buttonCreate = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
-            $button_create = UiComponent::button(
+            $buttonCreate = UiComponent::button(
                 self::BUTTON_ICON_CREATE. Yii::t('app', self::BUTTON_TEXT_CREATE),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
@@ -170,29 +172,29 @@ class UiComponent extends Component
             );
         }
 
-        $button_delete = '';
+        $buttonDelete = '';
         if (Common::getProfilePermission(ACTION_DELETE)) {
-            $button_delete= UiComponent::buttonDelete(
-                [ACTION_DELETE, 'id' => $primary_key],
+            $buttonDelete= UiComponent::buttonDelete(
+                [ACTION_DELETE, 'id' => $primaryKey],
                 self::CSS_BTN_DANGER
             );
         }
 
-        $button_update= '';
+        $buttonUpdate= '';
         if (Common::getProfilePermission(ACTION_UPDATE)) {
-            $button_update = UiComponent::button(
+            $buttonUpdate = UiComponent::button(
                 self::BUTTON_ICON_UPDATE . Yii::t('app', self::BUTTON_TEXT_UPDATE),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', 'Update the current record'),
-                [ACTION_UPDATE, 'id' => $primary_key]
+                [ACTION_UPDATE, 'id' => $primaryKey]
             );
         }
 
-        echo $button_create,
+        echo $buttonCreate,
             self::HTML_SPACE,
-            $button_update,
+            $buttonUpdate,
             self::HTML_SPACE,
-            $button_delete,
+            $buttonDelete,
             self::HTML_SPACE,
             UiComponent::button(
                 self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
@@ -208,12 +210,12 @@ class UiComponent extends Component
      */
     public static function buttonsCreate($tabIndex, $showBackToIndex = true)
     {
-        $button_save = '';
+        $buttonSave = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
-            $button_save = UiComponent::buttonSave($tabIndex);
+            $buttonSave = UiComponent::buttonSave($tabIndex);
         }
 
-        echo $button_save,
+        echo $buttonSave,
         self::HTML_SPACE,
         '<button type=\'reset\' class=\'', self::CSS_BTN_DEFAULT,'\' ',
                 self::HTML_TITLE,'=\'', Yii::t('app', self::BUTTON_TEXT_REFRESH),'\' ',
@@ -233,7 +235,7 @@ class UiComponent extends Component
     }
 
     /**
-     * @param $action string action
+     * @param $action array action
      * @param $css    string style
      * @return string
      */
@@ -360,7 +362,7 @@ class UiComponent extends Component
         $showButtons = '111',
         $showPageSize = false
     ) {
-        $nro_rows = Common::getNroRows($table);
+        $nroRows = Common::getNroRows($table);
 
         echo '<div class=\'row \'>
                     <div class=\'col-sm-6  \'>',
@@ -374,7 +376,7 @@ class UiComponent extends Component
                                 'app',
                                 'Registers entered (It is updated when the form is loaded)'
                             ), '\' ', self::HTML_DATA_TOGGLE, '=', self::HTML_TOOLTIP, ' ',
-                            self::HTML_DATA_PLACEMENT, '=',self::HTML_DATA_PLACEMENT_VALUE, '>', $nro_rows,
+                            self::HTML_DATA_PLACEMENT, '=',self::HTML_DATA_PLACEMENT_VALUE, '>', $nroRows,
                         '</span></h3>',
                     '</div>
                     <div class=\'col-sm-6  text-right\'>';
@@ -384,8 +386,8 @@ class UiComponent extends Component
         }
 
         if ($showPageSize) {
-            $page_size = UiComponent::pageSize();
-            echo UiComponent::pageSizeDropDownList($page_size);
+            $pageSize = UiComponent::pageSize();
+            echo UiComponent::pageSizeDropDownList($pageSize);
         }
         echo '      </div>
               </div>
@@ -400,38 +402,38 @@ class UiComponent extends Component
     {
 
         $session = Yii::$app->session;
-        $page_size = Yii::$app->request->get(self::STR_PER_PAGE);
+        $pageSize = Yii::$app->request->get(self::STR_PER_PAGE);
 
-        if (isset($page_size)) {
-            $page_size = Yii::$app->request->get(self::STR_PER_PAGE);
+        if (isset($pageSize)) {
+            $pageSize = Yii::$app->request->get(self::STR_PER_PAGE);
         } else {
-            $page_size = Yii::$app->request->post(self::STR_PER_PAGE);
-            if (isset($page_size)) {
-                $page_size = Yii::$app->request->post(self::STR_PER_PAGE);
+            $pageSize = Yii::$app->request->post(self::STR_PER_PAGE);
+            if (isset($pageSize)) {
+                $pageSize = Yii::$app->request->post(self::STR_PER_PAGE);
             } else {
                 if (isset($session[self::STR_PAGESIZE])) {
-                    $page_size  = $session[self::STR_PAGESIZE];
+                    $pageSize  = $session[self::STR_PAGESIZE];
                 } else {
-                    $page_size=Yii::$app->params['pageSizeDefault'];
-                    $session->set(self::STR_PAGESIZE, $page_size);
+                    $pageSize=Yii::$app->params['pageSizeDefault'];
+                    $session->set(self::STR_PAGESIZE, $pageSize);
                 }
             }
         }
 
-        $session->set(self::STR_PAGESIZE, $page_size);
-        return $page_size;
+        $session->set(self::STR_PAGESIZE, $pageSize);
+        return $pageSize;
     }
 
     /**
-     * @param $page_size
+     * @param $pageSize
      * @return string
      */
-    public static function pageSizeDropDownList($page_size)
+    public static function pageSizeDropDownList($pageSize)
     {
         $title= Yii::t('app', 'Number of rows to display per page');
         return Html::dropDownList(
             self::STR_PER_PAGE,
-            $page_size,
+            $pageSize,
             array(5=> 5, 10=> 10, 15 => 15, 25=> 25, 40=>40, 65=>65, 105=>105, 170=>170, 275=>275, 445=>445),
             array(
                 'id' => self::STR_PER_PAGE,
