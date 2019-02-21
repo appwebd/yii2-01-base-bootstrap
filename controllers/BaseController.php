@@ -229,24 +229,24 @@ class BaseController extends Controller
      */
     public static function getDirectoryUpload()
     {
-        $upload_directory =  Yii::$app->params['upload_directory'];
-        if (!isset($upload_directory)) {
-            $upload_directory = '/web/uploads/';
+        $uploadDirectory =  Yii::$app->params['upload_directory'];
+        if (!isset($uploadDirectory)) {
+            $uploadDirectory = '/web/uploads/';
         }
 
-        if (!file_exists(Yii::$app->basePath . $upload_directory)) {
-            mkdir(Yii::$app->basePath . $upload_directory, 0777);
+        if (!file_exists(Yii::$app->basePath . $uploadDirectory)) {
+            mkdir(Yii::$app->basePath . $uploadDirectory, 0777);
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
                     'To upload files was created the directory: {dir}',
-                    ['dir' => $upload_directory ]
+                    ['dir' => $uploadDirectory ]
                 ),
                 MSG_ERROR
             );
         }
 
-        return $upload_directory;
+        return $uploadDirectory;
     }
 
     /**
