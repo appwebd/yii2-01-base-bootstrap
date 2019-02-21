@@ -246,7 +246,6 @@ class CompanyController extends Controller
      * Delete many records of this table Company
      *
      * @return mixed
-     * @throws \yii\db\StaleObjectException Common::transaction
      */
     public function actionRemove()
     {
