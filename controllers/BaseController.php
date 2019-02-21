@@ -12,6 +12,7 @@ use app\models\Action;
 use app\models\Logs;
 use app\models\Controllers;
 use app\models\Status;
+use app\models\User;
 
 /**
  * Class BaseController
@@ -27,7 +28,6 @@ use app\models\Status;
 class BaseController extends Controller
 {
 
-    const USER_ID_VISIT     = 1;
     const SHA256       = 'sha256';
     const ENCRIPTED_METHOD = 'AES-256-CBC';
     const SECRET_KEY = 'money20343';
@@ -49,8 +49,7 @@ class BaseController extends Controller
         $model             = new Logs();
         $model->status_id  = $statusId;
         $model->event      = $event;
-        $model->user_id    = Yii::$app->user->isGuest ? self::USER_ID_VISIT : Yii::$app->user->identity->getId();
-
+        $model->user_id    = User::getIdentityUserId();
         $actionName        = Yii::$app->controller->action->id; // Action name
         $controllerName    = Yii::$app->controller->id;         // controller name
 
@@ -355,7 +354,7 @@ class BaseController extends Controller
             'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
         $totalChars = count($chars) - 1;
         for ($iterator = 0; $iterator <= $length; $iterator++) {
-            $random = rand(0, $totalChars);
+            $random = random_int(0, $totalChars);
             $randstr .= $chars[$random];
         }
         return $randstr;
