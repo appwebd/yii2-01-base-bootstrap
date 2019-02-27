@@ -1,28 +1,34 @@
 <?php
 /**
-  * Logs (user bitacora)
-  *
-  * @package     Controller of Logs table
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 15:34:07
-  * @version     1.0
-*/
+ * Logs (user bitacora)
+ *
+ * @category  Controllers
+ * @package   Logs
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2018-2019 Patricio Rojas Ortiz
+ * @license   Private license
+ * @link      https://appwebd.github.io
+ * @date      2018-07-30 15:34:07
+ * @version   SVN: $Id$
+ * @php       version 7.2
+ */
 
 namespace app\controllers;
 
 use Yii;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use app\components\UiComponent;
 use app\models\search\ActionSearch;
 use app\models\search\BlockedSearch;
 use app\models\search\ControllersSearch;
 use app\models\search\LogsSearch;
 use app\models\search\StatusSearch;
+
+/**
+ * LogsController class permit logs in bitacora table
+ */
 
 class LogsController extends Controller
 {
@@ -31,12 +37,12 @@ class LogsController extends Controller
     const CONTROLLER_ID = 'controller_id';
     const CONTROLLERS = 'controllers';
     const STATUS = 'status';
-    
+
     /**
      * Before action instructions for to do before call actions
      *
-     * @param object $action
-     * @return void
+     * @param  object $action name of object invoked.
+     * @return mixed
      */
     public function beforeAction($action)
     {
@@ -51,6 +57,8 @@ class LogsController extends Controller
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
     public function behaviors()
     {
@@ -92,6 +100,7 @@ class LogsController extends Controller
     }
     /**
      * Lists all Action models.
+     *
      * @return mixed
      */
     public function actionActions()
@@ -99,7 +108,7 @@ class LogsController extends Controller
 
         $actionsSearchModel  = new ActionSearch();
         $dataProvider = $actionsSearchModel->search(Yii::$app->request->queryParams);
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
@@ -114,15 +123,16 @@ class LogsController extends Controller
 
     /**
      * Lists all Blocked models.
+     *
      * @return mixed
      */
     public function actionBlocked()
     {
-        
+
         $searchModel  = new BlockedSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
@@ -137,6 +147,7 @@ class LogsController extends Controller
 
     /**
      * Lists all Controllers models.
+     *
      * @return mixed
      */
     public function actionControllers()
@@ -144,7 +155,7 @@ class LogsController extends Controller
         $searchModel  = new ControllersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
@@ -159,15 +170,16 @@ class LogsController extends Controller
 
     /**
      * Lists all Logs models.
+     *
      * @return mixed
      */
     public function actionIndex()
     {
-        
+
         $logsSearchModel  = new LogsSearch();
         $dataProvider = $logsSearchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
         $request= Yii::$app->request->get('LogsSearch');
         if (isset($request[self::CONTROLLER_ID])) {
@@ -187,6 +199,7 @@ class LogsController extends Controller
     }
     /**
      * Lists all Status models.
+     *
      * @return mixed
      */
     public function actionStatus()
@@ -194,7 +207,7 @@ class LogsController extends Controller
         $searchModel  = new StatusSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = Yii::$app->ui->pageSize();
+        $pageSize = UiComponent::pageSize();
         $dataProvider->pagination->pageSize=$pageSize;
 
         return $this->render(
