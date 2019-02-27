@@ -132,6 +132,7 @@ class UserSearch extends User
 
     /**
      * Get array from Sub categories
+     * @param $table
      * @return array
      */
     public static function getUserListSearch($table)
