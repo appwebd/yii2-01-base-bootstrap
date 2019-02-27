@@ -18,7 +18,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\Json;
 use app\components\UiComponent;
 use app\models\queries\Common;
 use app\models\search\PermissionSearch;
