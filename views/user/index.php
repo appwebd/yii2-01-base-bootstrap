@@ -20,7 +20,7 @@ use app\models\User;
 use app\models\search\ProfileSearch;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ProyProyectosSearch */
+/* @var $searchModel app\models\search\ProyProyectosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', User::TITLE);
@@ -55,7 +55,7 @@ try {
             User::LASTNAME,
             User::EMAIL,
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 ATTRIBUTE => User::PROFILE_ID,
                 FILTER => ProfileSearch::getProfileListSearch('user'),
                 VALUE => function ($model) {
@@ -65,7 +65,7 @@ try {
                 FORMAT => 'raw',
             ],
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 FILTER => UiComponent::yesOrNoArray(),
                 ATTRIBUTE => User::ACTIVE,
                 OPTIONS => [STR_CLASS => COLSM1],
@@ -75,7 +75,7 @@ try {
                 FORMAT => 'raw'
             ],
             [
-                STR_CLASS => yii\grid\ActionColumn::className(),
+                STR_CLASS => 'yii\grid\ActionColumn',
                 'header' => UiComponent::pageSizeDropDownList($pageSize),
                 'template' => '{view} {update} {delete}',
                 'contentOptions' => [STR_CLASS => 'GridView'],
@@ -86,14 +86,14 @@ try {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
+            ERROR_MODULE,
+            [MODULE=> 'app\views\user\index::GridView::widget', ERROR => $errorexception]
         ),
         MSG_ERROR
     );
 }
 
-
 UiComponent::buttonsAdmin('111', false);
+
 Html::endForm();
 echo HTML_WEBPAGE_CLOSE;
