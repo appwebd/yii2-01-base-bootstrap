@@ -96,7 +96,7 @@ class ProfileSearch extends Profile
             'user.profile_id'            => $this->profile_id,
 
         ]);
-         
+
          $query->andFilterWhere(['like', 'profile.profile_name', $this->profile_name]);
 
 
@@ -106,6 +106,7 @@ class ProfileSearch extends Profile
 
     /**
      * Get array from Profile
+     * @param $table
      * @return array
      */
     public static function getProfileListSearch($table)
