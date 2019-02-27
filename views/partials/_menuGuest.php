@@ -18,7 +18,6 @@
  */
 use yii\bootstrap\NavBar;
 use yii\bootstrap\Nav;
-use yii\helpers\Html;
 
 NavBar::begin([
     'brandLabel' => Yii::$app->name,
@@ -34,8 +33,8 @@ echo Nav::widget([
     'items' => [
         [LABEL => '<span class="glyphicon glyphicon-home"></span> &nbsp;'.Yii::t('app', 'Home'), 'url' => ['/'],],
         [LABEL => Yii::t('app', 'About'), 'url' => ['/site/about']],
-        [LABEL => Yii::t('app',  'Contact'), 'url' => ['/site/contact']],
-        [LABEL =>  Yii::t('app', 'Login'), 'url' => ['/login']]
+        [LABEL => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
+        [LABEL => Yii::t('app', 'Login'), 'url' => ['/login']]
     ],
 ]);
 
