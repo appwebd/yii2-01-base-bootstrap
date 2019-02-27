@@ -30,7 +30,7 @@ use yii\helpers\ArrayHelper;
  * @property int(11)         status_id            Status
  *
  */
-class Blocked extends \yii\db\ActiveRecord
+class Blocked extends ActiveRecord
 {
 
 
@@ -122,7 +122,7 @@ class Blocked extends \yii\db\ActiveRecord
      */
     public static function getStatusList()
     {
-        $droptions = Status::find([self::ACTIVE=>1])->asArray()->all();
+        $droptions = Status::find()->where([ACTIVE => 1])->asArray()->all();
         return ArrayHelper::map($droptions, self::STATUS_ID, self::STATUS_NAME);
     }
 
