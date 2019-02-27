@@ -87,7 +87,7 @@ echo '
                         PLACEHOLDER => 'phone number example: 579-1234-1234'
                     ],
 
-        ])->Input('tel')->label();
+        ])->input('tel')->label();
 
         echo HTML_DIV_CLOSE_DIV6_OPEN;
 
