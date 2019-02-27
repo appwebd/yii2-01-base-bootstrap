@@ -17,6 +17,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use yii\helpers\HtmlPurifier;
 
 /**
  * Status
@@ -29,7 +30,7 @@ use yii\helpers\ArrayHelper;
  * @property int(11)         status_id     Status
  *
  */
-class Status extends \yii\db\ActiveRecord
+class Status extends ActiveRecord
 {
     const ACTIVE          = 'active';
     const STATUS_ID       = 'status_id';
@@ -115,6 +116,7 @@ class Status extends \yii\db\ActiveRecord
     /**
      * Get status description for a status_id
      *
+     * @param int $statusID
      * @return string description od StatusId
      */
     public static function getStatusName($statusID)
@@ -142,9 +144,11 @@ class Status extends \yii\db\ActiveRecord
 
         return $return;
     }
+
     /**
      * Get status description for a status_id
      *
+     * @param $statusID
      * @return string
      */
     public static function getStatusBadge($statusID)
