@@ -11,14 +11,15 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\queries\Common;
 use app\models\Profile;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ProfileSearch */
+/* @var $searchModel app\models\search\ProfileSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $template = Common::getProfilePermissionString();
@@ -69,14 +70,15 @@ try {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
+            ERROR_MODULE,
+            [MODULE=> 'app\views\profile\index::GridView::widget', ERROR => $errorexception]
         ),
         MSG_ERROR
     );
 }
 
-echo UiComponent::buttonsAdmin('111', false);
+UiComponent::buttonsAdmin('111', false);
+
 Html::endForm();
 
 echo HTML_WEBPAGE_CLOSE;
