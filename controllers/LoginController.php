@@ -93,7 +93,7 @@ class LoginController extends Controller
         $token = BaseController::stringDecode($token);
         $model = User::find()->emailConfirmationToken($token)->one();
 
-        if ($model!==null && LoginForm::removeTokenEmail($model->user_id, true)) {
+        if ($model!==null && LoginForm::removeTokenEmail($model->user_id)) {
             Yii::$app->getUser()->login($model);
             return $this->goHome();
         }
