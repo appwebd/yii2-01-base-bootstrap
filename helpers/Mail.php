@@ -19,9 +19,9 @@ class Mail
      * The sender can be specified in `$params['from']` and defaults to the
      * `mail.from` application parameter.
      *
-     * @param app\models\User $user the recipient user object
+     * @param $user primary key of table user
+     * @param $subject string subject of email
      * @param string $view name of the view file to render from `@app/mail/user`
-     * @param array $params additional view parameters
      * @return bool whether the mail was sent successfully
      */
     public static function sendEmail($user, $subject, $view)
@@ -34,7 +34,7 @@ class Mail
                 ->compose(
                     ['html' => $view.'-html', 'text' => $view.'-text'],
                     [
-                        'user' => $user
+                        'model' => $user
                     ]
                 )
                 ->setFrom($from)
