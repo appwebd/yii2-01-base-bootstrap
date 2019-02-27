@@ -319,13 +319,13 @@ class ProfileController extends Controller
      */
     private function fkCheck($profileId)
     {
-        $nroRegs = common::getNroRowsForeignkey(
+        $nroRegs = Common::getNroRowsForeignkey(
             'permission',
             self::PROFILE_ID,
             $profileId
         );
 
-        return $nroRegs + common::getNroRowsForeignkey(
+        return $nroRegs + Common::getNroRowsForeignkey(
             'user',
             self::PROFILE_ID,
             $profileId
