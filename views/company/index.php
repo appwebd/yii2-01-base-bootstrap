@@ -74,7 +74,6 @@ try {
             ]
         ]
     ]);
-
 } catch (Exception $errorexception) {
     BaseController::bitacora(
         Yii::t(
