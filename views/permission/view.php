@@ -11,8 +11,9 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\widgets\DetailView;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\Permission;
 
 /* @var $this yii\web\View */
