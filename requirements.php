@@ -50,7 +50,12 @@ $gdMemo = $imagickMemo = 'Either GD PHP extension with FreeType support or Image
 $gdOK = $imagickOK = false;
 
 if (extension_loaded('imagick')) {
-    $imagick = new Imagick();
+    try {
+        $imagick = new Imagick();
+    } catch (ImagickException $e) {
+
+    }
+
     $imagickFormats = $imagick->queryFormats('PNG');
     if (in_array('PNG', $imagickFormats)) {
         $imagickOK = true;
