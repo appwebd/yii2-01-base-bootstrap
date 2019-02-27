@@ -185,7 +185,7 @@ class Common extends ActiveQuery
                 ),
                 MSG_ERROR
             );
-            throw $e;
+//            throw $errorException;
         }
 
         return Common::DENY_ACCESS;
@@ -285,28 +285,28 @@ class Common extends ActiveQuery
             Yii::$app->db->createCommand($sqlcode)->execute();
             $transaction->commit();
             return true;
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
                     ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $exception]
+                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $e]
                 ),
                 MSG_ERROR
             );
             $transaction->rollBack();
-            throw $e;
-        } catch (\Throwable $exception) {
+//            throw $exception;
+        } catch (\Throwable $e) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
                     ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $exception]
+                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $e]
                 ),
                 MSG_ERROR
             );
             $transaction->rollBack();
-            throw $e;
+            //throw $exception;
         }
         return false;
     }
