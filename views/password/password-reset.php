@@ -77,7 +77,7 @@ echo '
 </div>
 </div>';
 
-$script=<<< JS
+$script = <<< JS
 function showPassword() {
     var object = document.getElementById("passwd");
     if (object.type === "password") {
