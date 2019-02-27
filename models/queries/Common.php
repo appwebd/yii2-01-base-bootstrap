@@ -31,7 +31,7 @@ class Common extends ActiveQuery
     const DONT_REMOVE= 1;
     const ROWS_ZERO = 0;
     const ROWS_ONE = 1;
-
+    const USER_ID_VISIT = 0;
 
     /**
      * @param $dateInitial string in format YYYY-mm-dd H:i:s
@@ -91,7 +91,6 @@ class Common extends ActiveQuery
                 MSG_ERROR
             );
         }
-
 
         return $return;
     }
@@ -156,26 +155,40 @@ class Common extends ActiveQuery
      */
     public static function getProfilePermission($actionName)
     {
-        if (isset(Yii::$app->user->identity->profile->profile_id)) {
-            $profileId = Yii::$app->user->identity->profile->profile_id;
-        } else {
-            $profileId = Common::PROFILE_ID_VISIT;
+        try {
+            if (isset(Yii::$app->user->identity->profile->profile_id)) {
+                $profileId = Yii::$app->user->identity->profile->profile_id;
+            } else {
+                $profileId = Common::PROFILE_ID_VISIT;
+            }
+
+            if ($profileId == Common::PROFILE_ID_ADMINISTRATOR) {
+                return Common::PERMIT_ACCESS;
+            }
+
+            $controllerName = Yii::$app->controller->id;  // controller name
+            $controllerId = Controllers::getControllerId($controllerName);
+            $actionId = Action::getActionId($actionName);
+
+            $actionPermission = Common::DENY_ACCESS;
+            if (isset($controllerId) && isset($actionId)) {
+                $actionPermission = Permission::getPermission($actionId, $controllerId, $profileId);
+            }
+
+            return $actionPermission;
+        } catch (Exception $e) {
+            BaseController::bitacora(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE=> 'app\models\queries\Common::getProfilePermission', ERROR => $e]
+                ),
+                MSG_ERROR
+            );
+            throw $e;
         }
 
-        if ($profileId==Common::PROFILE_ID_ADMINISTRATOR) {
-            return Common::PERMIT_ACCESS;
-        }
-
-        $controllerName    = Yii::$app->controller->id;  // controller name
-        $controllerId = Controllers::getControllerId($controllerName);
-        $actionId = Action::getActionId($actionName);
-
-        $actionPermission = Common::DENY_ACCESS;
-        if (isset($controllerId) && isset($actionId)) {
-            $actionPermission = Permission::getPermission($actionId, $controllerId, $profileId);
-        }
-
-        return $actionPermission;
+        return Common::DENY_ACCESS;
     }
 
     /**
@@ -189,17 +202,45 @@ class Common extends ActiveQuery
 
         $template = '';
         if ($aButton[0] && Common::getProfilePermission('view')) {
-            $template .='{view}';
+            $template .=' {view} ';
         }
 
         if ($aButton[1] && Common::getProfilePermission('update')) {
-            $template .=' {update}';
+            $template .=' {update} ';
         }
 
         if ($aButton[2] && Common::getProfilePermission('delete')) {
             $template .=' {delete}';
         }
         return $template;
+    }
+
+    /**
+     * Get information for dropdown list
+     * @param $model Classname defined in app\models to get information
+     * @param $parentModelId String column related model
+     * @param $valueId integer id to search in model
+     * @param $key integer column to get column code
+     * @param $value string column to get column description
+     * @param $orderBy String Order by column
+     * @return string String
+     */
+    public static function relatedDropdownList($model, $parentModelId, $valueId, $key, $value, $orderBy)
+    {
+        $rows = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
+
+        $dropdown = Yii::t('app', 'Please select one option');
+        $dropdown  = HTML_OPTION  . $dropdown . HTML_OPTION_CLOSE;
+
+        if (count($rows)>0) {
+            foreach ($rows as $row) {
+                $dropdown  .= '<option value='.$row->$key.'>'.$row->$value . HTML_OPTION_CLOSE;
+            }
+        } else {
+            $dropdown  .= HTML_OPTION . Yii::t('app', 'No results found') . HTML_OPTION_CLOSE;
+        }
+
+        return $dropdown ;
     }
 
     /**
@@ -221,8 +262,8 @@ class Common extends ActiveQuery
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
-                    'Failed to {method} record error: {error}',
-                    ['method' => $method, ERROR=> $exception]
+                    ERROR_MODULE,
+                    [MODULE => 'app\models\queries\Common::transaction method:'.$method, ERROR => $exception]
                 ),
                 MSG_ERROR
             );
@@ -241,18 +282,31 @@ class Common extends ActiveQuery
     {
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            if (Yii::$app->db->createCommand($sqlcode)->execute()) {
-                $transaction->commit();
-                return true;
-            }
-            $transaction->rollBack();
-            return false;
+            Yii::$app->db->createCommand($sqlcode)->execute();
+            $transaction->commit();
+            return true;
         } catch (\Exception $exception) {
             BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Failed execute SQL: {error}', [ERROR => $exception]),
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $exception]
+                ),
                 MSG_ERROR
             );
             $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $exception) {
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $exception]
+                ),
+                MSG_ERROR
+            );
+            $transaction->rollBack();
+            throw $e;
         }
         return false;
     }
