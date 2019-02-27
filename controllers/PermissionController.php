@@ -14,14 +14,16 @@
 namespace app\controllers;
 
 use Yii;
-use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use app\components\UiComponent;
-use app\models\Permission;
+use app\models\queries\Common;
 use app\models\search\PermissionSearch;
+use app\models\Action;
+use app\models\Permission;
 
 class PermissionController extends Controller
 {
@@ -141,6 +143,21 @@ class PermissionController extends Controller
         return $this->redirect([ACTION_INDEX]);
     }
 
+    public function actionActiondropdown($id)
+    {
+        if (Yii::$app->request->isAjax) {
+
+            echo Common::relatedDropdownList(
+                Action::className(),
+                self::CONTROLLER_ID,
+                $id,
+                'action_id',
+                'action_name',
+                'action_name'
+            );
+        }
+    }
+
     /**
      * Lists all Permission models.
      * @return mixed
@@ -175,7 +192,7 @@ class PermissionController extends Controller
     /**
      * Delete many records of this table
      *
-     * @return void
+     * @return boolean
      */
     public function actionRemove()
     {
@@ -243,8 +260,8 @@ class PermissionController extends Controller
     /**
      * Finds the Permission model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $permission_id
-     * @return Permission the loaded model
+     * @param integer $permissionId
+     * @return app/models/Permission Permission the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($permissionId)
