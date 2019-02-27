@@ -13,7 +13,6 @@
 
 namespace app\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Controllers;
@@ -116,8 +115,10 @@ class ControllersSearch extends Controllers
 
         return $dataProvider;
     }
+
     /**
      * Get array from Controllers
+     * @param $table string name of table
      * @return array
      */
     public static function getControllersListSearch($table)
