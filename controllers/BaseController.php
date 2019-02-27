@@ -354,7 +354,18 @@ class BaseController extends Controller
             'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
         $totalChars = count($chars) - 1;
         for ($iterator = 0; $iterator <= $length; $iterator++) {
-            $random = random_int(0, $totalChars);
+            try {
+                $random = random_int(0, $totalChars);
+            } catch (\Exception $e) {
+                BaseController::bitacora(
+                    Yii::t(
+                        'app',
+                        ERROR_MODULE,
+                        [MODULE=> 'app\controllers\BaseControllers::randomString', ERROR => $e]
+                    ),
+                    MSG_ERROR
+                );
+            }
             $randstr .= $chars[$random];
         }
         return $randstr;
