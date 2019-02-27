@@ -1,12 +1,14 @@
 <?php
+
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use app\components\UiComponent;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
 /* @var \app\models\forms\ResetPasswordForm $model */
 
-$this->title = Yii::t('app','Reset password');
+$this->title = Yii::t('app', 'Reset password');
 $this->params[BREADCRUMBS][] = $this->title;
 
 echo '
@@ -17,13 +19,13 @@ echo '
 
             <div class="webpage ">';
 
-                echo Yii::$app->ui->header(
-                'user',
-                $this->title,
-                Yii::t(
-                'app',
-                'Please, choose your new password'
-                )
+                echo UiComponent::header(
+                    'user',
+                    $this->title,
+                    Yii::t(
+                        'app',
+                        'Please, choose your new password'
+                    )
                 );
 
 
