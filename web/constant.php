@@ -32,12 +32,16 @@ defined('ERROR_MODULE') || define('ERROR_MODULE', 'Failed to {module}, error: {e
 
 defined('DATA_PROVIDER')   || define('DATA_PROVIDER', 'dataProvider');
 defined('DATEFORMAT')   || define('DATEFORMAT', 'dd-MM-yyyy');
+defined('DATETIMEFORMAT')   || define('DATETIMEFORMAT', 'YYYY-MM-DD HH:mm');
+
+defined('FILTER') || define('FILTER', 'filter');
 
 defined('HEADER') || define('HEADER', 'header');
-
 defined('HTML_ROW_DIV6') || define('HTML_ROW_DIV6', '<div class="row"><div class="col-sm-6">');
 defined('HTML_DIV_CLOSE_DIV6_OPEN') || define('HTML_DIV_CLOSE_DIV6_OPEN', '</div><div class="col-sm-6">');
 defined('HTML_BTN_BTN_DEFAULT') || define('HTML_BTN_BTN_DEFAULT', 'btn btn-default');
+defined('HTML_OPTION') || define('HTML_OPTION', '<option>');
+defined('HTML_OPTION_CLOSE') || define('HTML_OPTION_CLOSE', '</option>');
 
 defined('HTML_WEBPAGE_OPEN') || define(
     'HTML_WEBPAGE_OPEN',
@@ -67,12 +71,13 @@ defined('HTML_DIV_CLOSE') || define('HTML_DIV_CLOSE', '</div>');
 defined('HTML_SPACEX2') || define('HTML_SPACEX2', '&nbsp; &nbsp;');
 defined('HTML_MODEL_LG') || define('HTML_MODEL_LG', 'model-lg');
 
-defined('FILTER') || define('FILTER', 'filter');
 defined('FORMAT') || define('FORMAT', 'format');
+defined('GRID_DATACOLUMN') || define('GRID_DATACOLUMN', 'yii\grid\DataColumn');
 defined('GRIDVIEW_CSS') || define(
     'GRIDVIEW_CSS',
     'table maxwidth items table-striped table-condensed'
 );
+defined('ID') || define('ID', 'id');
 defined('ITEMS') || define('ITEMS', 'items');
 defined('INFO') || define('INFO', 'info');
 defined('INPUT_OPTIONS') || define('INPUT_OPTIONS', 'inputOptions');
@@ -117,6 +122,7 @@ defined('STR_DEFAULT') || define('STR_DEFAULT', 'default');
 defined('STRING')   || define('STRING', 'string');
 defined('SUCCESS')   || define('SUCCESS', 'success');
 defined('TABINDEX') || define('TABINDEX', 'tabindex');
+defined('TEMPLATE') || define('TEMPLATE', 'template');
 defined('TYPE') || define('TYPE', 'type');
 defined('TITLE') || define('TITLE', 'title');
 defined('UNCHECK') || define('UNCHECK', 'uncheck');
