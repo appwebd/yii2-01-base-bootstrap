@@ -99,7 +99,7 @@ class Profile extends ActiveRecord
      * Get a Profile name given a profile_id
      *
      * @param integer $profile_id
-     * @return void
+     * @return String Name of profile
      */
     public static function getProfileName($profileId)
     {
@@ -135,7 +135,7 @@ class Profile extends ActiveRecord
      */
     public static function getProfileList()
     {
-        $droptions = Profile::find(['active'=>1])->orderBy(self::PROFILE_NAME)->asArray()->all();
+        $droptions = Profile::find()->where([self::ACTIVE => 1])->orderBy(self::PROFILE_NAME)->asArray()->all();
         return ArrayHelper::map($droptions, self::PROFILE_ID, self::PROFILE_NAME);
     }
 
