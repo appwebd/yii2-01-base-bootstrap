@@ -11,9 +11,10 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\Permission;
 use app\models\search\ActionSearch;
 use app\models\search\ProfileSearch;
@@ -49,21 +50,21 @@ try {
         'columns' => [
             [STR_CLASS => 'yii\grid\CheckboxColumn', 'options' => [STR_CLASS => 'width10px']],
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 ATTRIBUTE => Permission::PROFILE_ID,
                 FILTER => ProfileSearch::getProfileListSearch(Permission::TABLE),
                 VALUE => 'profile.profile_name',
                 FORMAT => 'raw',
             ],
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 ATTRIBUTE => Permission::CONTROLLER_ID,
                 FILTER => ControllersSearch::getControllersListSearch(Permission::TABLE),
                 VALUE => 'controllers.controller_name',
                 FORMAT => 'raw',
             ],
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 ATTRIBUTE => Permission::ACTION_ID,
                 FILTER => ActionSearch::getActionListSearch($controller_id, Permission::TABLE),
                 VALUE => 'action.action_name',
@@ -71,7 +72,7 @@ try {
             ],
 
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 FILTER => UiComponent::yesOrNoArray(),
                 ATTRIBUTE => Permission::ACTION_PERMISSION,
                 OPTIONS => [STR_CLASS => COLSM1],
@@ -99,17 +100,28 @@ try {
             ],
         ]
     ]);
-} catch (Exception $errorexception) {
+} catch (Exception $e) {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
+            ERROR_MODULE,
+            [MODULE=> 'app\views\permission\index::GridView::widget', ERROR => $e]
         ),
         MSG_ERROR
     );
 }
 
-UiComponent::buttonsAdmin('111', false);
+try {
+    UiComponent::buttonsAdmin('111', false);
+} catch (\yii\db\Exception $e) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            ERROR_MODULE,
+            [MODULE=> 'app\views\permission\index::GridView::widget', ERROR => $e]
+        ),
+        MSG_ERROR
+    );
+}
 Html::endForm();
 echo HTML_WEBPAGE_CLOSE;
