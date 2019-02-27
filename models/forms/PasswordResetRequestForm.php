@@ -82,7 +82,6 @@ class PasswordResetRequestForm extends Model
     /**
      * @param $tokendecode string format of generateToken
      * @return bool
-     * @throws \yii\db\Exception
      */
     public function tokenIsValid($tokendecode)
     {
