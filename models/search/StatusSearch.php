@@ -105,8 +105,10 @@ class StatusSearch extends Status
 
         return $dataProvider;
     }
+
     /**
      * Get array from Status (Only records that exists on table $table)
+     * @param $table
      * @return array
      */
     public static function getStatusListSearch($table)
