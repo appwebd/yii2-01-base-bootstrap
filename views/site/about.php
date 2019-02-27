@@ -1,10 +1,11 @@
 <?php
 
-/* @var $this yii\web\View */
-
+use app\components\UiComponent;
 use yii\helpers\Html;
 
-$this->title = Yii::t('app','About');
+/* @var $this yii\web\View */
+
+$this->title = Yii::t('app', 'About');
 $this->params[BREADCRUMBS][] = $this->title;
 
 echo '
@@ -15,13 +16,13 @@ echo '
 
             <div class="webpage ">';
 
-                echo Yii::$app->ui->header(
-                'home',
-                $this->title,
-                Yii::t(
-                'app',
-                'About of this webpage'
-                )
+                echo UiComponent::header(
+                    'home',
+                    $this->title,
+                    Yii::t(
+                        'app',
+                        'About of this webpage'
+                    )
                 );
 
 
