@@ -65,7 +65,4 @@ echo '
         echo '</div>';
         ActiveForm::end();
 
-        ?>
-
-    </div>
-</div>
+echo '</div></div>';
