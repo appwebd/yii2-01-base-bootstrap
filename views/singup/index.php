@@ -37,9 +37,7 @@ echo '
                     Yii::t(
                         'app',
                         'Please complete all requested information.'
-                    ),
-                    true,
-                    false
+                    )
                 );
 
                 $form = ActiveForm::begin(
