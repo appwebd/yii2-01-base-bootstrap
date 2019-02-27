@@ -24,100 +24,103 @@ use app\models\Profile;
 /* @var $form yii\widgets\ActiveForm */
 
 
-echo '
-<div class="row">
+echo '<div class="row">
     <div class="col-sm-5 text-justify"><p>';
-    echo Yii::t('app', 'Select the user profile to which you want to create / update the access properties');
-    echo '<br/><br/><br/><br/><br/><br/>';
-    echo Yii::t('app', 'Select the view / web page to then identify the action that is performed on it. Setting access Yes / No will indicate if the profile has access to this resource');
-    echo '</p></div>
-    <div class="col-sm-7">';
+echo Yii::t(
+    'app',
+    'Select the user profile to which you want to create / update the access properties'
+);
+echo '<br/><br/><br/><br/><br/><br/>';
+echo Yii::t(
+    'app',
+    'Select the view / web page to then identify the action that is performed on it.
+    Setting access Yes / No will indicate if the profile has access to this resource'
+);
+echo '</p></div><div class="col-sm-7">';
 
-        $form = ActiveForm::begin(
-            [
-               'id' => 'form-permission',
-               'method'  => 'post',
-               'options' => ['class' => 'form-vertical webpage'],
-            ]
-        );
+$form = ActiveForm::begin(
+    [
+       'id' => 'form-permission',
+       'method'  => 'post',
+       'options' => ['class' => 'form-vertical webpage'],
+    ]
+);
 
 
-        $items = Profile::getProfileList();
-        echo $form->field($model, Permission::PROFILE_ID)->RadioList(
+$items = Profile::getProfileList();
+echo $form->field($model, Permission::PROFILE_ID)->RadioList(
+    $items,
+    [
+        PROMPT=>Yii::t('app', 'Select Profile'),
+        AUTOFOCUS => AUTOFOCUS,
+        TABINDEX => 1,
+        REQUIRED => REQUIRED,
+        AUTOCOMPLETE => 'off',
+    ]
+)->label();
+
+$items = Controllers::getControllersList();
+echo $form->field($model, Permission::CONTROLLER_ID)->dropDownList(
+    $items,
+    [
+        PROMPT => Yii::t('app', 'Select Controller'),
+        AUTOFOCUS => AUTOFOCUS,
+        TABINDEX => 2,
+        REQUIRED => REQUIRED,
+        AUTOCOMPLETE => 'off',
+        'onchange'=>'
+            $.get( "'. Yii::$app->urlManager->createUrl('permission/actiondropdown') .
+            '", {id: $(this).val()})
+                .done(function( data ) {
+                    $( "#'.Html::getInputId($model, Permission::ACTION_ID) . '" ).html( data );
+                }
+            );'
+    ]
+);
+
+
+if ($model->isNewRecord) {
+    echo $form->field($model, Permission::ACTION_ID)->dropDownList(
+        [
+            1=>'que permiso falta definir aqui'
+        ],
+        [
+            AUTOFOCUS => AUTOFOCUS,
+            TABINDEX => 3,
+            REQUIRED => REQUIRED,
+            PROMPT => Yii::t('app', 'Select Action'),
+        ]
+    )->label();
+
+    $model->action_permission=1;
+
+} else {
+
+    $items = Action::getActionListById($model->controller_id);
+    echo $form->field($model, Permission::ACTION_ID)->dropDownList(
             $items,
             [
-                PROMPT=>Yii::t('app', 'Select Profile'),
+                PROMPT => Yii::t('app', 'Select Action'),
                 AUTOFOCUS => AUTOFOCUS,
-                TABINDEX => 1,
+                TABINDEX => 3,
                 REQUIRED => REQUIRED,
-                AUTOCOMPLETE => 'off',
             ]
-        )->label();
+    )->label();
+}
 
-        $items = Controllers::getControllersList();
-        echo $form->field($model, Permission::CONTROLLER_ID)->dropDownList(
-            $items,
-            [
-                PROMPT => Yii::t('app', 'Select Controller'),
-                AUTOFOCUS => AUTOFOCUS,
-                TABINDEX => 2,
-                REQUIRED => REQUIRED,
-                AUTOCOMPLETE => 'off',
-                'onchange'=>'
-                    $.get( "'. Yii::$app->urlManager->createUrl('permission/actiondropdown') .
-                    '", {id: $(this).val()})
-                        .done(function( data ) {
-                            $( "#'.Html::getInputId($model, Permission::ACTION_ID) . '" ).html( data );
-                        }
-                    );'
-            ]
-        );
+echo $form->field($model, Permission::ACTION_PERMISSION)->checkbox(
+    [
+        UNCHECK => 0,                
+        AUTOFOCUS   => AUTOFOCUS,
+        TABINDEX    => 4,
+    ]
+);
 
+echo '<div class=\'form-group\'>';
+    echo UiComponent::buttonsCreate(5);
+    echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
+echo '</div>';
+ActiveForm::end();
 
-        if ($model->isNewRecord) {
-            echo $form->field($model, Permission::ACTION_ID)->dropDownList(
-                [
-                    1=>'que permiso falta definir aqui'
-                ],
-                [
-                    AUTOFOCUS => AUTOFOCUS,
-                    TABINDEX => 3,
-                    REQUIRED => REQUIRED,                    
-                    PROMPT => Yii::t('app', 'Select Action'),
-                ]
-            )->label();
+echo '</div></div>';
 
-            $model->action_permission=1;
-
-        } else {
-
-            $items = Action::getActionListById($model->controller_id);
-            echo $form->field($model, Permission::ACTION_ID)->dropDownList(
-                    $items,
-                    [
-                        PROMPT=>Yii::t('app', 'Select Action'),
-                        AUTOFOCUS => AUTOFOCUS,
-                        TABINDEX => 3,
-                        REQUIRED => REQUIRED,
-                    ]
-            )->label();
-        }
-
-        echo $form->field($model, Permission::ACTION_PERMISSION)->checkbox(
-            [
-                UNCHECK => 0,                
-                AUTOFOCUS   => AUTOFOCUS,
-                TABINDEX    => 4,
-            ]
-        );
-
-        echo '<div class=\'form-group\'>';
-            echo UiComponent::buttonsCreate(5);
-            echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
-        echo '</div>';
-        ActiveForm::end();
-
-        ?>
-
-    </div>
-</div>
