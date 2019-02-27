@@ -13,7 +13,6 @@
 
 namespace app\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
@@ -127,17 +126,15 @@ class CompanySearch extends Company
               ->andFilterWhere(['like', 'company.contact_phone_1', $this->contact_phone_1])
               ->andFilterWhere(['like', 'company.contact_phone_2', $this->contact_phone_2])
               ->andFilterWhere(['like', 'company.contact_phone_3', $this->contact_phone_3])
-              ->andFilterWhere(['like', 'company.webpage', $this->webpage])
-;
-
-
+              ->andFilterWhere(['like', 'company.webpage', $this->webpage]);
 
         return $dataProvider;
     }
 
-    
+
     /**
      * Get array from Company
+     * @param $table string name of table
      * @return array
      */
     public static function getCompanyListSearch($table)
