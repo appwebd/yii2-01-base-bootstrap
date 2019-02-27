@@ -35,7 +35,7 @@ use yii\helpers\HtmlPurifier;
  * @property int(11)         user_id              User
  *
  */
-class Logs extends \yii\db\ActiveRecord
+class Logs extends ActiveRecord
 {
     const ACTION_ID            = 'action_id';
     const CONFIRMED            = 'confirmed';
