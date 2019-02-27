@@ -21,6 +21,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use app\components\UiComponent;
+use app\controllers\BaseController;
 use app\models\queries\Common;
 
 /**
@@ -30,7 +31,7 @@ use app\models\queries\Common;
  * @property string          action_description     Description
  * @property int             action_id              Actions
  * @property string          action_name            Name
- * @property tinyint(1)      active                 Active
+ * @property tinyint         active                 Active
  *
  */
 class Action extends ActiveRecord
@@ -159,6 +160,7 @@ class Action extends ActiveRecord
     {
         return $this->hasOne(Controllers::className(), [self::CONTROLLER_ID => self::CONTROLLER_ID]);
     }
+
     /**
     * @return \yii\db\ActiveQuery
     */
@@ -213,16 +215,18 @@ class Action extends ActiveRecord
      */
     public static function getActionList()
     {
-        $droptions = Action::find([self::ACTIVE=>1])->asArray()->all();
+        $droptions = Action::find()->where([self::ACTIVE => 1])->asArray()->all();
         return ArrayHelper::map($droptions, self::ACTION_ID, self::ACTION_NAME);
     }
+
     /**
      * Get array from Actions
+     * @param $actionId integer primary key of table action
      * @return array
      */
     public static function getActionListById($actionId)
     {
-        $droptions = Action::find([self::CONTROLLER_ID=>$actionId])->asArray()->all();
+        $droptions = Action::find()->where([self::CONTROLLER_ID => $actionId])->asArray()->all();
         return ArrayHelper::map($droptions, self::ACTION_ID, self::ACTION_NAME);
     }
 
