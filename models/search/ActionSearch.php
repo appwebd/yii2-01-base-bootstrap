@@ -117,6 +117,8 @@ class ActionSearch extends Action
 
     /**
      * Get array from Action
+     * @param $controllerID int primary key of table action
+     * @param $table string name of table
      * @return array
      */
     public static function getActionListSearch($controllerID, $table)
