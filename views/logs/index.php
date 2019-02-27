@@ -1,6 +1,6 @@
 <?php
 /**
-  * Logs (user bitacora)
+  * Logs (Logs user activities)
   *
   * @package     Index of Logs
   * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
@@ -20,6 +20,10 @@ use app\models\Status;
 use app\models\User;
 
 /* @var $this yii\web\View */
+/* @var $controller_id int app\controllers\LogsController */
+/* @var $dataProvider int app\controllers\LogsController */
+/* @var $searchModel int app\controllers\LogsController */
+/* @var $pageSize int app\controllers\LogsController */
 /* @var $searchModel app\models\search\LogsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -38,6 +42,7 @@ echo UiComponent::headerAdmin(
 );
 
 try {
+    /** @noinspection PhpDeprecationInspection */
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -51,24 +56,24 @@ try {
                 ATTRIBUTE => Logs::STATUS_ID,
                 FILTER => LogsSearch::getStatusListSearch(),
                 FORMAT => 'raw',
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => function ($model) {
                     $status = Status::getStatusName($model->status_id);
-                    return Yii::$app->ui->badgetStatus($model->status_id, $status);
+                    return UiComponent::badgetStatus($model->status_id, $status);
                 },
             ],
             [
                 ATTRIBUTE => Logs::CONTROLLER_ID,
                 FILTER => LogsSearch::getControllersListSearch(),
                 FORMAT => 'raw',
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => Logs::CONTROLLER_CONTROLLER_NAME,
             ],
             [
                 ATTRIBUTE => Logs::ACTION_ID,
                 FILTER => LogsSearch::getActionListSearch($controller_id),
                 FORMAT => 'raw',
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => Logs::ACTION_ACTION_NAME,
             ],
             Logs::EVENT,
@@ -76,24 +81,24 @@ try {
                 ATTRIBUTE => Logs::USER_ID,
                 FILTER => LogsSearch::getUserList(),
                 FORMAT => 'raw',
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => function ($model) {
                     if (($model = User::getUsername($model->user_id)) !== null) {
                         $return = $model->username;
                     } else {
-                        $return = Yii::t('app', 'Unkown');
+                        $return = Yii::t('app', 'Unknown');
                     }
                     return $return;
                 },
 
             ],
         ]]);
-} catch (Exception $errorexception) {
+} catch (Exception $errorException) {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
+            ERROR_MODULE,
+            [MODULE => 'app\views\logs\index::gridView::widget', ERROR => $errorException]
         ),
         MSG_ERROR
     );

@@ -17,7 +17,7 @@ use app\controllers\BaseController;
 use app\models\Status;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\StatusSearch */
+/* @var $searchModel app\models\search\StatusSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', Status::TITLE);
@@ -43,31 +43,31 @@ try {
         'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
         'columns' => [
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
                 ATTRIBUTE => Status::STATUS_ID,
                 OPTIONS => [STR_CLASS => COLSM1],
-                FORMAT => 'raw'
+                FORMAT => 'raw',
+                STR_CLASS => GRID_DATACOLUMN,
             ],
             Status::STATUS_NAME,
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
-                FILTER => UiComponent::yesOrNoArray(),
                 ATTRIBUTE => Status::ACTIVE,
                 OPTIONS => [STR_CLASS => COLSM1],
+                FILTER => UiComponent::yesOrNoArray(),
+                FORMAT => 'raw',
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
-                FORMAT => 'raw'
             ],
 
         ]
     ]);
-} catch (Exception $errorexception) {
+} catch (Exception $errorException) {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
+            ERROR_MODULE,
+            [MODULE => 'app\views\logs\status::gridView::widget', ERROR => $errorException]
         ),
         MSG_ERROR
     );

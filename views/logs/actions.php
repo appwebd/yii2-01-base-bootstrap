@@ -18,7 +18,7 @@ use app\models\search\ControllersSearch;
 use app\models\Action;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ActionSearch */
+/* @var $searchModel app\models\search\ActionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', Action::TITLE);
@@ -48,29 +48,29 @@ try {
         'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
         'columns' => [
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
                 ATTRIBUTE => Action::ACTION_ID,
                 OPTIONS => [STR_CLASS => COLSM1],
-                FORMAT => 'raw'
+                FORMAT => 'raw',
+                STR_CLASS => GRID_DATACOLUMN
             ],
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
                 ATTRIBUTE => Action::CONTROLLER_ID,
                 FILTER => ControllersSearch::getControllersListSearch(Action::TABLE),
-                VALUE => Action::CONTROLLER_CONTROLLER_NAME,
                 FORMAT => 'raw',
+                STR_CLASS => GRID_DATACOLUMN,
+                VALUE => Action::CONTROLLER_CONTROLLER_NAME,
             ],
             Action::ACTION_NAME,
             Action::ACTION_DESCRIPTION,
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
-                FILTER => UiComponent::yesOrNoArray(),
                 ATTRIBUTE => Action::ACTIVE,
                 OPTIONS => [STR_CLASS => COLSM1],
+                FILTER => UiComponent::yesOrNoArray(),
+                FORMAT => 'raw',
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
-                FORMAT => 'raw'
+                STR_CLASS => GRID_DATACOLUMN,
             ],
         ]
     ]);
@@ -78,8 +78,8 @@ try {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorException]
+            ERROR_MODULE,
+            [MODULE => 'app\views\logs\actions::gridView::widget', ERROR => $errorException]
         ),
         MSG_ERROR
     );

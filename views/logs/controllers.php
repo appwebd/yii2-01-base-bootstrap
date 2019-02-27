@@ -17,7 +17,7 @@ use app\controllers\BaseController;
 use app\models\Controllers;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ControllersSearch */
+/* @var $searchModel app\models\search\ControllersSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', Controllers::TITLE);
@@ -46,7 +46,7 @@ try {
                 ATTRIBUTE => Controllers::CONTROLLER_ID,
                 FORMAT => 'raw',
                 OPTIONS => [STR_CLASS => COLSM1],
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
             ],
             Controllers::CONTROLLER_NAME,
             Controllers::CONTROLLER_DESCRIPTION,
@@ -55,7 +55,7 @@ try {
                 FILTER => UiComponent::yesOrNoArray(),
                 FORMAT => 'raw',
                 OPTIONS => [STR_CLASS => 'col-sm-2'],
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
@@ -65,7 +65,7 @@ try {
                 FILTER => UiComponent::yesOrNoArray(),
                 FORMAT => 'raw',
                 OPTIONS => [STR_CLASS => COLSM1],
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
@@ -75,19 +75,19 @@ try {
                 FILTER => UiComponent::yesOrNoArray(),
                 FORMAT => 'raw',
                 OPTIONS => [STR_CLASS => COLSM1],
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => GRID_DATACOLUMN,
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
             ],
         ]
     ]);
-} catch (Exception $errorexception) {
+} catch (Exception $errorException) {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
+            ERROR_MODULE,
+            [MODULE => 'app\views\logs\controllers::gridView::widget', ERROR => $errorException]
         ),
         MSG_ERROR
     );

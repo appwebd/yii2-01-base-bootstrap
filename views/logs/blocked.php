@@ -18,10 +18,10 @@ use app\models\search\BlockedSearch;
 use app\models\Blocked;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\BlockedSearch */
+/* @var $searchModel app\models\search\BlockedSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app',  Blocked::TITLE);
+$this->title = Yii::t('app', Blocked::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
@@ -48,27 +48,27 @@ try {
         'columns' => [
             [STR_CLASS => 'yii\grid\CheckboxColumn', 'options' => [STR_CLASS => 'width10px']],
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
                 ATTRIBUTE => Blocked::ID,
                 OPTIONS => [STR_CLASS => 'col-sm-1'],
-                FORMAT => 'raw'
+                FORMAT => 'raw',
+                STR_CLASS => GRID_DATACOLUMN,
             ],
             Blocked::IPV4_ADDRESS,
             Blocked::DATE,
             [
-                "class" => yii\grid\DataColumn::className(),
-                "attribute" => Blocked::STATUS_ID,
-                'filter' => BlockedSearch::getStatusListSearch(),
-                "value" => Blocked::STATUS_STATUS_NAME,
-                "format" => "raw",
+                ATTRIBUTE => Blocked::STATUS_ID,
+                FILTER => BlockedSearch::getStatusListSearch(),
+                FORMAT => "raw",
+                STR_CLASS => GRID_DATACOLUMN,
+                VALUE => Blocked::STATUS_STATUS_NAME,
             ],
         ]]);
 } catch (Exception $errorException) {
     BaseController::bitacora(
         Yii::t(
             'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorException]
+            ERROR_MODULE,
+            [MODULE => 'app\views\logs\blocked::gridView::widget', ERROR => $errorException]
         ),
         MSG_ERROR
     );
