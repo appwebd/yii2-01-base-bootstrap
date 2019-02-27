@@ -3,10 +3,11 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
+use app\components\UiComponent;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\ContactForm */
+/* @var $model app\models\forms\ContactForm */
 
 $this->title = Yii::t('app', 'Contact');
 $this->params[BREADCRUMBS][] = $this->title;
@@ -18,7 +19,7 @@ echo '
         <div class="col-sm-6 box">
             <div class="webpage ">';
 
-                echo Yii::$app->ui->header('user', $this->title, '');
+                echo UiComponent::header('user', $this->title, '');
 ?>
 
                 <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')) :
@@ -72,10 +73,12 @@ echo '
                     ActiveForm::end(); ?>
 
                 <?php endif; ?>
-                <?=Yii::$app->view->render('@app/views/partials/_links_return_to');?>
+                <?=Yii::$app->view->render('@app/views/partials/_links_return_to');
+            echo '
             </div>
         </div>
         <div class="col-sm-3 "> &nbsp;&nbsp; </div>
     </div>
 </div>
-<br>
+<br>';
+
