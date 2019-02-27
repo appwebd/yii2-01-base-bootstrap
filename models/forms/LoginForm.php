@@ -60,6 +60,12 @@ class LoginForm extends Model
         return false;
     }
 
+    /**
+     * Validation of User/pass and Administrative rules, for example cookie duration
+     *
+     * @return bool
+     * @throws NotFoundHttpException
+     */
     public function loginAdmin()
     {
         if ($this->validate()) {
@@ -100,8 +106,10 @@ class LoginForm extends Model
 
         return $this->userPrivateLocalClass;
     }
+
     /**
      * Removes email confirmation token and sets is_email_verified to true
+     *
      * @param bool $save whether to save the record. Default is `false`.
      * @return bool|null whether the save was successful or null if $save was false.
      */
