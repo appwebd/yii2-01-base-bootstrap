@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use Yii;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
