@@ -19,7 +19,8 @@ use yii\helpers\HtmlPurifier;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
-use app\components\Uicomponent;
+use app\controllers\BaseController;
+use app\components\UiComponent;
 
 /**
  * Controllers
@@ -33,7 +34,7 @@ use app\components\Uicomponent;
  * @property tinyint(1)      menu_boolean_visible       Menu is visible
  *
  */
-class Controllers extends \yii\db\ActiveRecord
+class Controllers extends ActiveRecord
 {
     const ACTIVE                     = 'active';
     const CONTROLLER_DESCRIPTION     = 'controller_description';
@@ -178,6 +179,7 @@ class Controllers extends \yii\db\ActiveRecord
 
     /**
      * Get controller_name of Controllers table
+     * @param $controllerName string controller name
      * @return Controllers
      */
     public static function getControllers($controllerName)
@@ -219,7 +221,7 @@ class Controllers extends \yii\db\ActiveRecord
      */
     public static function getControllersList()
     {
-        $droptions = Controllers::find([self::ACTIVE=>1])
+        $droptions = Controllers::find()->where([self::ACTIVE => 1])
                ->orderBy([self::CONTROLLER_NAME => SORT_ASC])
                ->asArray()->all();
         return ArrayHelper::map($droptions, self::CONTROLLER_ID, self::CONTROLLER_NAME);
