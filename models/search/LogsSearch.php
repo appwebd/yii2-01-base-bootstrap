@@ -13,7 +13,6 @@
 
 namespace app\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -146,6 +145,7 @@ class LogsSearch extends Logs
 
     /**
      * Get array from Action
+     * @param $controllerId int primary key of table logs
      * @return array
      */
     public static function getActionListSearch($controllerId)
