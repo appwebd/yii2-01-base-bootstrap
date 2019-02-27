@@ -32,9 +32,7 @@ echo '
                         'app',
                         'Thanks for your registration'
                     ),
-                    ' ',
-                    true,
-                    false
+                    ' '
                 );
                 echo '                
                 <p>';
