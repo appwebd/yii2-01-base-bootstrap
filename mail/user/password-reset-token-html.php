@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-use app\controllers\BaseController;
 use app\models\forms\PasswordResetRequestForm;
 
 /* @var $this yii\web\View */
