@@ -1,7 +1,19 @@
 <?php
+/**
+ * login session view
+ *
+ * @package     login
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-11-02 07:30:41
+ * @version     1.0
+ */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use app\components\UiComponent;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
@@ -18,7 +30,7 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 
 
-                <?= Yii::$app->ui->header(
+                <?= UiComponent::header(
                     'user',
                     $this->title,
                     Yii::t('app', 'Please complete the following fields to start your session:')
@@ -40,7 +52,10 @@ $this->params[BREADCRUMBS][] = $this->title;
                                          'x-moz-errormessage'=>'The user account is required information!'
                                         ],
                     'inputTemplate' => '<div class="input-group">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-user">
+                                                </span>
+                                            </span>
                                             {input}
                                         </div>'
                 ])->textInput()->label(false); ?>
@@ -55,7 +70,9 @@ $this->params[BREADCRUMBS][] = $this->title;
                                         'x-moz-errormessage'=> Yii::t('app', 'The password is required information!')
                                        ],
                     'inputTemplate' => '<div class="input-group">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-lock"></span>
+                                            </span>
                                             {input}
                                         </div>'
                 ])->passwordInput(['placeholder'=> Yii::t('app', ' Password')])->label(false); ?>
@@ -99,7 +116,7 @@ $this->params[BREADCRUMBS][] = $this->title;
                     <?=
                     Yii::t('app', 'You do not have an account?'),
                     '&nbsp;',
-                    Html::a(Yii::t('app', 'Signup'), ['/singup/index']);
+                    Html::a(Yii::t('app', 'Signup'), ['/signup/index']);
                     ?>
                 </div>
 
