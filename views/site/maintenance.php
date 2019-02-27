@@ -1,4 +1,7 @@
 <?php
+
+use yii\helpers\Html;
+
 /* @var yii\web\View $this */
 $this->context->layout = false;
 $this->title = Yii::t('app', 'Website in maintenance');
