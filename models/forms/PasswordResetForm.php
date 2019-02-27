@@ -62,6 +62,11 @@ class PasswordResetForm extends Model
         ];
     }
 
+    /**
+     * @param models\forms\PasswordResetForm $modelForm
+     * @return bool
+     * @throws \Exception
+     */
     public function passwordUpdate($modelForm)
     {
         $transaction = Yii::$app->db->beginTransaction();
