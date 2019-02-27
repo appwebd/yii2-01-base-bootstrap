@@ -1,7 +1,5 @@
 <?php
 
-use yii\helpers\Html;
-
 const A_HREF='<a href=\'';
 
 ?>
@@ -9,7 +7,7 @@ const A_HREF='<a href=\'';
 <div class="footer-before">
     <div class="row ">
         <div class="col-sm-12 text-right ">
-
+            <p>
             &nbsp;
             <?= A_HREF . Yii::$app->urlManager->createUrl('index.php/site/about') . ' \'>' .
             Yii::t('app', 'ABOUT').'</a>';
