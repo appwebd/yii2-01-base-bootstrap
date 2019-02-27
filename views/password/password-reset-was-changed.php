@@ -2,7 +2,6 @@
 
 use app\components\UiComponent;
 
-
 /* @var yii\web\View $this */
 /* @var \app\models\User $model */
 
