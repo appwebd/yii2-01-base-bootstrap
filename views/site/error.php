@@ -39,11 +39,11 @@ BaseController::bitacora(Yii::t('app', 'Error: {error}', ['error' => $error]), M
         </div>
         <br>
         <p>
-            <?= Yii::t(
-                    'app',
-                    'The above error occurred while the Web server was processing your request. 
-                    We are generating a record status of this error. Thank you.'
-            );?>
+        <?= Yii::t(
+	    'app',
+	    'The above error occurred while the Web server was processing your request.
+	    We are generating a record status of this error. Thank you.'
+        );?>
         </p>
         <br>
 
