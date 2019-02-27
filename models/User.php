@@ -18,7 +18,6 @@ use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
-use yii\helpers\ArrayHelper;
 use yii\helpers\HtmlPurifier;
 use app\controllers\BaseController;
 use app\models\queries\UserQuery;
@@ -40,8 +39,6 @@ use app\models\queries\UserQuery;
  * @property char(15)      telephone                   Phone number 12 digits
  * @property int(11)       user_id                     User
  * @property char(20)      username                    User account
-
-
  *
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -60,6 +57,7 @@ class User extends ActiveRecord implements IdentityInterface
     const PASSWORD_RESET_TOKEN          = 'password_reset_token';
     const PASSWORD_RESET_TOKEN_DATE     = 'password_reset_token_date';
     const PROFILE_USER                  = 20;
+    const PROFILE_VISIT                 = 0;
     const PROFILE_ID                    = 'profile_id';
     const STATUS_ACTIVE                 = 1;
     const STATUS_DELETED                = 0;
@@ -69,6 +67,7 @@ class User extends ActiveRecord implements IdentityInterface
     const TITLE                         = 'Users';
     const USERNAME                      = 'username';
     const USER_ID                       = 'user_id';
+    const USER_ID_VISIT                 = 1;
 
     /**
      * @var string|null the current password value from form input
@@ -189,25 +188,13 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return UserQuery custom query class with user scopes
-     */
+    * @return UserQuery custom query class with user scopes
+    */
     public static function find()
     {
         return new UserQuery(get_called_class());
     }
 
-    /**
-     * Get array table user
-     *
-     * @return array
-     */
-    /*
-    public static function getUserList()
-    {
-        $droptions   = User::find([self::ACTIVE=>1])->asArray()->all();
-        return ArrayHelper::map($droptions, self::USER_ID, self::USERNAME);
-    }
-*/
     /**
      * @param $userId integer primary key of table User
      * @return User|null
@@ -216,11 +203,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne([self::USER_ID=> $userId]);
     }
+
     /**
      * Find user by AccessToken
      *
      * @param $token string
      *
+     * @param null $type
      * @return User
      */
     public static function findIdentityByAccessToken($token, $type = null)
@@ -231,13 +220,21 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Find Identity
      *
-     * @param  $usu_usuarios_id integer Primary key table
+     * @param $userId
      * @return User
      */
-
     public static function findIdentity($userId)
     {
         return static::findOne([self::USER_ID => $userId, self::ACTIVE => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Get the user_id of table user
+     * @return int user_id primary key of table user
+     */
+    public static function getIdentityUserId()
+    {
+        return Yii::$app->user->isGuest ? User::USER_ID_VISIT : Yii::$app->user->identity->getId();
     }
 
     /**
@@ -250,18 +247,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne([self::USERNAME => $username, self::ACTIVE =>self::STATUS_ACTIVE]);
     }
-/*
-    public static function findFirstNameLastName($userId)
-    {
-        $model = User::findIdentity($userId);
-        if ($model) {
-            $result = $model->firstName . ' '. $model->lastName;
-        } else {
-            $result = Yii::t('app', 'Unknow');
-        }
-        return $result;
-    }
-*/
+
     /**
      * Get primary key id
      *
@@ -275,7 +261,6 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @getAuthKey
      */
-
     public function getAuthKey()
     {
         return $this->auth_key;
@@ -340,7 +325,10 @@ class User extends ActiveRecord implements IdentityInterface
                 Yii::t(
                     'app',
                     ERROR_MODULE,
-                    [MODULE=> '@app\models\User\generateEmailConfirmationToken', ERROR => $errorexception]
+                    [
+                        MODULE=> '@app\models\User\generateEmailConfirmationToken',
+                        ERROR => $errorexception
+                    ]
                 ),
                 MSG_ERROR
             );
@@ -356,7 +344,6 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $password the new password for this user.
      * @return bool whether the record was updated successfully
      */
-
     public function resetPassword($password)
     {
         $this->setPassword($password);
@@ -398,8 +385,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * @validateAuthKey
+     * @param $authKey
+     * @return bool
      */
-
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey() === $authKey;
