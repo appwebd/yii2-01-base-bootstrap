@@ -18,6 +18,7 @@ class UserQuery extends ActiveQuery
     }
 
     /**
+     * @param $email
      * @return static the query with condition for given email applied
      */
     public function email($email)
