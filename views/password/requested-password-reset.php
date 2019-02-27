@@ -2,7 +2,6 @@
 
 use app\components\UiComponent;
 
-
 /* @var yii\web\View $this */
 /* @var \app\models\User $model */
 
@@ -15,7 +14,11 @@ echo '
         <div class="col-sm-3 "> &nbsp; </div>
         <div class="col-sm-6 box">';
 
-            echo UiComponent::header('user', Yii::t('app', 'Request password reset'), Yii::t('app', 'Requested password reset'));
+            echo UiComponent::header(
+                'user',
+                Yii::t('app', 'Request password reset'),
+                Yii::t('app', 'Requested password reset')
+            );
             echo '<div class="success"><h4>',
                 Yii::t(
                     'app',
