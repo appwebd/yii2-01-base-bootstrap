@@ -18,26 +18,26 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\HtmlPurifier;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use app\models\Contact;
-use app\models\Product;
+use app\models\Contacts;
+use app\models\Products;
 
 /**
  * Company
  * Company
  *
- * @property tinyint(1)      active              Active
- * @property char(100)       address             Address
- * @property int(11)         company_id          Company
- * @property char(60)        company_name        Name
- * @property char(254)       contact_email       Contact email
- * @property char(80)        contact_person      Contact person
- * @property char(20)        contact_phone_1     Contact phone
- * @property char(20)        contact_phone_2     Phone additional
- * @property char(20)        contact_phone_3     Phone additional
- * @property char(254)       webpage             URL Webpage
+ * @property int      active              Active
+ * @property string   address             Address
+ * @property int      company_id          Company
+ * @property string   company_name        Name
+ * @property string   contact_email       Contact email
+ * @property string   contact_person      Contact person
+ * @property string   contact_phone_1     Contact phone
+ * @property string   contact_phone_2     Phone additional
+ * @property string   contact_phone_3     Phone additional
+ * @property string   webpage             URL Webpage
  *
  */
-class Company extends \yii\db\ActiveRecord
+class Company extends ActiveRecord
 {
     const ACTIVE = 'active';
     const ADDRESS = 'address';
@@ -184,7 +184,7 @@ class Company extends \yii\db\ActiveRecord
      */
     public static function getCompanyList()
     {
-        $droptions = Company::find([self::ACTIVE=>1])
+        $droptions = Company::find()->where([self::ACTIVE => 1])
                     ->orderBy([self::COMPANY_NAME => SORT_ASC])
                     ->asArray()->all();
         return ArrayHelper::map($droptions, self::COMPANY_ID, self::COMPANY_NAME);
