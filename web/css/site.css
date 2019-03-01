@@ -109,7 +109,7 @@ p {
   background-color: transparent;
 }
 
-.classTabs .ui-tabs-tab ui-tabs-anchor {
+.classTabs .ui-tabs-tab .ui-tabs-anchor {
   background: black;
 }
 
