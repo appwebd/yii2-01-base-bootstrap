@@ -23,10 +23,10 @@ use yii\helpers\ArrayHelper;
  * Blocked
  * Ipv4 Blocked
  *
- * @property datetime        date                 date time
- * @property int(11)         id                   id
- * @property char(20)        ipv4_address         IPV4 address
- * @property bigint(20)      ipv4_address_int     IPV4 address integer
+ * @property string        date                 date time
+ * @property int(11)       id                   id
+ * @property string        ipv4_address         IPV4 address
+ * @property int           ipv4_address_int     IPV4 address integer
  * @property int(11)         status_id            Status
  *
  */
