@@ -81,14 +81,13 @@ class PasswordResetForm extends Model
                     return true;
                 }
             }
-            return false;
+
         } catch (\Exception $errorexception) {
             BaseController::bitacoraAndFlash(
                 Yii::t('app', 'Error, updating password {error}', ['error' => $errorexception]),
                 MSG_ERROR
             );
             $transaction->rollBack();
-            throw $errorexception;
         }
 
         return false;
