@@ -31,7 +31,7 @@ use app\models\queries\Common;
  * @property string          action_description     Description
  * @property int             action_id              Actions
  * @property string          action_name            Name
- * @property tinyint         active                 Active
+ * @property int             active                 Active
  *
  */
 class Action extends ActiveRecord
@@ -197,7 +197,7 @@ class Action extends ActiveRecord
             if (isset($actionId[0])) {
                 return $actionId[0];
             }
-        } catch (Exception $errorexception) {
+        } catch (\Exception $errorexception) {
             BaseController::bitacora(
                 Yii::t(
                     'app',
