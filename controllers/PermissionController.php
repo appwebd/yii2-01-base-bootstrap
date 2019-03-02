@@ -52,7 +52,7 @@ class PermissionController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => [
                     self::ACTION_DROPDOWN,
                     ACTION_CREATE,
@@ -79,7 +79,7 @@ class PermissionController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     self::ACTION_DROPDOWN=>['get'],
                     ACTION_CREATE => ['get', 'post'],
@@ -147,7 +147,7 @@ class PermissionController extends Controller
         if (Yii::$app->request->isAjax) {
 
             echo Common::relatedDropdownList(
-                Action::className(),
+                Action::class,
                 self::CONTROLLER_ID,
                 $id,
                 'action_id',
@@ -191,7 +191,7 @@ class PermissionController extends Controller
     /**
      * Delete many records of this table
      *
-     * @return boolean
+     * @return mixed
      */
     public function actionRemove()
     {

@@ -64,7 +64,7 @@ class ProfileController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                  'only' => [
                     ACTION_CREATE,
                     ACTION_DELETE,
@@ -91,7 +91,7 @@ class ProfileController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     ACTION_CREATE => ['get', 'post'],
                     ACTION_DELETE => ['post'],

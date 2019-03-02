@@ -29,7 +29,7 @@ class SingupController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => [ACTION_INDEX],
                 'rules' => [
                     [
@@ -40,7 +40,7 @@ class SingupController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     ACTION_INDEX => ['GET','POST'],
                 ],

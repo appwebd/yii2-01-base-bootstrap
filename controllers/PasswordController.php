@@ -33,7 +33,7 @@ class PasswordController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => [
                     ACTION_INDEX,                // Request password reset
                     self::ACTION_RESET,          // password reset
@@ -56,7 +56,7 @@ class PasswordController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     ACTION_INDEX => ['get','post'],
                     self::ACTION_RESET => ['get', 'post'],

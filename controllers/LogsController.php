@@ -43,6 +43,8 @@ class LogsController extends Controller
      *
      * @param  object $action name of object invoked.
      * @return mixed
+     * @throws \yii\db\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action)
     {
@@ -64,7 +66,7 @@ class LogsController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => [
                     self::ACTIONS,
                     self::BLOCKED,
@@ -87,7 +89,7 @@ class LogsController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     self::ACTIONS => ['get'],
                     self::BLOCKED => ['get'],

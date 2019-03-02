@@ -39,7 +39,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                STR_CLASS => AccessControl::className(),
+                STR_CLASS => AccessControl::class,
                 'only' => [self::STR_ABOUT,
                            self::STR_CONTACT,
                            self::STR_COOKIE_POLICY,
@@ -57,7 +57,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs'=>[
-                STR_CLASS=>VerbFilter::className(),
+                STR_CLASS=>VerbFilter::class,
                 'actions' =>[
                     ACTION_INDEX=>['get']
                 ]

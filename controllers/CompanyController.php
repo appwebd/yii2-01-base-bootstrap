@@ -66,7 +66,7 @@ class CompanyController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                  'only' => [
                     self::COMPANY_AUTOCOMPLETE,
                     ACTION_CREATE,
@@ -93,7 +93,7 @@ class CompanyController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     self::COMPANY_AUTOCOMPLETE=>['get'],
                     ACTION_CREATE => ['get', 'post'],

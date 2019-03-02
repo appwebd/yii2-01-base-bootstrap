@@ -31,7 +31,7 @@ class LoginController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => [ACTION_INDEX, self::LOGOUT],
                 'rules' => [
                     [
@@ -47,7 +47,7 @@ class LoginController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     ACTION_INDEX => ['get','post'],
                     self::LOGOUT => ['post'],

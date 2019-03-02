@@ -39,9 +39,10 @@ class BaseController extends Controller
     /**
      * Save in table logs all events and activities of this web application
      *
-     * @param string  $event    events or activities
+     * @param string $event events or activities
      * @param integer $statusId status_id related to table status
      * @return void
+     * @throws \yii\db\Exception
      */
     public static function bitacora($event, $statusId)
     {
@@ -126,7 +127,7 @@ class BaseController extends Controller
         /** @noinspection PhpDeprecationInspection */
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => [
                     ACTION_CREATE,
                     ACTION_DELETE,
@@ -151,7 +152,7 @@ class BaseController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 ACTIONS => [
                     ACTION_CREATE => ['get', 'post'],
                     ACTION_DELETE => ['post'],
