@@ -355,6 +355,7 @@ class BaseController extends Controller
             'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
         $totalChars = count($chars) - 1;
         for ($iterator = 0; $iterator <= $length; $iterator++) {
+            $random = 0;
             try {
                 $random = random_int(0, $totalChars);
             } catch (\Exception $e) {
