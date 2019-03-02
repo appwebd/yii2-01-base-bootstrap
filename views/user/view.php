@@ -17,7 +17,7 @@ use app\controllers\BaseController;
 use app\models\User;
 
 /* @var $this yii\web\View */
-/* @var $Model app\models\User */
+/* @var $model app\models\User */
 
 $this->title = Yii::t('app', User::TITLE);
 
@@ -55,7 +55,7 @@ try {
             ],
         ],
     ]);
-} catch (Exception $errorexception) {
+} catch (\Exception $errorexception) {
     BaseController::bitacora(
         Yii::t(
             'app',

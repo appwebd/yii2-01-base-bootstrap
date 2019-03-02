@@ -6,7 +6,7 @@ use app\components\UiComponent;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
-/* @var \app\models\forms\ResetPasswordForm $model */
+/* @var \app\models\forms\PasswordResetForm $model */
 
 $this->title = Yii::t('app', 'Reset password');
 $this->params[BREADCRUMBS][] = $this->title;
