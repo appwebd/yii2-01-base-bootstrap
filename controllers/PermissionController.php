@@ -260,7 +260,7 @@ class PermissionController extends Controller
      * Finds the Permission model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $permissionId
-     * @return app/models/Permission Permission the loaded model
+     * @return @app/models/Permission Permission the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($permissionId)
