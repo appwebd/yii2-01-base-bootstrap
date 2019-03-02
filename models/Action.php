@@ -30,6 +30,7 @@ use app\models\queries\Common;
  *
  * @property string          action_description     Description
  * @property int             action_id              Actions
+ * @property int             controller_id          Controller Id associated
  * @property string          action_name            Name
  * @property int             active                 Active
  *
