@@ -95,7 +95,7 @@ try {
             ],
             [
                 HEADER => UiComponent::pageSizeDropDownList($pageSize),
-                STR_CLASS => yii\grid\ActionColumn::className(),
+                STR_CLASS => yii\grid\ActionColumn::class,
                 'contentOptions' => [STR_CLASS => 'GridView'],
             ],
         ]

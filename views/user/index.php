@@ -75,7 +75,7 @@ try {
                 FORMAT => 'raw'
             ],
             [
-                STR_CLASS => 'yii\grid\ActionColumn',
+                STR_CLASS => yii\grid\ActionColumn::class,
                 'header' => UiComponent::pageSizeDropDownList($pageSize),
                 'template' => '{view} {update} {delete}',
                 'contentOptions' => [STR_CLASS => 'GridView'],
