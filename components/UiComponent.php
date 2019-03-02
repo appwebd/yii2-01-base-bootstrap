@@ -18,7 +18,7 @@ use yii\base\Component;
 use yii\helpers\Html;
 use app\models\queries\Common;
 use app\models\Status;
-
+use app\controllers\BaseController;
 /**
  * Class UiComponent
  *
@@ -141,7 +141,7 @@ class UiComponent extends Component
             } else {
                 echo '<br/><br/><br/>', $buttonDelete, self::HTML_SPACE, $buttonRefresh, self::HTML_SPACE, $buttonCreate;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             BaseController::bitacora(
                 Yii::t(
                     'app',
