@@ -140,7 +140,8 @@ return [
     'Select Profile' => 'Seleccione perfil',
     'Select the user profile to which you want to create / update the access properties' =>
     'Seleccione el perfil de usuario al cual usted desea crear/actualizar las propiedades',
-    'Select the view / web page to then identify the action that is performed on it. Setting access Yes / No will indicate if the profile has access to this resource'=>
+    'Select the view / web page to then identify the action that is performed on it.
+        Setting access Yes / No will indicate if the profile has access to this resource'  =>
     'Selecciona la vista / página web para luego identificando la acción que se realiza sobre ella.
      El establecer acceso Sí/No indicará si el perfil tiene acceso a este recurso',
     '&nbsp; Assign access ?' => 'Asignar acceso',
