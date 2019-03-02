@@ -131,7 +131,7 @@ class Permission extends ActiveRecord
     public function getProfile()
     {
         return $this->hasOne(
-            Profile::className(),
+            Profile::class,
             [self::PROFILE_ID => self::PROFILE_ID]
         );
     }
@@ -164,7 +164,7 @@ class Permission extends ActiveRecord
             if (isset($actionPermission[0])) {
                 return $actionPermission[0];
             }
-        } catch (Exception $errorException) {
+        } catch (\Exception $errorException) {
             BaseController::bitacora(
                 Yii::t(
                     'app',

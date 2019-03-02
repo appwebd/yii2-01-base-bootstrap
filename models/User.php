@@ -39,6 +39,7 @@ use app\models\queries\UserQuery;
  * @property string     telephone                   Phone number 12 digits
  * @property integer    user_id                     User
  * @property string     username                    User account
+ * @property string     ipv4_address_last_login     Ipv4 address of last login
  *
  */
 class User extends ActiveRecord implements IdentityInterface
