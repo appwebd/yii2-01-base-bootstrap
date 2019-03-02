@@ -45,8 +45,7 @@ try {
             User::IPV4_ADDRESS_LAST_LOGIN,
             'profile.profile_name',
             [
-                STR_CLASS => yii\grid\DataColumn::className(),
-                FILTER => UiComponent::yesOrNoArray(),
+                STR_CLASS => yii\grid\DataColumn::class,
                 ATTRIBUTE => User::ACTIVE,
                 OPTIONS => [STR_CLASS => 'col-sm-1'],
                 VALUE => function ($model) {
