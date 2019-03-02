@@ -217,7 +217,7 @@ class Common extends ActiveQuery
 
     /**
      * Get information for dropdown list
-     * @param $model Classname defined in app\models to get information
+     * @param $model object defined in app\models to get information
      * @param $parentModelId String column related model
      * @param $valueId integer id to search in model
      * @param $key integer column to get column code

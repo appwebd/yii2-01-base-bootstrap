@@ -63,7 +63,7 @@ class PasswordResetForm extends Model
     }
 
     /**
-     * @param models\forms\PasswordResetForm $modelForm
+     * @param @app\models\forms\PasswordResetForm $modelForm
      * @return bool
      * @throws \Exception
      */

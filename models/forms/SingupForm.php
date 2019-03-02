@@ -21,6 +21,25 @@ use app\components\UiComponent;
 
 /**
  * User signup form
+/**
+ * User
+ *
+ * @property integer    active                      Active
+ * @property string     auth_key                    key auth
+ * @property string     email                       Email
+ * @property string     email_confirmation_token    Email token of confirmation
+ * @property integer    email_is_verified           Boolean is email verified
+ * @property string     firstName                   First Name
+ * @property string     lastName                    Last Name
+ * @property string     password_hash               password
+ * @property string     password_reset_token        password reset token
+ * @property string     password_reset_token_date   password reset token date creation
+ * @property integer    profile_id                  Profile
+ * @property string     telephone                   Phone number 12 digits
+ * @property integer    user_id                     User
+ * @property string     username                    User account
+ * @property string     ipv4_address_last_login     Ipv4 address of last login
+ *
  */
 class SingupForm extends Model
 {
@@ -66,11 +85,11 @@ class SingupForm extends Model
             [[self::EMAIL, self::FIRST_NAME, self::LAST_NAME, self::USERNAME, self::PASSWORD], 'required'],
             [[self::EMAIL, self::FIRST_NAME, self::LAST_NAME, self::USERNAME], 'trim'],
 
-            [self::USERNAME, 'unique', 'targetClass' => User::className()],
+            [self::USERNAME, 'unique', 'targetClass' => User::class],
             [self::USERNAME, self::STRING, 'min' => 2, 'max' => 255],
 
             [self::EMAIL, 'email'],
-            [self::EMAIL, 'unique', 'targetClass' => User::className()],
+            [self::EMAIL, 'unique', 'targetClass' => User::class],
 
             [self::FIRST_NAME, STR_DEFAULT, VALUE => ''],
             [self::LAST_NAME, STR_DEFAULT, VALUE => ''],
