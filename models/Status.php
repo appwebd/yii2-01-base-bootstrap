@@ -97,7 +97,7 @@ class Status extends ActiveRecord
     public function getBlocked()
     {
         return $this->hasMany(
-            Blocked::className(),
+            Blocked::class,
             [self::STATUS_ID => self::STATUS_ID]
         );
     }
@@ -108,7 +108,7 @@ class Status extends ActiveRecord
     public function getLogs()
     {
         return $this->hasMany(
-            Logs::className(),
+            Logs::class,
             [self::STATUS_ID => self::STATUS_ID]
         );
     }

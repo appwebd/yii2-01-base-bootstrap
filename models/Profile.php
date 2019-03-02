@@ -118,7 +118,7 @@ class Profile extends ActiveRecord
     */
     public function getPermission()
     {
-        return $this->hasMany(Permission::className(), [self::PROFILE_ID => self::PROFILE_ID]);
+        return $this->hasMany(Permission::class, [self::PROFILE_ID => self::PROFILE_ID]);
     }
 
     /**
@@ -126,7 +126,7 @@ class Profile extends ActiveRecord
     */
     public function getUser()
     {
-        return $this->hasMany(User::className(), [self::PROFILE_ID => self::PROFILE_ID]);
+        return $this->hasMany(User::class, [self::PROFILE_ID => self::PROFILE_ID]);
     }
 
     /**

@@ -158,7 +158,7 @@ class Action extends ActiveRecord
      */
     public function getControllers()
     {
-        return $this->hasOne(Controllers::className(), [self::CONTROLLER_ID => self::CONTROLLER_ID]);
+        return $this->hasOne(Controllers::class, [self::CONTROLLER_ID => self::CONTROLLER_ID]);
     }
 
     /**
@@ -166,7 +166,7 @@ class Action extends ActiveRecord
     */
     public function getLogs()
     {
-        return $this->hasMany(Logs::className(), [self::ACTION_ID => self::ACTION_ID]);
+        return $this->hasMany(Logs::class, [self::ACTION_ID => self::ACTION_ID]);
     }
 
     /**

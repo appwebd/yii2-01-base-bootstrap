@@ -112,7 +112,7 @@ class Blocked extends ActiveRecord
      */
     public function getStatus()
     {
-        return $this->hasOne(Status::className(), [self::STATUS_ID => self::STATUS_ID]);
+        return $this->hasOne(Status::class, [self::STATUS_ID => self::STATUS_ID]);
     }
 
 

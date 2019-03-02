@@ -109,7 +109,7 @@ class Permission extends ActiveRecord
     public function getAction()
     {
         return $this->hasOne(
-            Action::className(),
+            Action::class,
             [self::ACTION_ID => self::ACTION_ID]
         );
     }
@@ -120,7 +120,7 @@ class Permission extends ActiveRecord
     public function getControllers()
     {
         return $this->hasOne(
-            Controllers::className(),
+            Controllers::class,
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }

@@ -143,7 +143,7 @@ class Company extends ActiveRecord
     */
     public function getProduct()
     {
-        return $this->hasMany(Product::className(), [self::COMPANY_ID => self::COMPANY_ID]);
+        return $this->hasMany(Product::class, [self::COMPANY_ID => self::COMPANY_ID]);
     }
 
     /**
@@ -151,7 +151,7 @@ class Company extends ActiveRecord
      */
     public function getContact()
     {
-        return $this->hasMany(Contact::className(), [self::COMPANY_ID => self::COMPANY_ID]);
+        return $this->hasMany(Contact::class, [self::COMPANY_ID => self::COMPANY_ID]);
     }
 
     /**

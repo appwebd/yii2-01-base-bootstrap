@@ -143,7 +143,7 @@ class Logs extends ActiveRecord
     public function getAction()
     {
         return $this->hasOne(
-            Action::className(),
+            Action::class,
             [self::ACTION_ID => self::ACTION_ID]
         );
     }
@@ -154,7 +154,7 @@ class Logs extends ActiveRecord
     public function getControllers()
     {
         return $this->hasOne(
-            Controllers::className(),
+            Controllers::class,
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }
@@ -165,7 +165,7 @@ class Logs extends ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(
-            Status::className(),
+            Status::class,
             [self::STATUS_ID => self::STATUS_ID]
         );
     }
@@ -176,7 +176,7 @@ class Logs extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(
-            User::className(),
+            User::class,
             [self::USER_ID => self::USER_ID]
         );
     }

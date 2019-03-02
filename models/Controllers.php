@@ -150,7 +150,7 @@ class Controllers extends ActiveRecord
     public function getAction()
     {
         return $this->hasMany(
-            Action::className(),
+            Action::class,
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }
@@ -161,7 +161,7 @@ class Controllers extends ActiveRecord
     public function getLogs()
     {
         return $this->hasMany(
-            Logs::className(),
+            Logs::class,
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }
@@ -172,7 +172,7 @@ class Controllers extends ActiveRecord
     public function getPermission()
     {
         return $this->hasMany(
-            Permission::className(),
+            Permission::class,
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }
