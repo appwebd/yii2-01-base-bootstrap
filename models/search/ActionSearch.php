@@ -20,8 +20,13 @@ use app\models\Action;
 
 /**
  * ActionSearch represents the model behind the search form about `app\models\Action`.
+ *
+ * @property string          action_description     Description
+ * @property int             action_id              Actions
+ * @property string          action_name            Name
+ * @property int             active                 Active
+ *
  */
-
 class ActionSearch extends Action
 {
     const ACTION_DESCRIPTION     = 'action_description';

@@ -23,6 +23,9 @@ use app\models\search\ControllersSearch;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\PermissionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $pageSize int */
+/* @var $controller_id int */
+
 
 $this->title = Yii::t('app', Permission::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;

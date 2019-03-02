@@ -21,6 +21,7 @@ use app\models\Company;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\CompanySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $pageSize int */
 
 $this->title = Yii::t('app', Company::TITLE);
 $this->params[BREADCRUMBS][] = $this->title;
@@ -61,7 +62,7 @@ try {
                 FILTER => UiComponent::yesOrNoArray(),
                 FORMAT=>'raw',
                 OPTIONS => [STR_CLASS=> COLSM1],
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => yii\grid\DataColumn::class,
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
