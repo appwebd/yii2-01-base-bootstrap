@@ -22,11 +22,11 @@ use app\controllers\BaseController;
  * Permission
  * Permission
  *
- * @property int(11)         action_id             Action
- * @property tinyint(1)      action_permission     Action permission
- * @property int(11)         controller_id         Controller
- * @property int(11)         permission_id         Permission
- * @property int(11)         profile_id            Profile
+ * @property integer         action_id             Action
+ * @property integer         action_permission     Action permission
+ * @property integer         controller_id         Controller
+ * @property integer         permission_id         Permission
+ * @property integer         profile_id            Profile
  *
  */
 class Permission extends ActiveRecord

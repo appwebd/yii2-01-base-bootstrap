@@ -23,9 +23,9 @@ use yii\helpers\HtmlPurifier;
  * Profile
  * Profiles
  *
- * @property tinyint(1)      active           Active
- * @property int(11)         profile_id       Profile
- * @property char(80)        profile_name     Name
+ * @property integer      active           Active
+ * @property int          profile_id       Profile
+ * @property string       profile_name     Name
  *
  */
 class Profile extends ActiveRecord

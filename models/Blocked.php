@@ -24,10 +24,10 @@ use yii\helpers\ArrayHelper;
  * Ipv4 Blocked
  *
  * @property string        date                 date time
- * @property int(11)       id                   id
+ * @property integer       id                   id
  * @property string        ipv4_address         IPV4 address
- * @property int           ipv4_address_int     IPV4 address integer
- * @property int(11)         status_id            Status
+ * @property integer       ipv4_address_int     IPV4 address integer
+ * @property integer       status_id            Status
  *
  */
 class Blocked extends ActiveRecord

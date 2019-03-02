@@ -26,12 +26,12 @@ use app\components\UiComponent;
  * Controllers
  * Controllers
  *
- * @property tinyint(1)      active                     Active
- * @property char(80)        controller_description     Description
- * @property int(11)         controller_id              Controller
- * @property char(100)       controller_name            Name
- * @property tinyint(1)      menu_boolean_private       Menu is private
- * @property tinyint(1)      menu_boolean_visible       Menu is visible
+ * @property integer      active                     Active
+ * @property string        controller_description     Description
+ * @property integer         controller_id              Controller
+ * @property string       controller_name            Name
+ * @property integer      menu_boolean_private       Menu is private
+ * @property integer      menu_boolean_visible       Menu is visible
  *
  */
 class Controllers extends ActiveRecord

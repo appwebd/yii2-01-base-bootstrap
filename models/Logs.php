@@ -22,17 +22,17 @@ use yii\helpers\HtmlPurifier;
  * Logs
  * Logs (user bitacora)
  *
- * @property tinyint(1)      confirmed            ipv4 address confirmed
- * @property int(11)         controller_id        Controller
- * @property int(11)         action_id            Action
- * @property datetime        date                 date
- * @property char(80)        event                Activity / Event
- * @property char(20)        ipv4_address         ipv4_address
- * @property bigint(20)      ipv4_address_int     ipv4_address integer
- * @property int(11)         logs_id              Logs
- * @property int(11)         status_id            Status
- * @property char(250)       user_agent           user agent browser
- * @property int(11)         user_id              User
+ * @property integer  confirmed            ipv4 address confirmed
+ * @property integer  controller_id        Controller
+ * @property integer  action_id            Action
+ * @property string   date                 date
+ * @property string   event                Activity / Event
+ * @property string   ipv4_address         ipv4_address
+ * @property integer  ipv4_address_int     ipv4_address integer
+ * @property integer  logs_id              Logs
+ * @property integer  status_id            Status
+ * @property string   user_agent           user agent browser
+ * @property integer  user_id              User
  *
  */
 class Logs extends ActiveRecord

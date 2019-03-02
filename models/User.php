@@ -25,20 +25,20 @@ use app\models\queries\UserQuery;
 /**
  * User
  *
- * @property tinyint(1)    active                      Active
- * @property char(32)      auth_key                    key auth
- * @property char(254)     email                       Email
- * @property char(255)     email_confirmation_token    Email token of confirmation
- * @property tinyint(1)    email_is_verified           Boolean is email verified
- * @property char(80)      firstName                   First Name
- * @property char(80)      lastName                    Last Name
- * @property char(255)     password_hash               password
- * @property char(255)     password_reset_token        password reset token
- * @property datetime      password_reset_token_date   password reset token date creation
- * @property int(11)       profile_id                  Profile
- * @property char(15)      telephone                   Phone number 12 digits
- * @property int(11)       user_id                     User
- * @property char(20)      username                    User account
+ * @property integer    active                      Active
+ * @property string     auth_key                    key auth
+ * @property string     email                       Email
+ * @property string     email_confirmation_token    Email token of confirmation
+ * @property integer    email_is_verified           Boolean is email verified
+ * @property string     firstName                   First Name
+ * @property string     lastName                    Last Name
+ * @property string     password_hash               password
+ * @property string     password_reset_token        password reset token
+ * @property string     password_reset_token_date   password reset token date creation
+ * @property integer    profile_id                  Profile
+ * @property string     telephone                   Phone number 12 digits
+ * @property integer    user_id                     User
+ * @property string     username                    User account
  *
  */
 class User extends ActiveRecord implements IdentityInterface

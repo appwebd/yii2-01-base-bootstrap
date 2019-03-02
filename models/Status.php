@@ -23,11 +23,11 @@ use yii\helpers\HtmlPurifier;
  * Status
  * Informative status of events in all the platform
  *
- * @property tinyint(1)      active        Active
- * @property char(80)        status_name   Status message
- * @property datetime        created_at    Datetime created record
- * @property datetime        updated_at    Datetime updated record
- * @property int(11)         status_id     Status
+ * @property integer       active        Active
+ * @property string        status_name   Status message
+ * @property string        created_at    Datetime created record
+ * @property string        updated_at    Datetime updated record
+ * @property ineteger      status_id     Status
  *
  */
 class Status extends ActiveRecord
