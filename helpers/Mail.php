@@ -19,7 +19,7 @@ class Mail
      * The sender can be specified in `$params['from']` and defaults to the
      * `mail.from` application parameter.
      *
-     * @param $user primary key of table user
+     * @param $user object key of table user
      * @param $subject string subject of email
      * @param string $view name of the view file to render from `@app/mail/user`
      * @return bool whether the mail was sent successfully
