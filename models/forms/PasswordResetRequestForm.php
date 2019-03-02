@@ -41,7 +41,8 @@ class PasswordResetRequestForm extends Model
 
     /**
      * Sends an email with a link, for resetting the password.
-     * @param email string Email of Password Reset Request form
+     *
+     * @param string email Email of Password Reset Request form
      * @return bool whether the email was sent
      */
     public function sendEmail($email)

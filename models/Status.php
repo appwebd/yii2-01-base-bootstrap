@@ -27,7 +27,7 @@ use yii\helpers\HtmlPurifier;
  * @property string        status_name   Status message
  * @property string        created_at    Datetime created record
  * @property string        updated_at    Datetime updated record
- * @property ineteger      status_id     Status
+ * @property integer       status_id     Status
  *
  */
 class Status extends ActiveRecord

@@ -21,9 +21,9 @@ use app\models\User;
 /**
  * User
  *
- * @property tinyint(1)    active                      Active
- * @property char(255)     password_hash               password
- * @property int(11)       user_id                     User
+ * @property integer    active                      Active
+ * @property string     password_hash               password
+ * @property integer    user_id                     User
  *
  */
 class PasswordResetForm extends Model
