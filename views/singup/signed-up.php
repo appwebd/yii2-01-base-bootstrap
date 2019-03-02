@@ -14,7 +14,7 @@
 use \app\components\UiComponent;
 
 /* @var yii\web\View $this */
-/* @var \frontend\models\User $model */
+/* @var app\models\User $model */
 
 $this->title = Yii::t('app', 'Signed Up');
 $this->params[BREADCRUMBS][] = $this->title;

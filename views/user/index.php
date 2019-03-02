@@ -20,8 +20,9 @@ use app\models\User;
 use app\models\search\ProfileSearch;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\ProyProyectosSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModelUser app\models\search\UserSearch */
+/* @var $dataProviderUser yii\data\ActiveDataProvider */
+/* @var $pageSize int */
 
 $this->title = Yii::t('app', User::TITLE);
 

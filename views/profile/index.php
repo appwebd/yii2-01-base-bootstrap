@@ -19,8 +19,9 @@ use app\models\queries\Common;
 use app\models\Profile;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\search\ProfileSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $searchModelProfile app\models\search\ProfileSearch */
+/* @var $dataProviderProfile yii\data\ActiveDataProvider */
+/* @var $pageSize int */
 
 $template = Common::getProfilePermissionString();
 $this->title = Yii::t('app', Profile::TITLE);
@@ -53,7 +54,7 @@ try {
                 FILTER => UiComponent::yesOrNoArray(),
                 FORMAT => 'raw',
                 OPTIONS => [STR_CLASS => 'col-sm-1'],
-                STR_CLASS => yii\grid\DataColumn::className(),
+                STR_CLASS => yii\grid\DataColumn::class,
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },
