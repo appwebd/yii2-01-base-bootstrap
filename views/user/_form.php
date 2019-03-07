@@ -19,7 +19,8 @@ use app\models\Profile;
 /* @var $form yii\widgets\ActiveForm */
 
     $form = ActiveForm::begin(
-        ['id' => 'form-user',
+        [
+            'id' => 'form-user',
             'method'  => 'post',
             'options' => ['class' => 'form-vertical webpage'],
         ]
@@ -31,10 +32,10 @@ use app\models\Profile;
 
     echo $form->field($model, 'firstName')->textInput(
         [
-            MAXLENGTH => true,
             AUTOFOCUS   => AUTOFOCUS,
+            MAXLENGTH => true,
+            PLACEHOLDER => 'First name for example John',
             TABINDEX    => 2,
-            PLACEHOLDER => 'First name for example John'
         ]
     )->label();
 
