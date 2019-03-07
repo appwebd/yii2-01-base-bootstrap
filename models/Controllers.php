@@ -18,6 +18,7 @@ use yii\db\Query;
 use yii\helpers\HtmlPurifier;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 use app\controllers\BaseController;
 use app\components\UiComponent;
