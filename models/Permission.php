@@ -147,9 +147,12 @@ class Permission extends ActiveRecord
     }
 
     /**
+     * Get permission (boolean) of profileId in controllerId, actionId
+     *
      * @param $actionId integer primary key table action
      * @param $controllerId integer primary key table controllers
      * @param $profileId integer primary key table profile
+     * @return bool permission of ProfileId in controllerId and actionId
      * @throws \yii\db\Exception
      */
     public static function getPermission($actionId, $controllerId, $profileId)
