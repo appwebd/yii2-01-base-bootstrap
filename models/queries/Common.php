@@ -148,19 +148,30 @@ class Common extends ActiveQuery
     }
 
     /**
+     * @return int profile of User
+     */
+    public static function getProfile()
+    {
+        $profileId = Common::PROFILE_ID_VISIT;
+
+        if (isset(Yii::$app->user->identity->profile->profile_id)) {
+            $profileId = Yii::$app->user->identity->profile->profile_id;
+        }
+
+        return $profileId;
+    }
+
+    /**
      * Check user permission for any resources like tables (Controllers/Action)
      * @param $actionName
      * @return int grant or deny access
-     * @throws Exception
      */
     public static function getProfilePermission($actionName)
     {
         try {
-            if (isset(Yii::$app->user->identity->profile->profile_id)) {
-                $profileId = Yii::$app->user->identity->profile->profile_id;
-            } else {
-                $profileId = Common::PROFILE_ID_VISIT;
-            }
+
+            $profileId = Common::getProfile();
+            $actionPermission = Common::DENY_ACCESS;
 
             if ($profileId == Common::PROFILE_ID_ADMINISTRATOR) {
                 return Common::PERMIT_ACCESS;
@@ -170,12 +181,10 @@ class Common extends ActiveQuery
             $controllerId = Controllers::getControllerId($controllerName);
             $actionId = Action::getActionId($actionName);
 
-            $actionPermission = Common::DENY_ACCESS;
             if (isset($controllerId) && isset($actionId)) {
                 $actionPermission = Permission::getPermission($actionId, $controllerId, $profileId);
             }
 
-            return $actionPermission;
         } catch (Exception $e) {
             BaseController::bitacora(
                 Yii::t(
@@ -185,16 +194,15 @@ class Common extends ActiveQuery
                 ),
                 MSG_ERROR
             );
-//            throw $errorException;
+            $actionPermission = Common::DENY_ACCESS;
         }
 
-        return Common::DENY_ACCESS;
+        return $actionPermission;
     }
 
     /**
      * @param $showButtons string what buttons should show in the view
      * @return string
-     * @throws Exception
      */
     public static function getProfilePermissionString($showButtons = '111')
     {
@@ -218,7 +226,7 @@ class Common extends ActiveQuery
     /**
      * Get information for dropdown list
      * @param $model object defined in app\models to get information
-     * @param $parentModelId String column related model
+     * @param $parentModelId string column related model
      * @param $valueId integer id to search in model
      * @param $key integer column to get column code
      * @param $value string column to get column description
@@ -251,7 +259,7 @@ class Common extends ActiveQuery
      */
     public static function transaction(&$model, $method)
     {
-        $transaction = Yii::$app->db->beginTransaction();
+        $transaction        = Yii::$app->db->beginTransaction();
         try {
             if ($model->$method()) {
                 $transaction->commit();
@@ -263,7 +271,10 @@ class Common extends ActiveQuery
                 Yii::t(
                     'app',
                     ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::transaction method:'.$method, ERROR => $exception]
+                    [
+                        MODULE => 'app\models\queries\Common::transaction method:'.$method,
+                        ERROR => $exception
+                    ]
                 ),
                 MSG_ERROR
             );
