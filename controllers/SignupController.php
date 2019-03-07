@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\forms\SingupForm;
+use app\models\forms\SignupForm;
 
 /**
  * Class SingupController
@@ -19,7 +19,7 @@ use app\models\forms\SingupForm;
  * @date        11/1/18 10:33 PM
  * @version     1.0
  */
-class SingupController extends Controller
+class SignupController extends Controller
 {
 
     /**
@@ -55,7 +55,7 @@ class SingupController extends Controller
     public function actionIndex()
     {
 
-        $model = new SingupForm;
+        $model = new SignupForm;
         if ($model->load(Yii::$app->request->post()) && $model->singup() !== null) {
             return $this->render('signed-up');
         }

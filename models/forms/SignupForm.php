@@ -26,6 +26,7 @@ use app\components\UiComponent;
  *
  * @property integer    active                      Active
  * @property string     auth_key                    key auth
+ * @property integer    company_id                  Company associated to user
  * @property string     email                       Email
  * @property string     email_confirmation_token    Email token of confirmation
  * @property integer    email_is_verified           Boolean is email verified
@@ -41,7 +42,7 @@ use app\components\UiComponent;
  * @property string     ipv4_address_last_login     Ipv4 address of last login
  *
  */
-class SingupForm extends Model
+class SignupForm extends Model
 {
     const EMAIL      = 'email';
     const FIRST_NAME = 'firstName';
@@ -114,7 +115,7 @@ class SingupForm extends Model
         $user = new User();
         $user->username                 = $this->username;
         $user->email                    = $this->email;
-        $user->email_is_verified        = SingupForm::EMAIL_IS_VERIFIED_FALSE;
+        $user->email_is_verified        = SignupForm::EMAIL_IS_VERIFIED_FALSE;
         $user->email_confirmation_token = null;
         $user->firstName                = $this->firstName;
         $user->lastName                 = $this->lastName;
@@ -122,10 +123,10 @@ class SingupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailConfirmationToken(true);
-        $user->profile_id               = SingupForm::PROFILE_USER; // 20: Usuario comun
+        $user->profile_id               = SignupForm::PROFILE_USER; // 20: Usuario comun
         $user->ipv4_address_last_login  = Yii::$app->getRequest()->getUserIP();
-        $user->active                   = SingupForm::USER_ACTIVE;
-        $user->company_id               = SingupForm::COMPANY_EMPTY;
+        $user->active                   = SignupForm::USER_ACTIVE;
+        $user->company_id               = SignupForm::COMPANY_EMPTY;
         $user->generatePasswordResetToken(true);
 
         if ($user->validate() && $user->save()) {
