@@ -32,7 +32,7 @@ defined('ERROR_MODULE') || define('ERROR_MODULE', 'Failed to {module}, error: {e
 
 defined('DATA_PROVIDER')   || define('DATA_PROVIDER', 'dataProvider');
 defined('DATEFORMAT')   || define('DATEFORMAT', 'dd-MM-yyyy');
-defined('DATETIMEFORMAT')   || define('DATETIMEFORMAT', 'YYYY-MM-DD HH:mm');
+defined('DATETIMEFORMAT')   || define('DATETIMEFORMAT', 'DD-MM-YYYY HH:mm');
 
 defined('FILTER') || define('FILTER', 'filter');
 
@@ -77,9 +77,12 @@ defined('GRIDVIEW_CSS') || define(
     'GRIDVIEW_CSS',
     'table maxwidth items table-striped table-condensed'
 );
+
 defined('ID') || define('ID', 'id');
 defined('ITEMS') || define('ITEMS', 'items');
 defined('INFO') || define('INFO', 'info');
+
+defined('INPUT') || define('INPUT', 'input');
 defined('INPUT_OPTIONS') || define('INPUT_OPTIONS', 'inputOptions');
 defined('INPUT_TEMPLATE') || define('INPUT_TEMPLATE', 'inputTemplate');
 defined('LABEL') || define('LABEL', 'label');
