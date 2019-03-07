@@ -14,15 +14,15 @@
 namespace app\controllers;
 
 use Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use app\components\UiComponent;
-use app\models\queries\Common;
-use app\models\search\PermissionSearch;
 use app\models\Action;
 use app\models\Permission;
+use app\models\queries\Common;
+use app\models\search\PermissionSearch;
 
 class PermissionController extends Controller
 {
