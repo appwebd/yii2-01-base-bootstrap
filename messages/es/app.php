@@ -50,7 +50,10 @@ return [
     'Controllers' => 'Controladores',
     'Could not save new Action:' => 'Podría no guardar nueva acción:',
     'Create' => 'Crear',
+    'Config' => 'Configuración',
     'Create a new record' => 'Crear un nuevo registro',
+    'Detailed information' => 'Información detallada',
+    'General administration view' =>'Vista general de administración',
     'Delete' => 'Eliminar',
     'Delete the selected records' => 'Eliminar el registro seleccionado',
     'Description' => 'Descripción',
@@ -60,6 +63,7 @@ return [
     'Email token of confirmation ' => 'Token de confirmación de correo',
     'Enter the name that best identifies your user profile.' =>
     'Ingrese el nombre que mejor identifica su perfil de usuario.',
+    'Email is required information!' => 'Email es unformación requerida',
     'Error' => 'Error',
     'Error: {error}' => 'Error: {error}',
     'Error creating action name: {action_name}' => 'Error al crear acción  {action_name}',
@@ -90,6 +94,7 @@ return [
     'Please, write your new password' => 'Por favor, escriba su nueva contraseña',
     'New password, Minimum password length are 8 chars and max. 50.' =>
     'Nueva contraseña, debe contener mín. entre 8 a 50 caracteres.',
+    'Please complete all requested information.' => 'Por favor, ingrese toda la información',
     'Page not valid Please do not repeat this requirement.
                 All site traffic is being monitored' =>
 'Página no válida, por favor no repita esta acción. Todo el tráfico de este sitio está siendo monitoreado',
@@ -105,7 +110,6 @@ return [
     'Por favor, complete toda la información solicitada',
     'Please complete all requested information of User.' =>
     'Por favor, ingrese toda la información de usuario',
-    'Please complete all requested information.' => 'Por favor, ingrese toda la información',
     'Please complete the following fields to start your session:' =>
     'Por favor ingrese toda la información para iniciar sesión',
     'Please select one option' => 'Por favor seleccione una opción',
@@ -149,6 +153,7 @@ return [
     'El seleccionado registro: \'{ids}\' no ha sido eliminado (esta siendo ocupado en el sistema)',
     'Signed Up' => 'Registrado',
     'Signup' => 'Registrarse',
+    'Sign up' => 'Registrarse',
     'Signup email of confirmation' => 'Correo de confirmación al registrarse',
     'Signup view' => 'Vista registro',
     'Status' => 'Estado',
@@ -176,6 +181,8 @@ Estamos generando un estado de registro de este error. Gracias.',
      'Ha fallado el envío de un mensaje a su cuenta de correo',
     'This view exists for to do more easy the stadistica process in the web application' =>
     'Esta vista existe, para hacer más fácil el proceso de estadísticas en esta aplicación web',
+    'Event log of the web application.' =>
+    'Bitácora de eventos de la aplicación web',
     'This view is the event log of the web application.' =>
     'Esta vista, permite mostrar la bitácora de todos los eventos que suceden en la aplicación web',
     'This view permit Create a new User, update or delete information related of user' =>
