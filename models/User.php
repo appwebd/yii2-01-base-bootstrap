@@ -27,6 +27,7 @@ use app\models\queries\UserQuery;
  *
  * @property integer    active                      Active
  * @property string     auth_key                    key auth
+ * @property integer    company_id                  Company associated to user
  * @property string     email                       Email
  * @property string     email_confirmation_token    Email token of confirmation
  * @property integer    email_is_verified           Boolean is email verified
@@ -183,7 +184,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function getProfile()
     {
         return $this->hasOne(
-            Profile::Class,
+            Profile::class,
             [self::PROFILE_ID => self::PROFILE_ID]
         );
     }
@@ -202,7 +203,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function getUsername($userId)
     {
-        return static::findOne([self::USER_ID=> $userId]);
+        return static::findOne([self::USER_ID => $userId]);
     }
 
     /**
