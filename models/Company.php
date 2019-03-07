@@ -166,6 +166,7 @@ class Company extends ActiveRecord
 
     /**
      * @param $companyId integer primary key in table Company
+     * @return string Company name
      */
     public static function getCompanyName($companyId)
     {
