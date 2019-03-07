@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -42,7 +43,6 @@ class BaseController extends Controller
      * @param string $event events or activities
      * @param integer $statusId status_id related to table status
      * @return void
-     * @throws \yii\db\Exception
      */
     public static function bitacora($event, $statusId)
     {
@@ -77,7 +77,21 @@ class BaseController extends Controller
         if ($modelAction) {
             $model->action_id    = $modelAction->action_id;
         } else {
-            Action::addAction($model->controller_id, $actionName, 'not verified', 1);
+            try {
+                Action::addAction($model->controller_id, $actionName, 'not verified', 1);
+            } catch (Exception $e) {
+                BaseController::bitacoraAndFlash(
+                    Yii::t(
+                        'app',
+                        ERROR_MODULE,
+                        [
+                            MODULE => 'app\controllers\BaseController::bitacora addAction',
+                            ERROR => $e
+                        ]
+                    ),
+                    MSG_ERROR
+                );
+            }
             $modelAction = Action::getAction($actionName, $model->controller_id);
             if ($modelAction) {
                 $model->action_id = $modelAction->action_id;
