@@ -29,6 +29,7 @@ defined('COLSM1') || define('COLSM1', 'col-sm-1');
 defined('CONTENT') || define('CONTENT', 'content');
 defined('ERROR')   || define('ERROR', 'error');
 defined('ERROR_MODULE') || define('ERROR_MODULE', 'Failed to {module}, error: {error}');
+defined('TRANSACTION_MODULE') || define('TRANSACTION_MODULE', '{module} {method} success');
 
 defined('DATA_PROVIDER')   || define('DATA_PROVIDER', 'dataProvider');
 defined('DATEFORMAT')   || define('DATEFORMAT', 'dd-MM-yyyy');
@@ -96,7 +97,9 @@ defined('METHOD') || define('METHOD', 'method');
 // Begin Status declaracion variables
 // see table app\models\Status.php subroutines:  getStatusName, getStatusBadge, getStatusList
 // app\components\UiComponent.php subroutine: badgetStatus
+defined('METHOD') || define('METHOD', 'method');
 defined('MODULE') || define('MODULE', 'module');
+
 defined('MSG_INFO') || define('MSG_INFO', 10);
 defined('MSG_SUCCESS') || define('MSG_SUCCESS', 20);
 defined('MSG_WARNING') || define('MSG_WARNING', 30);
