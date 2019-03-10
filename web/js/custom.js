@@ -78,7 +78,11 @@ window.setTimeout(function() {
     });
 }, 4000);
 
-
+/**
+ *
+ * @param event
+ * @constructor
+ */
 
 function AjaxUpdate(event) {
 
