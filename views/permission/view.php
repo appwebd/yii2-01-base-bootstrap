@@ -21,7 +21,6 @@ use app\models\Permission;
 
 $this->title = Yii::t('app', Permission::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
-$this->params[BREADCRUMBS][] = $model->permission_id;
 
 echo HTML_WEBPAGE_OPEN;
 

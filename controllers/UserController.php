@@ -13,21 +13,26 @@ use app\models\queries\Common;
 /**
  * Class UserController
  *
- * @package     User
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        11/1/18 10:12 PM
- * @version     1.0
+ * @category  Controller
+ * @package   User
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 Patricio Rojas Ortiz
+ * @license   Private license
+ * @release   1.0
+ * @link      https://appwebd.github.io
+ * @date      11/1/18 10:12 PM
+ * @php       version 7.2
  */
 class UserController extends Controller
 {
     const USER_ID ='user_id';
 
     /**
-     * @param $action
-     * @return bool|\yii\web\Response
+     * Before action instructions for to do before call actions
+     *
+     * @param string $action action name
+     *
+     * @return bool \yii\web\Response
      * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action)
@@ -41,6 +46,8 @@ class UserController extends Controller
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
     public function behaviors()
     {
@@ -50,6 +57,7 @@ class UserController extends Controller
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     *
      * @return mixed
      * @throws \yii\db\Exception
      */
@@ -57,8 +65,15 @@ class UserController extends Controller
     {
         $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            return $this->redirect([ACTION_VIEW, 'id' => $model->user_id]);
+        if ($model->load(Yii::$app->request->post())
+            && Common::transaction($model, 'save')
+        ) {
+            $primaryKey = BaseController::stringEncode($model->user_id);
+            BaseController::bitacora(
+                Yii::t('app', 'new record {id}', ['id'=>$model->permission_id]),
+                MSG_INFO
+            );
+            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
@@ -68,13 +83,16 @@ class UserController extends Controller
     /**
      * Deletes an existing row of User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     *
+     * @param integer $id primary key iof table user
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      * @throws \yii\db\Exception
      */
     public function actionDelete($id)
     {
+        $id = BaseController::stringDecode($id);
         if (! BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -107,13 +125,16 @@ class UserController extends Controller
 
     /**
      * Lists all User models.
+     *
      * @return mixed
      */
     public function actionIndex()
     {
 
         $searchModelUser  = new UserSearch();
-        $dataProviderUser = $searchModelUser->search(Yii::$app->request->queryParams);
+        $dataProviderUser = $searchModelUser->search(
+            Yii::$app->request->queryParams
+        );
 
         $pageSize = UiComponent::pageSize();
         $dataProviderUser ->pagination->pageSize=$pageSize;
@@ -136,19 +157,17 @@ class UserController extends Controller
      */
     public function actionRemove()
     {
-
         $result = Yii::$app->request->post('selection');
 
-        if (! BaseController::okRequirements(ACTION_DELETE) ||
-            ! BaseController::okSeleccionItems($result)
+        if (! BaseController::okRequirements(ACTION_DELETE)
+            || ! BaseController::okSeleccionItems($result)
         ) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $nroSelections = sizeof($result);
-        $deleteOk = "";
-        $deleteKo = "";
-
+        $deleteOk = '';
+        $deleteKo = '';
 
         for ($counter = 0; $counter < $nroSelections; $counter++) {
             $userId = $result[$counter];
@@ -156,10 +175,10 @@ class UserController extends Controller
             if (($model = User::findOne($userId)) !== null) {
                 if ($this->fkCheck($userId) <= 0) {
                     if (Common::transaction($model, 'delete')) {
-                        $deleteOk .= $userId . ", ";
+                        $deleteOk .= $userId . ', ';
                     }
                 } else {
-                    $deleteKo .= $userId . ", ";
+                    $deleteKo .= $userId . ', ';
                 }
             }
         }
@@ -172,17 +191,23 @@ class UserController extends Controller
     /**
      * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     *
+     * @param integer $id primary key of table user
+     *
      * @return mixed
      * @throws NotFoundHttpException
      * @throws \yii\db\Exception
      */
     public function actionUpdate($id)
     {
+        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            return $this->redirect([ACTION_VIEW, 'id' => $model->user_id]);
+        if ($model->load(Yii::$app->request->post())
+            && Common::transaction($model, 'save')
+        ) {
+            $id = BaseController::stringEncode($model->user_id);
+            return $this->redirect([ACTION_VIEW, 'id' => $id]);
         }
 
         return $this->render(ACTION_UPDATE, [MODEL=> $model]);
@@ -191,12 +216,15 @@ class UserController extends Controller
 
     /**
      * Displays a single User model.
-     * @param integer $id
+     *
+     * @param integer $id primary key of table user
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
         BaseController::bitacora(
             Yii::t('app', 'view record {id}', ['id'=>$model->user_id]),
@@ -208,8 +236,10 @@ class UserController extends Controller
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param $primaryKey
-     * @return User the loaded model
+     *
+     * @param integer $primaryKey primary key of table user
+     *
+     * @return object User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     private function findModel($primaryKey)
@@ -220,17 +250,29 @@ class UserController extends Controller
         }
 
         BaseController::bitacora(
-            Yii::t('app', 'The requested page does not exist {id}', ['id'=>$primaryKey]),
+            Yii::t(
+                'app',
+                'The requested page does not exist {id}',
+                [
+                    'id'=>$primaryKey
+                ]
+            ),
             MSG_SECURITY_ISSUE
         );
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(
+            Yii::t(
+                'app',
+                'The requested page does not exist.'
+            )
+        );
     }
 
     /**
      * Check nro. records found in other tables related.
      *
-     * @param $userId int Primary Key of table User
-     * @return integer numbers of rows in other tables with integrity referential found.
+     * @param integer $userId int Primary Key of table User
+     *
+     * @return integer numbers of rows in other tables (integrity referential)
      */
     private function fkCheck($userId)
     {

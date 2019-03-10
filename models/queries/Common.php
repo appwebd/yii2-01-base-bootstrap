@@ -263,6 +263,17 @@ class Common extends ActiveQuery
         try {
             if ($model->$method()) {
                 $transaction->commit();
+                BaseController::bitacora(
+                    Yii::t(
+                        'app',
+                        TRANSACTION_MODULE,
+                        [
+                            METHOD => $method,
+                            MODULE => 'app\models\queries\Common::transaction',
+                        ]
+                    ),
+                    MSG_SUCCESS
+                );
                 return true;
             }
             $transaction->rollBack();

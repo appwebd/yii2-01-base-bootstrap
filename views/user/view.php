@@ -22,7 +22,6 @@ use app\models\User;
 $this->title = Yii::t('app', User::TITLE);
 
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
-$this->params[BREADCRUMBS][] = $model->user_id;
 
 echo HTML_WEBPAGE_OPEN;
 
@@ -36,7 +35,6 @@ try {
     echo DetailView::widget([
         'model' => $model,
         'attributes' => [
-            User::USER_ID,
             User::USERNAME,
             User::FIRSTNAME,
             User::LASTNAME,

@@ -26,11 +26,13 @@ AppAsset::register($this);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="pragma" content="no-cache" />
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache" >
+
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>

@@ -1,15 +1,15 @@
 <?php
 /**
-  * Company
-  *
-  * @package     Controller of Company table
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-08-20 16:37:24
-  * @version     1.0
-*/
+ * Company
+ *
+ * @package   Controller
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 Patricio Rojas Ortiz
+ * @license   Private license
+ * @link      https://appwebd.github.io
+ * @date      2018-08-20 16:37:24
+ * @release   1.0
+ */
 
 namespace app\controllers;
 
@@ -27,13 +27,15 @@ use yii\helpers\Json;
 /**
  * Class CompanyController
  *
- * @package     Ui
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        11/1/18 11:37 AM
- * @version     1.0
+ * @category  Controller
+ * @package   Company
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 Patricio Rojas Ortiz
+ * @license   Private license
+ * @release   1.0
+ * @link      https://appwebd.github.io
+ * @date      11/1/18 11:37 AM
+ * @php       version 7.2
  */
 class CompanyController extends Controller
 {
@@ -46,7 +48,8 @@ class CompanyController extends Controller
     /**
      * Before action instructions for to do before call actions
      *
-     * @param object $action
+     * @param object $action action
+     *
      * @return mixed
      * @throws \yii\web\BadRequestHttpException
      */
@@ -61,6 +64,8 @@ class CompanyController extends Controller
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
     public function behaviors()
     {
@@ -109,7 +114,9 @@ class CompanyController extends Controller
 
     /**
      * Search Company
+     *
      * @param string $term pattern to search
+     *
      * @return void
      */
     public function actionAutocomplete($term)
@@ -143,10 +150,10 @@ class CompanyController extends Controller
     }
 
     /**
-    * Search modal view of Company
-    *
-    * @return mixed
-    */
+     * Search modal view of Company
+     *
+     * @return mixed
+     */
     public function actionSearchmodal()
     {
 
@@ -168,6 +175,7 @@ class CompanyController extends Controller
     /**
      * Creates a new Company model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     *
      * @return mixed
      * @throws \yii\db\Exception
      */
@@ -176,7 +184,8 @@ class CompanyController extends Controller
         $model = new Company();
 
         if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            return $this->redirect([ACTION_VIEW, 'id' => $model->company_id]);
+            $primaryKey = BaseController::stringEncode($model->company_id);
+            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
@@ -185,12 +194,14 @@ class CompanyController extends Controller
     /**
      * Deletes an existing row of Company model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     *
+     * @param integer $id primary key of table Company
+     *
      * @return mixed
      */
     public function actionDelete($id)
     {
-
+        $id = BaseController::stringDecode($id);
         if (! BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -222,6 +233,7 @@ class CompanyController extends Controller
 
     /**
      * Lists all Company models.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -249,7 +261,6 @@ class CompanyController extends Controller
      */
     public function actionRemove()
     {
-
         $result = Yii::$app->request->post('selection');
 
         if (! BaseController::okRequirements(ACTION_DELETE) ||
@@ -282,12 +293,13 @@ class CompanyController extends Controller
         return $this->redirect([ACTION_INDEX]);
     }
 
-
     /**
      * Finds the Company model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param $companyId
-     * @return Company the loaded model
+     *
+     * @param int $companyId company primary key
+     *
+     * @return string Company the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($companyId)
@@ -306,17 +318,20 @@ class CompanyController extends Controller
     /**
      * Updates an existing Company model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     *
+     * @param integer $id primary key of table company
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      * @throws \yii\db\Exception driven in common::transaction
      */
     public function actionUpdate($id)
     {
+        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            return $this->redirect([ACTION_VIEW, 'id' => $model->company_id]);
+            $primaryKey = BaseController::stringEncode($model->company_id);
+            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
         }
 
         return $this->render(ACTION_UPDATE, [MODEL=> $model]);
@@ -325,12 +340,15 @@ class CompanyController extends Controller
 
     /**
      * Displays a single Company model.
-     * @param integer $id
+     *
+     * @param integer $id primary key of table Company
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
         BaseController::bitacora(
             Yii::t('app', 'view record {id}', ['id'=>$model->company_id]),
@@ -346,7 +364,6 @@ class CompanyController extends Controller
      */
     private function fkCheck()
     {
-
         return 0;
     }
 }

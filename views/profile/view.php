@@ -21,7 +21,6 @@ use app\models\Profile;
 
 $this->title = Yii::t('app', Profile::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
-$this->params[BREADCRUMBS][] = $model->profile_id;
 
 echo HTML_WEBPAGE_OPEN;
 

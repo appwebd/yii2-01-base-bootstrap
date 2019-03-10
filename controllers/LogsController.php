@@ -41,7 +41,7 @@ class LogsController extends Controller
     /**
      * Before action instructions for to do before call actions
      *
-     * @param  object $action name of object invoked.
+     * @param object $action name of object invoked.
      * @return mixed
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
@@ -189,6 +189,7 @@ class LogsController extends Controller
         } else {
             $controllerId =null;
         }
+
         return $this->render(
             ACTION_INDEX,
             [

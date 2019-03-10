@@ -1,15 +1,16 @@
 <?php
 /**
-  * Company
-  *
-  * @package     Index of Company
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-09-16 18:30:42
-  * @version     1.0
-*/
+ * Company
+ *
+ * @category  View
+ * @package   Index
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 Patricio Rojas Ortiz
+ * @license   Private license
+ * @link      https://appwebd.github.io
+ * @date      2018-09-16 18:30:42
+ * @version   1.0
+ */
 
 use yii\grid\GridView;
 use yii\helpers\Html;

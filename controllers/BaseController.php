@@ -131,6 +131,18 @@ class BaseController extends Controller
         $badge = Status::getStatusBadge($statusId);
         Yii::$app->session->setFlash($badge, $event);
     }
+    /**
+     * flash message respective
+     *
+     * @param string  $event    events or activities
+     * @param integer $statusId status_id related to table status
+     * @return void
+     */
+    public static function flashMessage($event, $statusId)
+    {
+        $badge = Status::getStatusBadge($statusId);
+        Yii::$app->session->setFlash($badge, $event);
+    }
 
     /**
      * @return array

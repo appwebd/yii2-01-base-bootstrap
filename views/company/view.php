@@ -22,7 +22,6 @@ use app\models\Company;
 
 $this->title = Yii::t('app', Company::TITLE);
 $this->params[BREADCRUMBS][] = [LABEL => $this->title, 'url' => [ACTION_INDEX]];
-$this->params[BREADCRUMBS][] = $model->company_id;
 
 echo HTML_WEBPAGE_OPEN;
 echo UiComponent::header(

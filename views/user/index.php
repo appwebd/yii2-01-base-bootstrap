@@ -11,10 +11,11 @@
   * @version     1.0
 */
 
-use app\components\UiComponent;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use app\components\UiComponent;
 use app\controllers\BaseController;
+use app\models\queries\Common;
 use app\models\Profile;
 use app\models\User;
 use app\models\search\ProfileSearch;
@@ -49,8 +50,10 @@ try {
         'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
         'columns' => [
 
-            [STR_CLASS => 'yii\grid\CheckboxColumn', 'options' => [STR_CLASS => 'width:10px']],
-
+            [
+                STR_CLASS => 'yii\grid\CheckboxColumn',
+                'options' => [STR_CLASS => 'width:10px'],
+            ],
             User::USERNAME,
             User::FIRSTNAME,
             User::LASTNAME,
@@ -77,24 +80,100 @@ try {
             ],
             [
                 STR_CLASS => yii\grid\ActionColumn::class,
-                'header' => UiComponent::pageSizeDropDownList($pageSize),
-                'template' => '{view} {update} {delete}',
                 'contentOptions' => [STR_CLASS => 'GridView'],
-            ],
-        ],
+                HEADER => UiComponent::pageSizeDropDownList($pageSize),
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                TEMPLATE => Common::getProfilePermissionString(),
+                'buttons' => [
+                    ACTION_VIEW => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            $url,
+                            [
+                                TITLE => Yii::t('app', 'Full details'),
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+
+                    ACTION_UPDATE => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            $url,
+                            [
+                                TITLE => Yii::t('app', ACTION_UPDATE),
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+                    ACTION_DELETE => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            $url,
+                            [
+                                TITLE => Yii::t('app', 'Delete'),
+                                'data-confirm' => Yii::t(
+                                    'app',
+                                    'Are you sure you want to delete?'
+                                ),
+                                'data-method' => 'post',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    }
+                ],
+
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    $key = BaseController::stringEncode($key);
+                    $url = 'index.php?r='. Yii::$app->controller->id;
+
+                    if ($action === ACTION_VIEW) {
+                        $url = $url . '/' . $action . '&id='.$key;
+                    }
+
+                    if ($action === ACTION_UPDATE) {
+                        $url = $url . '/' . $action . '&id='.$key;
+                    }
+
+                    if ($action === ACTION_DELETE) {
+                        $url = $url . '/' . $action . '&id='.$key;
+                    }
+
+                    return $url;
+                },
+            ]
+        ]
     ]);
-} catch (Exception $errorexception) {
+} catch (\yii\db\Exception $e) {
     BaseController::bitacora(
         Yii::t(
             'app',
             ERROR_MODULE,
-            [MODULE=> 'app\views\user\index::GridView::widget', ERROR => $errorexception]
+            [
+                MODULE=> '@app\views\@TABLE\index',
+                ERROR => $e
+            ]
         ),
         MSG_ERROR
     );
 }
 
-UiComponent::buttonsAdmin('111', false);
+try {
+    UiComponent::buttonsAdmin('111', false);
+} catch (\yii\db\Exception $e) {
+    BaseController::bitacora(
+        Yii::t(
+            'app',
+            ERROR_MODULE,
+            [
+                MODULE=> '@app\views\@TABLE\index::UiComponent::buttonsAdmin',
+                ERROR => $e
+            ]
+        ),
+        MSG_ERROR
+    );
+}
 
 Html::endForm();
 echo HTML_WEBPAGE_CLOSE;
+

@@ -162,6 +162,7 @@ class UiComponent extends Component
     public static function buttonsViewBottom(&$model)
     {
         $primaryKey = $model->getId();
+        $primaryKey = BaseController::stringEncode($primaryKey);
         $buttonCreate = '';
         if (Common::getProfilePermission(ACTION_CREATE)) {
             $buttonCreate = UiComponent::button(
