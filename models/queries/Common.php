@@ -252,8 +252,11 @@ class Common extends ActiveQuery
     }
 
     /**
-     * @param $model mixed class defined in @app\models\
-     * @param $method
+     * Execute   the database transactions
+     *
+     * @param object $model  mixed class defined in @app\models\
+     * @param string $method the method associated with the model (save, delete)
+     *
      * @return bool Success o failed to create/update a $model in this view
      * @throws yii\db\Exception Failed to save a record error: {error}
      */
@@ -296,7 +299,10 @@ class Common extends ActiveQuery
     }
 
     /**
-     * @param $sqlcode string sql instruction
+     * Execute SQLCreate command
+     *
+     * @param string $sqlcode string sql instruction
+     *
      * @return bool int true/false answer: query was executed with errors?
      * @throws Exception
      */
@@ -317,7 +323,6 @@ class Common extends ActiveQuery
                 MSG_ERROR
             );
             $transaction->rollBack();
-//            throw $exception;
         } catch (\Throwable $e) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
@@ -328,7 +333,6 @@ class Common extends ActiveQuery
                 MSG_ERROR
             );
             $transaction->rollBack();
-            //throw $exception;
         }
         return false;
     }
