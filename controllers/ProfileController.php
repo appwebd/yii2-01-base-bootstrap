@@ -124,6 +124,10 @@ class ProfileController extends Controller
         $model = new Profile();
 
         if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
+            BaseController::flashMessage(
+                Yii::t('app', 'New record saved successfully'),
+                MSG_SUCCESS
+            );
             $primaryKey = BaseController::stringEncode($model->profile_id);
             return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
         }
