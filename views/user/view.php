@@ -15,6 +15,7 @@ use app\components\UiComponent;
 use yii\widgets\DetailView;
 use app\controllers\BaseController;
 use app\models\User;
+use app\models\Profile;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -40,12 +41,17 @@ try {
             User::LASTNAME,
             User::EMAIL,
             User::TELEPHONE,
-            User::IPV4_ADDRESS_LAST_LOGIN,
-            'profile.profile_name',
+
             [
-                STR_CLASS => yii\grid\DataColumn::class,
+                ATTRIBUTE => User::PROFILE_ID,
+                HEADER => Yii::t('app', 'Profile'),
+                VALUE => function($model) {
+                    return Profile::getProfileName($model->profile_id);
+                },
+            ],
+            User::IPV4_ADDRESS_LAST_LOGIN,
+            [
                 ATTRIBUTE => User::ACTIVE,
-                OPTIONS => [STR_CLASS => 'col-sm-1'],
                 VALUE => function ($model) {
                     return UiComponent::yesOrNo($model->active);
                 },

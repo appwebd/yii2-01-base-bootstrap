@@ -150,7 +150,7 @@ try {
             'app',
             ERROR_MODULE,
             [
-                MODULE=> '@app\views\@TABLE\index',
+                MODULE=> '@app\views\user\index',
                 ERROR => $e
             ]
         ),
@@ -166,7 +166,7 @@ try {
             'app',
             ERROR_MODULE,
             [
-                MODULE=> '@app\views\@TABLE\index::UiComponent::buttonsAdmin',
+                MODULE=> '@app\views\User\index::UiComponent::buttonsAdmin',
                 ERROR => $e
             ]
         ),
