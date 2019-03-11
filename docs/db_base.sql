@@ -261,7 +261,6 @@ CREATE TABLE `user` (
   `email_is_verified` tinyint(1) NOT NULL COMMENT 'Boolean is email verified ',
   `telephone` char(15) CHARACTER SET utf8 DEFAULT NULL COMMENT 'Phone number 12 digits',
   `profile_id` int(11) NOT NULL COMMENT 'Profile',
-  `company_id` int(11) NOT NULL COMMENT 'Company',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Date created',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'date updated',
   `active` tinyint(1) NOT NULL COMMENT 'Active',
@@ -272,8 +271,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `password_reset_token_date`, `email_confirmation_token`, `firstName`, `lastName`, `email`, `email_is_verified`, `telephone`, `profile_id`, `company_id`, `created_at`, `updated_at`, `active`, `ipv4_address_last_login`) VALUES
-(20, 'admin', 'eHCuQ7yHQ13Xsxwy9djir0k5FCbuYKcc', '$2y$13$jL2vB0tP3RGc1r483ETKaea3IZfEbcME.pM8A.xFuAgOp2A3e9X3a', '', '2018-07-17 23:18:18', '5hpbjIKd5FARfDsIsiVI31Vi9huaad7H_1538056684', 'Administrador', 'administrador', 'pro@dev-master.local', 1, '', 99, 4, '2018-07-17 23:18:18', '2018-10-01 15:11:59', 1, '127');
+INSERT INTO `user` (`user_id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `password_reset_token_date`, `email_confirmation_token`, `firstName`, `lastName`, `email`, `email_is_verified`, `telephone`, `profile_id`, `created_at`, `updated_at`, `active`, `ipv4_address_last_login`) VALUES
+(20, 'admin', 'eHCuQ7yHQ13Xsxwy9djir0k5FCbuYKcc', '$2y$13$jL2vB0tP3RGc1r483ETKaea3IZfEbcME.pM8A.xFuAgOp2A3e9X3a', '', '2018-07-17 23:18:18', '5hpbjIKd5FARfDsIsiVI31Vi9huaad7H_1538056684', 'Administrador', 'administrador', 'pro@dev-master.local', 1, '', 99, '2018-07-17 23:18:18', '2018-10-01 15:11:59', 1, '127');
 
 --
 -- Indexes for dumped tables

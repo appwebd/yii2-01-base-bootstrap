@@ -96,7 +96,7 @@ class User extends ActiveRecord implements IdentityInterface
 
             [self::AUTH_KEY, STRING, LENGTH => [1, 32]],
             [self::EMAIL, 'email'],
-            [self::EMAIL, 'unique'],
+            [[self::EMAIL, self::USERNAME], 'unique'],
             [self::EMAIL_CONFIRMATION_TOKEN, STRING, LENGTH => [1, 255]],
             [self::EMAIL_CONFIRMATION_TOKEN, 'unique'],
             [self::FIRSTNAME, STRING, LENGTH => [1, 80]],

@@ -26,7 +26,6 @@ use app\components\UiComponent;
  *
  * @property integer    active                      Active
  * @property string     auth_key                    key auth
- * @property integer    company_id                  Company associated to user
  * @property string     email                       Email
  * @property string     email_confirmation_token    Email token of confirmation
  * @property integer    email_is_verified           Boolean is email verified
@@ -51,10 +50,9 @@ class SignupForm extends Model
     const USERNAME   = 'username';
     const PASSWORD   = 'password';
     const NEW_PASSWORD = 'new-password';
-    const COMPANY_EMPTY = 0;
     const USER_ACTIVE = 1;
     const PROFILE_USER = 20;
-    const EMAIL_IS_VERIFIED_FALSE= 0;
+    const EMAIL_IS_VERIFIED_FALSE = 0;
 
     /**
      * @var
@@ -126,7 +124,6 @@ class SignupForm extends Model
         $user->profile_id               = SignupForm::PROFILE_USER; // 20: Usuario comun
         $user->ipv4_address_last_login  = Yii::$app->getRequest()->getUserIP();
         $user->active                   = SignupForm::USER_ACTIVE;
-        $user->company_id               = SignupForm::COMPANY_EMPTY;
         $user->generatePasswordResetToken(true);
 
         if ($user->validate() && $user->save()) {
