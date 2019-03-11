@@ -32,7 +32,7 @@ class UserController extends Controller
      *
      * @param string $action action name
      *
-     * @return bool \yii\web\Response
+     * @return mixed \yii\web\Response
      * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action)
@@ -63,17 +63,29 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
 
-        if ($model->load(Yii::$app->request->post())
-            && Common::transaction($model, 'save')
-        ) {
-            $primaryKey = BaseController::stringEncode($model->user_id);
-            BaseController::bitacora(
-                Yii::t('app', 'new record {id}', ['id'=>$model->permission_id]),
-                MSG_INFO
-            );
-            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+        $model = new User();
+        if ($model->load(Yii::$app->request->post())) {
+            $request = Yii::$app->request->post('User');
+
+            $model->email_is_verified = false;
+            $model->email_confirmation_token = null;
+            $model->setPassword($request['password']);
+            $model->generateAuthKey();
+            $model->ipv4_address_last_login = Yii::$app->getRequest()->getUserIP();
+
+            $model->generateEmailConfirmationToken(true);
+
+
+            if  (Common::transaction($model, 'save')) {
+
+                $primaryKey = BaseController::stringEncode($model->user_id);
+                BaseController::flashMessage(
+                    Yii::t('app', 'New record saved successfully'),
+                    MSG_SUCCESS
+                );
+                return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+            }
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
