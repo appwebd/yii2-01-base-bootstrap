@@ -184,6 +184,10 @@ class CompanyController extends Controller
         $model = new Company();
 
         if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
+            BaseController::flashMessage(
+                Yii::t('app', 'New record saved successfully'),
+                MSG_SUCCESS
+            );
             $primaryKey = BaseController::stringEncode($model->company_id);
             return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
         }
