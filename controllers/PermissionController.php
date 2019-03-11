@@ -106,11 +106,11 @@ class PermissionController extends Controller
         $model = new Permission();
 
         if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            $primaryKey = BaseController::stringEncode($model->permission_id);
-            BaseController::bitacora(
-                Yii::t('app', 'new record {id}', ['id'=> $model->permission_id]),
-                MSG_INFO
+            BaseController::flashMessage(
+                Yii::t('app', 'New record saved successfully'),
+                MSG_SUCCESS
             );
+            $primaryKey = BaseController::stringEncode($model->permission_id);
             return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
         }
 
