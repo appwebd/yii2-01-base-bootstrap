@@ -224,6 +224,16 @@ class Common extends ActiveQuery
     }
 
     /**
+     * @return \Closure
+     */
+    public static function isActive()
+    {
+        return function ($model) {
+            return ($model->active==1)? Yii::t('app', 'Yes'):'No';
+        };
+    }
+
+    /**
      * Get information for dropdown list
      * @param $model object defined in app\models to get information
      * @param $parentModelId string column related model
