@@ -81,6 +81,62 @@ class UiComponent extends Component
     }
 
     /**
+     * Show icon action column in grid view Widget
+     *
+     * @return array
+     */
+    public static function buttonsActionColumn()
+    {
+        return [
+            ACTION_VIEW => function ($url, $model, $key) {
+                $key = BaseController::stringEncode($key);
+                $url = 'index.php?r='. Yii::$app->controller->id;
+                $url = $url . '/view' . '&id='.$key;
+                return Html::a(
+                    '<span class="' . ACTION_VIEW_ICON .'"></span>',
+                    $url,
+                    [
+                        TITLE => Yii::t('app', 'Full details'),
+                        'data-pjax' => '0',
+                    ]
+                );
+            },
+
+            ACTION_UPDATE => function ($url, $model, $key) {
+                $key = BaseController::stringEncode($key);
+                $url = 'index.php?r='. Yii::$app->controller->id;
+                $url = $url . '/update' . '&id='.$key;
+                return Html::a(
+                    '<span class="' . ACTION_UPDATE_ICON .'"></span>',
+                    $url,
+                    [
+                        TITLE => Yii::t('app', 'Update'),
+                        'data-pjax' => '0',
+                    ]
+                );
+            },
+            ACTION_DELETE => function ($url, $model, $key) {
+                $key = BaseController::stringEncode($key);
+                $url = 'index.php?r='. Yii::$app->controller->id;
+                $url = $url . '/delete' . '&id='.$key;
+                return Html::a(
+                    '<span class="' . ACTION_DELETE_ICON .'"></span>',
+                    $url,
+                    [
+                        TITLE => Yii::t('app', 'Delete'),
+                        'data-confirm' => Yii::t(
+                            'app',
+                            'Are you sure you want to delete ?'
+                        ),
+                        'data-method' => 'post',
+                        'data-pjax' => '0',
+                    ]
+                );
+            }
+        ];
+    }
+
+    /**
      * @param $caption string caption of button
      * @param $css     string style of button
      * @param $buttonToolTip  string help tooltip
