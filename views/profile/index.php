@@ -64,7 +64,6 @@ try {
                 'headerOptions' => ['style' => 'color:#337ab7'],
                 TEMPLATE => Common::getProfilePermissionString(),
                 'buttons' => UiComponent::buttonsActionColumn(),
-                'urlCreator' => UiComponent::urlCreator(),
             ]
         ]
     ]);
