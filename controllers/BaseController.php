@@ -401,32 +401,33 @@ class BaseController extends Controller
 
     /**
      * Encode a string
-     * @param $string
+     *
+     * @param string $plaintext plain text (text to encode)
      * @return string
      */
-    public static function stringEncode($string)
+    public static function stringEncode($plaintext)
     {
 
         $encryptmethod = self::ENCRIPTED_METHOD;
         $secretkey     = self::SECRET_KEY;
-        $secretiv       = self::SECRET_IV;
+        $secretiv      = self::SECRET_IV;
 
         // hash
         $keyValue    = hash(self::SHA256, $secretkey);
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $ivencripted     = substr(hash(self::SHA256, $secretiv), 0, 16);
-        $output = openssl_encrypt($string, $encryptmethod, $keyValue, 0, $ivencripted);
+        $output = openssl_encrypt($plaintext, $encryptmethod, $keyValue, 0, $ivencripted);
 
         return  base64_encode($output);
     }
 
     /**
      * Decode a string
-     * @param $string
+     * @param string $ciphertext text to decode
      * @return string decoded
      */
-    public static function stringDecode($string)
+    public static function stringDecode($ciphertext)
     {
 
         $encryptmethod = self::ENCRIPTED_METHOD;
@@ -438,6 +439,7 @@ class BaseController extends Controller
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $ivencripted             = substr(hash(self::SHA256, $secretiv), 0, 16);
-        return openssl_decrypt(base64_decode($string), $encryptmethod, $keyValue, 0, $ivencripted);
+        return openssl_decrypt(base64_decode($ciphertext), $encryptmethod, $keyValue, 0, $ivencripted);
+
     }
 }
