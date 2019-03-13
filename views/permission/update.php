@@ -19,7 +19,6 @@ use app\models\Permission;
 
 $this->title = Yii::t('app', Permission::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
-$this->params[BREADCRUMBS][] = ['label' => $model->permission_id, 'url' => ['view', 'id' => $model->permission_id]];
 $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
 echo HTML_WEBPAGE_OPEN;

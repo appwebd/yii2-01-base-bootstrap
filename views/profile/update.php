@@ -19,7 +19,6 @@ use app\models\Profile;
 
 $this->title = Yii::t('app', Profile::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
-$this->params[BREADCRUMBS][] = ['label' => $model->profile_id, 'url' => ['view', 'id' => $model->profile_id]];
 $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
 echo HTML_WEBPAGE_OPEN;

@@ -21,7 +21,6 @@ use app\models\User;
 $this->title = Yii::t('app', User::TITLE);
 
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
-//$this->params[BREADCRUMBS][] = ['label' => $model->user_id, 'url' => ['view', 'id' => $model->user_id]];
 $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
 echo HTML_WEBPAGE_OPEN;

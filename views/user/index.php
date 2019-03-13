@@ -79,69 +79,14 @@ try {
                 FORMAT => 'raw'
             ],
             [
-                STR_CLASS => yii\grid\ActionColumn::class,
+                'buttons' => UiComponent::buttonsActionColumn(),
                 'contentOptions' => [STR_CLASS => 'GridView'],
                 HEADER => UiComponent::pageSizeDropDownList($pageSize),
                 'headerOptions' => ['style' => 'color:#337ab7'],
-                TEMPLATE => Common::getProfilePermissionString(),
-                'buttons' => [
-                    ACTION_VIEW => function ($url, $model, $key) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>',
-                            $url,
-                            [
-                                TITLE => Yii::t('app', 'Full details'),
-                                'data-pjax' => '0',
-                            ]
-                        );
-                    },
-
-                    ACTION_UPDATE => function ($url, $model, $key) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
-                            $url,
-                            [
-                                TITLE => Yii::t('app', ACTION_UPDATE),
-                                'data-pjax' => '0',
-                            ]
-                        );
-                    },
-                    ACTION_DELETE => function ($url, $model, $key) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
-                            $url,
-                            [
-                                TITLE => Yii::t('app', 'Delete'),
-                                'data-confirm' => Yii::t(
-                                    'app',
-                                    'Are you sure you want to delete?'
-                                ),
-                                'data-method' => 'post',
-                                'data-pjax' => '0',
-                            ]
-                        );
-                    }
-                ],
-
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    $key = BaseController::stringEncode($key);
-                    $url = 'index.php?r='. Yii::$app->controller->id;
-
-                    if ($action === ACTION_VIEW) {
-                        $url = $url . '/' . $action . '&id='.$key;
-                    }
-
-                    if ($action === ACTION_UPDATE) {
-                        $url = $url . '/' . $action . '&id='.$key;
-                    }
-
-                    if ($action === ACTION_DELETE) {
-                        $url = $url . '/' . $action . '&id='.$key;
-                    }
-
-                    return $url;
-                },
+                STR_CLASS => yii\grid\ActionColumn::class,
+                TEMPLATE => Common::getProfilePermissionString('111'),
             ]
+
         ]
     ]);
 } catch (\yii\db\Exception $e) {
