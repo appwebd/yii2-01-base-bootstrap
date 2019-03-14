@@ -97,11 +97,12 @@ class Controllers extends ActiveRecord
         $model->active = $active;
 
         if ($model->save()) {
-            Yii::info(Yii::t('app', 'OK your Controller was saved.'), __METHOD__);
+            Yii::$app->session->setFlash(SUCCESS, Yii::t('app', 'Controller was saved successfully.')) ;
             return true;
         }
 
-        UiComponent::warning('Could not save new Controller:', $model->errors);
+        $message = 'Could not save new Controller:\n'. print_r($model->errors, true);
+        Yii::$app->session->setFlash(ERROR, $message) ;
         return false;
     }
 
