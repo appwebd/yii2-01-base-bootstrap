@@ -33,6 +33,7 @@ defined('BREADCRUMBS') || define('BREADCRUMBS', 'breadcrumbs');
 defined('COLSM1') || define('COLSM1', 'col-sm-1');
 defined('CONTENT') || define('CONTENT', 'content');
 defined('DATA_PROVIDER')   || define('DATA_PROVIDER', 'dataProvider');
+defined('DETAILVIEW_CLASS') || define('DETAILVIEW_CLASS', 'table maxwidth table-striped ');
 defined('DATEFORMAT')   || define('DATEFORMAT', 'dd-MM-yyyy');
 defined('DATETIMEFORMAT')   || define('DATETIMEFORMAT', 'DD-MM-YYYY HH:mm');
 defined('ERROR')   || define('ERROR', 'error');
