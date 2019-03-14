@@ -247,7 +247,8 @@ class UiComponent extends Component
             );
         }
 
-        echo $buttonCreate,
+        echo '<br>',
+            $buttonCreate,
             self::HTML_SPACE,
             $buttonUpdate,
             self::HTML_SPACE,
@@ -333,6 +334,7 @@ class UiComponent extends Component
             ]
         );
     }
+
     /**
      * Return html for button save
      *
@@ -378,27 +380,6 @@ class UiComponent extends Component
                     <p class="text-justify headerSubText">',$subHeader,'</p><br/>
             </div></div>';
     }
-
-    /**
-     * Show a panel in bootstrap 3.3.7
-     * @param $panelTitle string header title of panel
-     * @return string
-     */
-    public static function panel($panelTitle)
-    {
-        return '<div class="panel panel-default"><div class="panel-heading"><b>'.
-        Yii::t('app', $panelTitle).'</b></div><div class="panel-body">';
-    }
-
-    /**
-     * Close a Panel in view
-     * @return string
-     */
-    public static function panelClose()
-    {
-        return '</div></div>';
-    }
-
     /**
      * Show page header and navigation buttons of the index page.
      * @param string $icon
@@ -423,19 +404,19 @@ class UiComponent extends Component
 
         echo '<div class=\'row \'>
                     <div class=\'col-sm-6  \'>',
-                        '<h3 class="headerTitle '.self::COLOR_PRIMARY.'"><strong>
+            '<h3 class="headerTitle '.self::COLOR_PRIMARY.'"><strong>
                             <span class=\'glyphicon glyphicon-', $icon, self::COLOR_PRIMARY, ' headerIcon \'>',
-                            '</span>',
-                            $pageTitle,
-                        self::HTML_SPACE,
-                        '</strong><span class=\'nroRowsbadge \' title=\'',
-                            Yii::t(
-                                'app',
-                                'Registers entered (It is updated when the form is loaded)'
-                            ), '\' ', self::HTML_DATA_TOGGLE, '=', self::HTML_TOOLTIP, ' ',
-                            self::HTML_DATA_PLACEMENT, '=',self::HTML_DATA_PLACEMENT_VALUE, '>', $nroRows,
-                        '</span></h3>',
-                    '</div>
+        '</span>',
+        $pageTitle,
+        self::HTML_SPACE,
+        '</strong><span class=\'nroRowsbadge \' title=\'',
+        Yii::t(
+            'app',
+            'Registers entered (It is updated when the form is loaded)'
+        ), '\' ', self::HTML_DATA_TOGGLE, '=', self::HTML_TOOLTIP, ' ',
+        self::HTML_DATA_PLACEMENT, '=',self::HTML_DATA_PLACEMENT_VALUE, '>', $nroRows,
+        '</span></h3>',
+        '</div>
                     <div class=\'col-sm-6  text-right\'>';
 
         if ($showButtons) {
@@ -450,7 +431,25 @@ class UiComponent extends Component
               </div>
               <p class=\'text-justify textSubHeader\'>',$subHeader,'</p>';
     }
+    /**
+     * Show a panel in bootstrap 3.3.7
+     * @param $panelTitle string header title of panel
+     * @return string
+     */
+    public static function panel($panelTitle)
+    {
+        return '<div class="panel panel-default"><div class="panel-heading"><b>'.
+        Yii::t('app', $panelTitle).'</b></div><div class="panel-body">';
+    }
 
+    /**
+     * Close a Panel in view
+     * @return string
+     */
+    public static function panelClose()
+    {
+        return '</div></div>';
+    }
 
     /**
      * @return array|mixed
@@ -501,18 +500,6 @@ class UiComponent extends Component
                 self::HTML_DATA_PLACEMENT => self::HTML_DATA_PLACEMENT_VALUE,
                 )
         );
-    }
-
-    /**
-     * @param $message string
-     * @param $error array of string error message
-     * @return void
-     */
-    public static function warning($message, $error)
-    {
-        $message = $message.'\n'. print_r($error, true);
-        Yii::warning($message, __METHOD__);
-        Yii::$app->session->setFlash('error', $message);
     }
 
     /**
