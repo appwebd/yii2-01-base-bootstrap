@@ -123,13 +123,8 @@ class ProfileController extends Controller
 
         $model = new Profile();
 
-        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            BaseController::flashMessage(
-                Yii::t('app', 'New record saved successfully'),
-                MSG_SUCCESS
-            );
-            $primaryKey = BaseController::stringEncode($model->profile_id);
-            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+        if ($model->load(Yii::$app->request->post())) {
+            return $this->saveRecord($model);
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
@@ -154,7 +149,7 @@ class ProfileController extends Controller
 
         $model = $this->findModel($id);
         $profileId = $model->profile_id;
-        if ($this->_fkCheck($profileId)==0) {
+        if ($this->fkCheck($profileId)==0) {
             if (Common::transaction($model, 'delete')) {
                 BaseController::bitacoraAndFlash(
                     Yii::t(
@@ -249,7 +244,7 @@ class ProfileController extends Controller
 
             if (($model = Profile::findOne($profileId)) !== null) {
                 $profileId = $model->profile_id;
-                if ($this->_fkCheck($profileId) <= 0) {
+                if ($this->fkCheck($profileId) <= 0) {
                     if (Common::transaction($model, 'delete')) {
                         $deleteOK .= $profileId . ", ";
                     }
@@ -309,9 +304,8 @@ class ProfileController extends Controller
         $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            $primaryKey = BaseController::stringEncode($model->profile_id);
-            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+        if ($model->load(Yii::$app->request->post())) {
+            return $this->saveRecord($model);
         }
 
         return $this->render(ACTION_UPDATE, [MODEL=> $model]);
@@ -343,7 +337,7 @@ class ProfileController extends Controller
      *
      * @return int numbers of rows in other tables with integrity referential found.
      */
-    private function _fkCheck($profileId)
+    private function fkCheck($profileId)
     {
         $nroRegs = Common::getNroRowsForeignkey(
             'permission',
@@ -356,5 +350,49 @@ class ProfileController extends Controller
             self::PROFILE_ID,
             $profileId
         );
+    }
+
+    /**
+     * @param object $model
+     * @return bool|\yii\web\Response
+     * @throws \yii\db\Exception
+     */
+    private function saveRecord($model)
+    {
+        try {
+            if (Common::transaction($model, 'save')) {
+                Yii::$app->session->setFlash(
+                    SUCCESS,
+                    Yii::t(
+                        'app',
+                        'Record saved successfully'
+                    )
+                );
+                $primaryKey = BaseController::stringEncode($model->profile_id);
+                return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+            } else {
+                Yii::$app->session->setFlash(
+                    ERROR,
+                    Yii::t(
+                        'app',
+                        'Error saving record'
+                    )
+                );
+                $this->refresh();
+            }
+        } catch (\yii\db\Exception $e) {
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [
+                        MODULE => 'app\models\queries\Common::transaction method: save',
+                        ERROR => $e
+                    ]
+                ),
+                MSG_ERROR
+            );
+        }
+        return false;
     }
 }
