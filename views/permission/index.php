@@ -99,12 +99,12 @@ try {
             ],
 
             [
-                STR_CLASS => yii\grid\ActionColumn::class,
+                'buttons' => UiComponent::buttonsActionColumn(),
                 'contentOptions' => [STR_CLASS => 'GridView'],
                 HEADER => UiComponent::pageSizeDropDownList($pageSize),
                 'headerOptions' => ['style' => 'color:#337ab7'],
-                TEMPLATE => Common::getProfilePermissionString(),
-                'buttons' => UiComponent::buttonsActionColumn(),
+                STR_CLASS => yii\grid\ActionColumn::class,
+                TEMPLATE => Common::getProfilePermissionString('111'),
             ]
         ]
     ]);
