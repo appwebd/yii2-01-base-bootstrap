@@ -27,7 +27,6 @@ use app\models\queries\UserQuery;
  *
  * @property integer    active                      Active
  * @property string     auth_key                    key auth
- * @property integer    company_id                  Company associated to user
  * @property string     email                       Email
  * @property string     email_confirmation_token    Email token of confirmation
  * @property integer    email_is_verified           Boolean is email verified
