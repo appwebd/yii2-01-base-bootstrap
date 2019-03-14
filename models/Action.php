@@ -108,21 +108,23 @@ class Action extends ActiveRecord
         $model->active = $active;
 
         if (Common::transaction($model, 'save')) {
-            Yii::info(
-                Yii::t(
-                    'app',
-                    'OK your action {actionName} was saved.',
-                    ['actionName'=>$actionName]
-                ),
-                __METHOD__
+            $message = Yii::t(
+                'app',
+                'OK your action {actionName} was saved.',
+                ['actionName'=>$actionName]
             );
+            Yii::$app->session->setFlash(ERROR, $message);
             return true;
         }
 
-        UiComponent::warning(
-            Yii::t('app', 'Could not save new Action:'),
-            $model->errors
+        $message = yii::t(
+            'app',
+            'Could not save new Action: {error}\n',
+            [
+                'error' => print_r($model->errors, true)
+            ]
         );
+        Yii::$app->session->setFlash(ERROR, $message);
         return false;
     }
 
