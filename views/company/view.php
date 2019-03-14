@@ -32,6 +32,7 @@ echo UiComponent::header(
 try {
     echo DetailView::widget([
         MODEL => $model,
+        OPTIONS => [STR_CLASS => DETAILVIEW_CLASS],
         ATTRIBUTES => [
                     Company::COMPANY_ID,
                     Company::COMPANY_NAME,

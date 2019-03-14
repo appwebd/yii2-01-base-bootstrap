@@ -33,6 +33,7 @@ echo UiComponent::header(
 try {
     echo DetailView::widget([
         'model' => $model,
+        OPTIONS => [STR_CLASS => DETAILVIEW_CLASS],
         'attributes' => [
             [
                 ATTRIBUTE => Permission::PROFILE_NAME,
