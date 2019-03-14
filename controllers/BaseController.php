@@ -68,7 +68,7 @@ class BaseController extends Controller
                     'Error creating controlller name: {controller_name}',
                     ['controllerName' => $controllerName]
                 );
-                Yii::warning($message, __METHOD__);
+               Yii::$app->session->setFlash(ERROR, $message);
                 $error = true;
             }
         }
@@ -80,7 +80,7 @@ class BaseController extends Controller
             try {
                 Action::addAction($model->controller_id, $actionName, 'not verified', 1);
             } catch (Exception $e) {
-                BaseController::bitacoraAndFlash(
+                BaseController::bitacora(
                     Yii::t(
                         'app',
                         ERROR_MODULE,
@@ -101,14 +101,15 @@ class BaseController extends Controller
                     'Error creating action name: {action_name}',
                     ['action_name' => $actionName]
                 );
-                Yii::warning($mesage, __METHOD__);
+                Yii::$app->session->setFlash(ERROR, $mesage) ;
                 $error = true;
             }
         }
 
 
         if ($error) {
-            UiComponent::warning('Could not save new log information:', $model->errors);
+            $message = Yii::t('app', 'Could not save new log information: {error}', ['error' =>  print_r($model->errors, true)]);
+            Yii::$app->session->setFlash(ERROR, $message);
         } else {
             $model->user_agent       = Yii::$app->request->userAgent;
             $model->ipv4_address     = Yii::$app->getRequest()->getUserIP();
@@ -128,18 +129,6 @@ class BaseController extends Controller
     public static function bitacoraAndFlash($event, $statusId)
     {
         BaseController::bitacora($event, $statusId);
-        $badge = Status::getStatusBadge($statusId);
-        Yii::$app->session->setFlash($badge, $event);
-    }
-    /**
-     * flash message respective
-     *
-     * @param string  $event    events or activities
-     * @param integer $statusId status_id related to table status
-     * @return void
-     */
-    public static function flashMessage($event, $statusId)
-    {
         $badge = Status::getStatusBadge($statusId);
         Yii::$app->session->setFlash($badge, $event);
     }
@@ -440,6 +429,5 @@ class BaseController extends Controller
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $ivencripted             = substr(hash(self::SHA256, $secretiv), 0, 16);
         return openssl_decrypt(base64_decode($ciphertext), $encryptmethod, $keyValue, 0, $ivencripted);
-
     }
 }
