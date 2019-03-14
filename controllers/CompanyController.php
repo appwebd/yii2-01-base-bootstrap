@@ -183,13 +183,8 @@ class CompanyController extends Controller
     {
         $model = new Company();
 
-        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            BaseController::flashMessage(
-                Yii::t('app', 'New record saved successfully'),
-                MSG_SUCCESS
-            );
-            $primaryKey = BaseController::stringEncode($model->company_id);
-            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+        if ($model->load(Yii::$app->request->post())) {
+            return $this->saveRecord($model);
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
@@ -333,9 +328,8 @@ class CompanyController extends Controller
     {
         $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && Common::transaction($model, 'save')) {
-            $primaryKey = BaseController::stringEncode($model->company_id);
-            return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+        if ($model->load(Yii::$app->request->post())) {
+            return $this->saveRecord($model);
         }
 
         return $this->render(ACTION_UPDATE, [MODEL=> $model]);
@@ -369,5 +363,49 @@ class CompanyController extends Controller
     private function fkCheck()
     {
         return 0;
+    }
+
+    /**
+     * @param object $model
+     * @return bool|\yii\web\Response
+     * @throws \yii\db\Exception
+     */
+    private function saveRecord($model)
+    {
+        try {
+            if (Common::transaction($model, 'save')) {
+                Yii::$app->session->setFlash(
+                    SUCCESS,
+                    Yii::t(
+                        'app',
+                        'Record saved successfully'
+                    )
+                );
+                $primaryKey = BaseController::stringEncode($model->company_id);
+                return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+            } else {
+                Yii::$app->session->setFlash(
+                    ERROR,
+                    Yii::t(
+                        'app',
+                        'Error saving record'
+                    )
+                );
+                $this->refresh();
+            }
+        } catch (\yii\db\Exception $e) {
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [
+                        MODULE => 'app\models\queries\Common::transaction method: save',
+                        ERROR => $e
+                    ]
+                ),
+                MSG_ERROR
+            );
+        }
+        return false;
     }
 }
