@@ -13,6 +13,7 @@
 
 namespace app\models\forms;
 
+use app\controllers\BaseController;
 use Yii;
 use yii\base\Model;
 use app\models\User;
@@ -130,12 +131,13 @@ class SignupForm extends Model
             Yii::info("OK your account was saved.", __METHOD__);
             $subject = Yii::t('app', 'Signup email of confirmation');
             if (!Mail::sendEmail($user, $subject, 'user/confirm-email')) { // app/mail/user/confirm-email-html.php
-                Yii::warning(Yii::t('app', 'Failed to send confirmation email to new user.'), __METHOD__);
+                Yii::$app->session->setFlash(ERROR, Yii::t('app', 'Failed to send confirmation email to new user.'));
             }
             return $user;
         }
 
-        UiComponent::warning('Could not save new user:', $user->errors);
+        $message = Yii::t('app', 'Could not save new User:\n') . print_r($user->errors, true);
+        Yii::$app->session->setFlash(ERROR, $message);
         return null;
     }
 
