@@ -63,11 +63,10 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-
         $model = new User();
+
         if ($model->load(Yii::$app->request->post())) {
             $request = Yii::$app->request->post('User');
-
             $model->email_is_verified = false;
             $model->email_confirmation_token = null;
             $model->setPassword($request['password']);
@@ -76,16 +75,7 @@ class UserController extends Controller
 
             $model->generateEmailConfirmationToken(true);
 
-
-            if  (Common::transaction($model, 'save')) {
-
-                $primaryKey = BaseController::stringEncode($model->user_id);
-                BaseController::flashMessage(
-                    Yii::t('app', 'New record saved successfully'),
-                    MSG_SUCCESS
-                );
-                return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
-            }
+            return $this->saveRecord($model);
         }
 
         return $this->render(ACTION_CREATE, [MODEL=> $model]);
@@ -215,11 +205,8 @@ class UserController extends Controller
         $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())
-            && Common::transaction($model, 'save')
-        ) {
-            $id = BaseController::stringEncode($model->user_id);
-            return $this->redirect([ACTION_VIEW, 'id' => $id]);
+        if ($model->load(Yii::$app->request->post())) {
+            return $this->saveRecord($model);
         }
 
         return $this->render(ACTION_UPDATE, [MODEL=> $model]);
@@ -293,5 +280,48 @@ class UserController extends Controller
             self::USER_ID,
             $userId
         );
+    }
+    /**
+     * @param object $model
+     * @return bool|\yii\web\Response
+     * @throws \yii\db\Exception
+     */
+    private function saveRecord($model)
+    {
+        try {
+            if (Common::transaction($model, 'save')) {
+                Yii::$app->session->setFlash(
+                    SUCCESS,
+                    Yii::t(
+                        'app',
+                        'Record saved successfully'
+                    )
+                );
+                $primaryKey = BaseController::stringEncode($model->user_id);
+                return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+            } else {
+                Yii::$app->session->setFlash(
+                    ERROR,
+                    Yii::t(
+                        'app',
+                        'Error saving record'
+                    )
+                );
+                $this->refresh();
+            }
+        } catch (\yii\db\Exception $e) {
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [
+                        MODULE => 'app\models\queries\Common::transaction method: save',
+                        ERROR => $e
+                    ]
+                ),
+                MSG_ERROR
+            );
+        }
+        return false;
     }
 }
