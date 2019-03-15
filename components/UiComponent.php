@@ -406,7 +406,7 @@ class UiComponent extends Component
                     <div class=\'col-sm-6  \'>',
             '<h3 class="headerTitle '.self::COLOR_PRIMARY.'"><strong>
                             <span class=\'glyphicon glyphicon-', $icon, self::COLOR_PRIMARY, ' headerIcon \'>',
-        '</span>',
+        '</span> &nbsp;',
         $pageTitle,
         self::HTML_SPACE,
         '</strong><span class=\'nroRowsbadge \' title=\'',
