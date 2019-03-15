@@ -122,7 +122,6 @@ class ProfileController extends Controller
     {
 
         $model = new Profile();
-
         if ($model->load(Yii::$app->request->post())) {
             return $this->saveRecord($model);
         }
@@ -142,14 +141,13 @@ class ProfileController extends Controller
      */
     public function actionDelete($id)
     {
-        $id = BaseController::stringDecode($id);
         if (! BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $model = $this->findModel($id);
-        $profileId = $model->profile_id;
-        if ($this->fkCheck($profileId)==0) {
+        $profile_id = $model->profile_id;
+        if ($this->fkCheck($profile_id)==0) {
             if (Common::transaction($model, 'delete')) {
                 BaseController::bitacoraAndFlash(
                     Yii::t(
@@ -182,14 +180,15 @@ class ProfileController extends Controller
      * @return object Profile the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($profileId)
+    protected function findModel($profile_id)
     {
-        if (($model = Profile::findOne($profileId)) !== null) {
+        $profile_id = BaseController::stringDecode($profile_id);
+        if (($model = Profile::findOne($profile_id)) !== null) {
             return $model;
         }
 
         BaseController::bitacora(
-            Yii::t('app', 'The requested page does not exist {id}', ['id'=>$profileId]),
+            Yii::t('app', 'The requested page does not exist {id}', ['id' => $profile_id]),
             MSG_SECURITY_ISSUE
         );
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
@@ -236,25 +235,25 @@ class ProfileController extends Controller
             return $this->redirect([ACTION_INDEX]);
         }
 
-        $deleteOK = "";
-        $deleteKO = "";
-        $nroSelections = sizeof($result);
-        for ($i = 0; $i < $nroSelections; $i++) {
-            $profileId = $result[$i];
+        $delete_ok = "";
+        $delete_ko = "";
+        $nro_selections = sizeof($result);
+        for ($i = 0; $i < $nro_selections; $i++) {
+            $profile_id = $result[$i];
 
-            if (($model = Profile::findOne($profileId)) !== null) {
-                $profileId = $model->profile_id;
-                if ($this->fkCheck($profileId) <= 0) {
+            if (($model = Profile::findOne($profile_id)) !== null) {
+                $profile_id = $model->profile_id;
+                if ($this->fkCheck($profile_id) <= 0) {
                     if (Common::transaction($model, 'delete')) {
-                        $deleteOK .= $profileId . ", ";
+                        $delete_ok.= $profile_id  . ", ";
                     }
                 } else {
-                    $deleteKO .= $profileId . ", ";
+                    $delete_ko .= $profile_id . ", ";
                 }
             }
         }
 
-        BaseController::summaryDisplay($deleteOK, $deleteKO);
+        BaseController::summaryDisplay($delete_ok, $delete_ko);
         return $this->redirect([ACTION_INDEX]);
     }
 
@@ -288,70 +287,6 @@ class ProfileController extends Controller
 
         return $this->redirect([ACTION_INDEX]);
     }
-
-    /**
-     * Updates an existing Profile model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     *
-     * @param integer $id primary key of table Profile
-     *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     * @throws \yii\db\Exception
-     */
-    public function actionUpdate($id)
-    {
-        $id = BaseController::stringDecode($id);
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post())) {
-            return $this->saveRecord($model);
-        }
-
-        return $this->render(ACTION_UPDATE, [MODEL=> $model]);
-    }
-
-    /**
-     * Displays a single Profile model.
-     *
-     * @param integer $id primary key of table Profile
-     *
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        $id = BaseController::stringDecode($id);
-        $model = $this->findModel($id);
-        BaseController::bitacora(
-            Yii::t('app', 'view record {id}', ['id'=>$model->profile_id]),
-            MSG_INFO
-        );
-        return $this->render(ACTION_VIEW, [MODEL => $model]);
-    }
-
-    /**
-     * Check nro. records found in other tables related.
-     *
-     * @param integer $profileId integer Primary Key of table Profile
-     *
-     * @return int numbers of rows in other tables with integrity referential found.
-     */
-    private function fkCheck($profileId)
-    {
-        $nroRegs = Common::getNroRowsForeignkey(
-            'permission',
-            self::PROFILE_ID,
-            $profileId
-        );
-
-        return $nroRegs + Common::getNroRowsForeignkey(
-            'user',
-            self::PROFILE_ID,
-            $profileId
-        );
-    }
-
     /**
      * @param object $model
      * @return bool|\yii\web\Response
@@ -394,5 +329,65 @@ class ProfileController extends Controller
             );
         }
         return false;
+    }
+
+    /**
+     * Updates an existing Profile model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     *
+     * @param integer $id primary key of table Profile
+     *
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     * @throws \yii\db\Exception
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            return $this->saveRecord($model);
+        }
+
+        return $this->render(ACTION_UPDATE, [MODEL=> $model]);
+    }
+
+    /**
+     * Displays a single Profile model.
+     *
+     * @param integer $id primary key of table Profile
+     *
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        $model = $this->findModel($id);
+        BaseController::bitacora(
+            Yii::t('app', 'view record {id}', ['id'=>$model->profile_id]),
+            MSG_INFO
+        );
+        return $this->render(ACTION_VIEW, [MODEL => $model]);
+    }
+
+    /**
+     * Check nro. records found in other tables related.
+     *
+     * @param integer $profileId integer Primary Key of table Profile
+     *
+     * @return int numbers of rows in other tables with integrity referential found.
+     */
+    private function fkCheck($profileId)
+    {
+        $nro_regs = Common::getNroRowsForeignkey(
+            'permission',
+            self::PROFILE_ID,
+            $profileId
+        );
+
+        return $nro_regs + Common::getNroRowsForeignkey(
+            'user',
+            self::PROFILE_ID,
+            $profileId
+        );
     }
 }

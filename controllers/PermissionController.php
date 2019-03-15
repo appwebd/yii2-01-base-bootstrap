@@ -124,7 +124,6 @@ class PermissionController extends Controller
      */
     public function actionDelete($id)
     {
-        $id = BaseController::stringDecode($id);
         if (! BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -243,7 +242,6 @@ class PermissionController extends Controller
      */
     public function actionUpdate($id)
     {
-        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -263,7 +261,6 @@ class PermissionController extends Controller
      */
     public function actionView($id)
     {
-        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
         BaseController::bitacora(
             Yii::t('app', 'view record {id}', ['id'=>$model->permission_id]),
@@ -283,6 +280,7 @@ class PermissionController extends Controller
      */
     protected function findModel($permissionId)
     {
+        $permissionId = BaseController::stringDecode($permissionId);
         if (($model = Permission::findOne($permissionId)) !== null) {
             return $model;
         }
