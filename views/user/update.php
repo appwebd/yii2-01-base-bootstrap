@@ -30,7 +30,7 @@ echo UiComponent::header(
     $this->title,
     Yii::t(
         'app',
-        'Please complete all requested information of User.'
+        'Please complete all requested information'
     )
 );
 
