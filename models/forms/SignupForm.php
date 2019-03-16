@@ -13,12 +13,10 @@
 
 namespace app\models\forms;
 
-use app\controllers\BaseController;
 use Yii;
 use yii\base\Model;
 use app\models\User;
 use app\helpers\Mail;
-use app\components\UiComponent;
 
 /**
  * User signup form
