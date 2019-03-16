@@ -20,7 +20,6 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
-use app\components\UiComponent;
 use app\controllers\BaseController;
 use app\models\queries\Common;
 
