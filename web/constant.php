@@ -16,10 +16,6 @@ defined('ACTION_INDEX')  || define('ACTION_INDEX', 'index');
 defined('ACTION_LOGOUT')   || define('ACTION_LOGOUT', 'logout');
 defined('ACTION_REMOVE') || define('ACTION_REMOVE', 'remove');
 
-defined('ACTION_VIEW_ICON')  || define('ACTION_VIEW_ICON', 'glyphicon glyphicon-eye-open');
-defined('ACTION_UPDATE_ICON') || define('ACTION_UPDATE_ICON', 'glyphicon glyphicon-pencil');
-defined('ACTION_DELETE_ICON') || define('ACTION_DELETE_ICON', 'glyphicon glyphicon-trash');
-
 defined('ACTIONS') || define('ACTIONS', 'actions');
 defined('ACTION_UPDATE') || define('ACTION_UPDATE', 'update');
 defined('ACTION_VIEW')   || define('ACTION_VIEW', 'view');
