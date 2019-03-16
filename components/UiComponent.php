@@ -32,7 +32,9 @@ use app\controllers\BaseController;
  */
 class UiComponent extends Component
 {
-
+    const ACTION_VIEW_ICON              = '<span class="glyphicon glyphicon-eye-open"></span>';
+    const ACTION_UPDATE_ICON            = '<span class="glyphicon glyphicon-pencil"></span>';
+    const ACTION_DELETE_ICON            = '<span class="glyphicon glyphicon-trash"></span>';
     const BOOL_TEXT                     = true;
     const BOOL_ACTIONS_TEXT             = false;
     const BOOL_TOOLTIP                  = true;
@@ -65,9 +67,12 @@ class UiComponent extends Component
     const HTML_SPACE                    = '&nbsp;';
     const HTML_OPTION                   = '<option>';
     const HTML_OPTION_CLOSE             = '</option>';
+    const STR_CLASS_DATA_PJAX           = 'data-pjax';
+    const STR_CONFIRM                   = 'confirm';
     const STR_PER_PAGE                  = 'per-page';
     const STR_PAGESIZE                  = 'pageSize';
-    const STR_CONFIRM                   = 'confirm';
+    const STR_URL_BASE                  = 'index.php?r=';
+
 
     /**
      * @param $statusId
@@ -87,40 +92,41 @@ class UiComponent extends Component
      */
     public static function buttonsActionColumn()
     {
+
         return [
             ACTION_VIEW => function ($url, $model, $key) {
                 $key = BaseController::stringEncode($key);
-                $url = 'index.php?r='. Yii::$app->controller->id;
+                $url = UiComponent::STR_URL_BASE  . Yii::$app->controller->id;
                 $url = $url . '/view' . '&id='.$key;
                 return Html::a(
-                    '<span class="' . ACTION_VIEW_ICON .'"></span>',
+                    UiComponent::ACTION_VIEW_ICON,
                     $url,
                     [
                         TITLE => Yii::t('app', 'Full details'),
-                        'data-pjax' => '0',
+                        UiComponent::STR_CLASS_DATA_PJAX => '0',
                     ]
                 );
             },
 
             ACTION_UPDATE => function ($url, $model, $key) {
                 $key = BaseController::stringEncode($key);
-                $url = 'index.php?r='. Yii::$app->controller->id;
+                $url = UiComponent::STR_URL_BASE  . Yii::$app->controller->id;
                 $url = $url . '/update' . '&id='.$key;
                 return Html::a(
-                    '<span class="' . ACTION_UPDATE_ICON .'"></span>',
+                    UiComponent::ACTION_UPDATE_ICON,
                     $url,
                     [
                         TITLE => Yii::t('app', 'Update'),
-                        'data-pjax' => '0',
+                        UiComponent::STR_CLASS_DATA_PJAX => '0',
                     ]
                 );
             },
             ACTION_DELETE => function ($url, $model, $key) {
                 $key = BaseController::stringEncode($key);
-                $url = 'index.php?r='. Yii::$app->controller->id;
+                $url = UiComponent::STR_URL_BASE  . Yii::$app->controller->id;
                 $url = $url . '/delete' . '&id='.$key;
                 return Html::a(
-                    '<span class="' . ACTION_DELETE_ICON .'"></span>',
+                    UiComponent::ACTION_DELETE_ICON,
                     $url,
                     [
                         TITLE => Yii::t('app', 'Delete'),
@@ -129,7 +135,7 @@ class UiComponent extends Component
                             'Are you sure you want to delete ?'
                         ),
                         'data-method' => 'post',
-                        'data-pjax' => '0',
+                        UiComponent::STR_CLASS_DATA_PJAX => '0',
                     ]
                 );
             }
