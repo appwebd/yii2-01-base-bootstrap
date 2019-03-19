@@ -93,7 +93,7 @@ defined('SUCCESS')   || define('SUCCESS', 'success');
 defined('TABINDEX') || define('TABINDEX', 'tabindex');
 defined('TEMPLATE') || define('TEMPLATE', 'template');
 defined('TITLE') || define('TITLE', 'title');
-defined('TRANSACTION_MODULE') || define('TRANSACTION_MODULE', '{module} {method} success');
+defined('TRANSACTION_MODULE') || define('TRANSACTION_MODULE', '{module} {method}');
 defined('TYPE') || define('TYPE', 'type');
 defined('UNCHECK') || define('UNCHECK', 'uncheck');
 defined('VALUE') || define('VALUE', 'value');
