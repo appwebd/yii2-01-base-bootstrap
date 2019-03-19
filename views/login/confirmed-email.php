@@ -24,17 +24,17 @@ echo '
 
             <div class="webpage">';
 
-                echo UiComponent::header(
-                    'envelope',
-                    $this->title,
-                   ''
-                );
+echo UiComponent::header(
+    'envelope',
+    $this->title,
+    ''
+);
 
-                echo '<div class="success text-center"><h4>',
-                Yii::t('app', 'Email confirmation success'),
-                '<br/><br/><br/></h4></div>';
+echo '<div class="success text-center"><h4>',
+Yii::t('app', 'Email confirmation success'),
+'<br/><br/><br/></h4></div>';
 
-                echo Yii::$app->view->render('@app/views/partials/_links_return_to');
+echo Yii::$app->view->render('@app/views/partials/_links_return_to');
 
 echo '
         </div>

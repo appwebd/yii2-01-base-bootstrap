@@ -2,15 +2,15 @@
 
 if (YII_ENV) {
     $bundles = [
-            'yii\web\JqueryAsset' => [
-                'js' => ['jquery.js']
-            ],
-            'yii\bootstrap\BootstrapAsset' => [
-                'css' => ['css/bootstrap.min.css'],
-            ],
-            'yii\bootstrap\BootstrapPluginAsset' => [
-                'js' => ['js/bootstrap.js']
-            ]
+        'yii\web\JqueryAsset' => [
+            'js' => ['jquery.js']
+        ],
+        'yii\bootstrap\BootstrapAsset' => [
+            'css' => ['css/bootstrap.min.css'],
+        ],
+        'yii\bootstrap\BootstrapPluginAsset' => [
+            'js' => ['js/bootstrap.js']
+        ]
     ];
 } else {
     $bundles = [

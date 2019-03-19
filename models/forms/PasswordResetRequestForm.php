@@ -1,12 +1,13 @@
 <?php
+
 namespace app\models\forms;
 
-use Yii;
 use app\controllers\BaseController;
-use yii\base\Model;
 use app\helpers\Mail;
 use app\models\queries\Common;
 use app\models\User;
+use Yii;
+use yii\base\Model;
 
 /**
  * Password reset request form
@@ -22,6 +23,19 @@ class PasswordResetRequestForm extends Model
      */
 
     public $email;
+
+    /**
+     * @param $passwordresettoken String password reset token saved in model User
+     * @param $userId integer primary key of table User
+     * @return string  String encoded with infomation password Reset Token | datetime | User_id
+     */
+    public static function generateToken($passwordresettoken, $userId)
+    {
+
+        $token = $passwordresettoken . '|' . date('Y-m-d H:i:s') . '|' . $userId;
+        return BaseController::stringEncode($token);
+    }
+
     /**
      * @inheritdoc
      */
@@ -69,18 +83,6 @@ class PasswordResetRequestForm extends Model
     }
 
     /**
-     * @param $passwordresettoken String password reset token saved in model User
-     * @param $userId integer primary key of table User
-     * @return string  String encoded with infomation password Reset Token | datetime | User_id
-     */
-    public static function generateToken($passwordresettoken, $userId)
-    {
-
-        $token = $passwordresettoken . '|'. date('Y-m-d H:i:s') . '|' . $userId;
-        return BaseController::stringEncode($token);
-    }
-
-    /**
      * @param $tokendecode string format of generateToken
      * @return bool
      */
@@ -100,12 +102,12 @@ class PasswordResetRequestForm extends Model
         }
 
         // We need to verity date time validity.
-        if (Common::getDateDiffNow($tokenarray[1])>PasswordResetRequestForm::RANGE_MINUTES_TOKEN) {
+        if (Common::getDateDiffNow($tokenarray[1]) > PasswordResetRequestForm::RANGE_MINUTES_TOKEN) {
             $valid = false;
         }
 
         $model = User::findOne(['user_id' => $tokenarray[2]]);
-        if ($model ==null) {
+        if ($model == null) {
             $valid = false;
         } else {
             if ($model->password_reset_token !== $tokenarray[0]) {

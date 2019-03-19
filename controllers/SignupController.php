@@ -2,11 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\forms\SignupForm;
 use Yii;
-use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\forms\SignupForm;
+use yii\web\Controller;
 
 /**
  * Class SingupController

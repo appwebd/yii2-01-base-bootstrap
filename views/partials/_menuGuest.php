@@ -16,13 +16,14 @@
  * | patricio-rojaso@outlook.com so we can send you a copy immediately.         |
  * +----------------------------------------------------------------------------+
  */
-use yii\bootstrap\NavBar;
+
 use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
 
 NavBar::begin([
     'brandLabel' => Yii::$app->name,
     'brandUrl' => Yii::$app->homeUrl,
-    OPTIONS => [ STR_CLASS => 'navbar-inverse navbar-fixed-top'],
+    OPTIONS => [STR_CLASS => 'navbar-inverse navbar-fixed-top'],
 
 ]);
 
@@ -31,7 +32,7 @@ echo Nav::widget([
     'options' => ['class' => 'navbar-nav navbar-right'],
     'encodeLabels' => false,
     'items' => [
-        [LABEL => '<span class="glyphicon glyphicon-home"></span> &nbsp;'.Yii::t('app', 'Home'), 'url' => ['/'],],
+        [LABEL => '<span class="glyphicon glyphicon-home"></span> &nbsp;' . Yii::t('app', 'Home'), 'url' => ['/'],],
         [LABEL => Yii::t('app', 'About'), 'url' => ['/site/about']],
         [LABEL => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
         [LABEL => Yii::t('app', 'Login'), 'url' => ['/login']]

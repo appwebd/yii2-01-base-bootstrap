@@ -2,11 +2,11 @@
 
 namespace app\models\forms;
 
+use app\models\queries\Common;
+use app\models\User;
 use Yii;
 use yii\base\Model;
 use yii\web\NotFoundHttpException;
-use app\models\User;
-use app\models\queries\Common;
 
 /**
  * LoginForm is the model behind the login form.
@@ -16,14 +16,33 @@ use app\models\queries\Common;
  */
 class LoginForm extends Model
 {
+    const USERNAME = 'username';
+    const PASSWORD = 'password';
+    const REMEMBER_ME = 'rememberMe';
     public $username;
     public $password;
     public $rememberMe = true;
     private $userPrivateLocalClass = false;
 
-    const USERNAME = 'username';
-    const PASSWORD =  'password';
-    const REMEMBER_ME = 'rememberMe';
+    /**
+     * Removes email confirmation token and sets is_email_verified to true
+     *
+     * @param bool $save whether to save the record. Default is `false`.
+     * @return bool|null whether the save was successful or null if $save was false.
+     */
+    public static function removeTokenEmail($userId)
+    {
+        $model = User::findIdentity($userId);
+        if ($model !== null) {
+            $model->email_confirmation_token = null;
+            $model->email_is_verified = 1;
+            if (Common::transaction($model, 'save')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @return array the validation rules.
      */
@@ -42,8 +61,8 @@ class LoginForm extends Model
     public function attributeLabels()
     {
         return [
-            self::USERNAME   => Yii::t('app', 'Username'),
-            self::PASSWORD   => Yii::t('app', 'Password'),
+            self::USERNAME => Yii::t('app', 'Username'),
+            self::PASSWORD => Yii::t('app', 'Password'),
             self::REMEMBER_ME => Yii::t('app', 'Remember me'),
         ];
     }
@@ -55,9 +74,23 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
+    }
+
+    /**
+     * Finds user by [[username]]
+     *
+     * @return User|null
+     */
+    public function getUser()
+    {
+        if ($this->userPrivateLocalClass === false) {
+            $this->userPrivateLocalClass = User::findByUsername($this->username);
+        }
+
+        return $this->userPrivateLocalClass;
     }
 
     /**
@@ -77,6 +110,7 @@ class LoginForm extends Model
             throw new NotFoundHttpException('Something is wrong with your user/pass');
         }
     }
+
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
@@ -90,39 +124,5 @@ class LoginForm extends Model
                 $this->addError('password', 'Incorrect username or password.');
             }
         }
-    }
-
-
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
-    public function getUser()
-    {
-        if ($this->userPrivateLocalClass === false) {
-            $this->userPrivateLocalClass = User::findByUsername($this->username);
-        }
-
-        return $this->userPrivateLocalClass;
-    }
-
-    /**
-     * Removes email confirmation token and sets is_email_verified to true
-     *
-     * @param bool $save whether to save the record. Default is `false`.
-     * @return bool|null whether the save was successful or null if $save was false.
-     */
-    public static function removeTokenEmail($userId)
-    {
-        $model = User::findIdentity($userId);
-        if ($model !==null) {
-            $model->email_confirmation_token = null;
-            $model->email_is_verified = 1;
-            if (Common::transaction($model, 'save')) {
-                return true;
-            }
-        }
-        return false;
     }
 }

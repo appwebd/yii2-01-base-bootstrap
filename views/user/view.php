@@ -1,21 +1,21 @@
 <?php
 /**
-  * View of table User
-  *
-  * @package     View of User
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        @DATETIME
-  * @version     1.0
-*/
+ * View of table User
+ *
+ * @package     View of User
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        @DATETIME
+ * @version     1.0
+ */
 
 use app\components\UiComponent;
-use yii\widgets\DetailView;
 use app\controllers\BaseController;
-use app\models\User;
 use app\models\Profile;
+use app\models\User;
+use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -46,7 +46,7 @@ try {
             [
                 ATTRIBUTE => User::PROFILE_ID,
                 HEADER => Yii::t('app', 'Profile'),
-                VALUE => function($model) {
+                VALUE => function ($model) {
                     return Profile::getProfileName($model->profile_id);
                 },
             ],

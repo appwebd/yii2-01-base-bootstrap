@@ -1,30 +1,30 @@
 <?php
 /**
-  * Login process
-  *
-  * @package     Controller of Login (using table user)
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-06-16 23:03:06
-  * @version     1.0
-*/
+ * Login process
+ *
+ * @package     Controller of Login (using table user)
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-06-16 23:03:06
+ * @version     1.0
+ */
 
 namespace app\controllers;
 
+use app\models\forms\PasswordResetForm;
+use app\models\forms\PasswordResetRequestForm;
 use Yii;
 use yii\db\Exception;
-use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\forms\PasswordResetRequestForm;
-use app\models\forms\PasswordResetForm;
+use yii\web\Controller;
 
 class PasswordController extends Controller
 {
     const ACTION_RESET = 'reset';
-    const ACTION_NEW= 'new';
+    const ACTION_NEW = 'new';
 
     /**
      * {@inheritdoc}
@@ -58,7 +58,7 @@ class PasswordController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 ACTIONS => [
-                    ACTION_INDEX => ['get','post'],
+                    ACTION_INDEX => ['get', 'post'],
                     self::ACTION_RESET => ['get', 'post'],
                     self::ACTION_NEW => ['get', 'post'],
                 ],
@@ -83,19 +83,7 @@ class PasswordController extends Controller
     }
 
     /**
-     * @param $token string encoded with token for change password
-     * @return \yii\web\Response
-     */
-    public function wrongToken($token)
-    {
-        BaseController::bitacora(
-            Yii::t('app', 'Error, token password reset wrong {token}', ['token' => $token]),
-            MSG_SECURITY_ISSUE
-        );
-        return $this->redirect([ACTION_INDEX]);
-    }
-    /**
-     * @param string $token. Token is a cryptographed string, which must contain password_reset_token and the
+     * @param string $token . Token is a cryptographed string, which must contain password_reset_token and the
      *  date / time for its validity. The token is set '' like parameter only for don't show ways to corrupt this
      * web application.
      * @return \yii\web\Response
@@ -108,15 +96,28 @@ class PasswordController extends Controller
             if ($model->tokenIsValid($tokendecode)) {
                 $this->wrongToken($token);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             BaseController::bitacora(
-                Yii::t('app', 'Error, {module} {error}', ['module'=>'actionReset', 'error' => $exception]),
+                Yii::t('app', 'Error, {module} {error}', ['module' => 'actionReset', 'error' => $exception]),
                 MSG_SECURITY_ISSUE
             );
         }
 
         $userId = $model->getUserid($tokendecode);
         return $this->redirect(['password/resetpassword', 'userId' => $userId]);
+    }
+
+    /**
+     * @param $token string encoded with token for change password
+     * @return \yii\web\Response
+     */
+    public function wrongToken($token)
+    {
+        BaseController::bitacora(
+            Yii::t('app', 'Error, token password reset wrong {token}', ['token' => $token]),
+            MSG_SECURITY_ISSUE
+        );
+        return $this->redirect([ACTION_INDEX]);
     }
 
     /**

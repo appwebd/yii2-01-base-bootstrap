@@ -6,8 +6,8 @@
 
 $this->beginPage();
 
-    $this->beginBody();
-        $content;
-    $this->endBody();
+$this->beginBody();
+$content;
+$this->endBody();
 
 $this->endPage();

@@ -11,10 +11,10 @@
  * @version     1.0
  */
 
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Html;
 use app\components\UiComponent;
 use app\models\forms\SignupForm;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
@@ -31,98 +31,98 @@ echo '
 
             <div class="webpage ">';
 
-                echo UiComponent::header(
-                    'user',
-                    $this->title,
-                    Yii::t(
-                        'app',
-                        'Please complete all requested information.'
-                    )
-                );
+echo UiComponent::header(
+    'user',
+    $this->title,
+    Yii::t(
+        'app',
+        'Please complete all requested information.'
+    )
+);
 
-                $form = ActiveForm::begin(
-                    ['id' => 'form-signup',
-                        'method' => 'post',
-                        'options' => [STR_CLASS => 'form-horizontal webpage'],
-                    ]
-                );
+$form = ActiveForm::begin(
+    ['id' => 'form-signup',
+        'method' => 'post',
+        'options' => [STR_CLASS => 'form-horizontal webpage'],
+    ]
+);
 
-                echo $form->field($model, SignupForm::FIRST_NAME, [
-                    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS,
-                        TABINDEX => '1',
-                        'title' => 'First name is required information!',
-                        'x-moz-errormessage' => 'First name is required information!',
-                        REQUIRED => REQUIRED,
-                        PLACEHOLDER => 'First name'],
-                        INPUT_TEMPLATE => '<div class="input-group">
+echo $form->field($model, SignupForm::FIRST_NAME, [
+    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS,
+        TABINDEX => '1',
+        'title' => 'First name is required information!',
+        'x-moz-errormessage' => 'First name is required information!',
+        REQUIRED => REQUIRED,
+        PLACEHOLDER => 'First name'],
+    INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-credit-card"></span>
                                             </span>
                                             {input}
                                         </div>',
-                ])->textInput()->label(false);
+])->textInput()->label(false);
 
-                echo $form->field($model, SignupForm::LAST_NAME, [
-                    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS,
-                        TABINDEX => '1',
-                        'title' => 'Last name is required!',
-                        'x-moz-errormessage' => 'Last name is required!',
-                        REQUIRED => REQUIRED,
-                        PLACEHOLDER => 'Last name'],
-                    INPUT_TEMPLATE => '<div class="input-group">
+echo $form->field($model, SignupForm::LAST_NAME, [
+    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS,
+        TABINDEX => '1',
+        'title' => 'Last name is required!',
+        'x-moz-errormessage' => 'Last name is required!',
+        REQUIRED => REQUIRED,
+        PLACEHOLDER => 'Last name'],
+    INPUT_TEMPLATE => '<div class="input-group">
                                                             <span class="input-group-addon">
                                                                 <span class="glyphicon glyphicon-credit-card"></span>
                                                             </span>
                                                             {input}
                                                         </div>',
-                ])->textInput()->label(false);
+])->textInput()->label(false);
 
 
-                echo $form->field($model, SignupForm::USERNAME, [
-                    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '2'],
-                    INPUT_TEMPLATE => '<div class="input-group">
+echo $form->field($model, SignupForm::USERNAME, [
+    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '2'],
+    INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-user"></span>
                                             </span>
                                             {input}
                                         </div>',
-                ])->textInput([PLACEHOLDER => Yii::t('app', ' User account')])->label(false);
+])->textInput([PLACEHOLDER => Yii::t('app', ' User account')])->label(false);
 
 
-                echo  $form->field($model, SignupForm::PASSWORD, [
-                    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '3'],
-                    INPUT_TEMPLATE => '<div class="input-group">
+echo $form->field($model, SignupForm::PASSWORD, [
+    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '3'],
+    INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-lock"></span>
                                             </span>
                                             {input}
                                         </div>',
-                ])->passwordInput(['autocomplete' => SignupForm::NEW_PASSWORD,
-                    PLACEHOLDER => Yii::t('app', ' Password')])->label(false);
+])->passwordInput(['autocomplete' => SignupForm::NEW_PASSWORD,
+    PLACEHOLDER => Yii::t('app', ' Password')])->label(false);
 
 
-                echo $form->field($model, SignupForm::EMAIL, [
-                    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '4'],
-                    INPUT_TEMPLATE => '<div class="input-group">
+echo $form->field($model, SignupForm::EMAIL, [
+    INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '4'],
+    INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-envelope"></span>
                                             </span>
                                             {input}
                                         </div>',
-                ])->textInput([
-                    PLACEHOLDER => Yii::t('app', ' valid email account, Ex: account@domain.com'),
-                ])->label(false);
+])->textInput([
+    PLACEHOLDER => Yii::t('app', ' valid email account, Ex: account@domain.com'),
+])->label(false);
 
-                echo '<div class="form-group">',
-                        Html::submitButton(Yii::t('app', 'Signup'), [STR_CLASS => 'btn btn-primary',
-                            'name' => 'signup-button', AUTOFOCUS => AUTOFOCUS, TABINDEX => '5',
-                        ]),
-                        $form->errorSummary($model, array(STR_CLASS => "error-summary")),
-                    '</div>';
-                ActiveForm::end();
+echo '<div class="form-group">',
+Html::submitButton(Yii::t('app', 'Signup'), [STR_CLASS => 'btn btn-primary',
+    'name' => 'signup-button', AUTOFOCUS => AUTOFOCUS, TABINDEX => '5',
+]),
+$form->errorSummary($model, array(STR_CLASS => "error-summary")),
+'</div>';
+ActiveForm::end();
 
-                echo Yii::$app->view->render('@app/views/partials/_links_return_to');
-                echo '
+echo Yii::$app->view->render('@app/views/partials/_links_return_to');
+echo '
             </div>
         </div>
         <div class="col-sm-3 "> &nbsp; </div>

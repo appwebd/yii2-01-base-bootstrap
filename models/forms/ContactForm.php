@@ -10,17 +10,16 @@ use yii\base\Model;
  */
 class ContactForm extends Model
 {
-    public $name;
-    public $email;
-    public $subject;
-    public $body;
-    public $verifyCode;
-
     const BODY = 'body';
     const EMAIL = 'email';
     const NAME = 'name';
     const SUBJECT = 'subject';
     const VERIFY_CODE = 'verifyCode';
+    public $name;
+    public $email;
+    public $subject;
+    public $body;
+    public $verifyCode;
 
     /**
      * @return array the validation rules.
@@ -45,10 +44,10 @@ class ContactForm extends Model
         $translate = new Yii\i18n\I18N();
 
         return [
-            self::NAME   => $translate->translate('app', 'Name', [], Yii::$app->language),
-            self::EMAIL  => $translate->translate('app', 'Email', [], Yii::$app->language),
-            self::SUBJECT     => $translate->translate('app', 'Subject', [], Yii::$app->language),
-            self::BODY        => $translate->translate('app', 'Message', [], Yii::$app->language),
+            self::NAME => $translate->translate('app', 'Name', [], Yii::$app->language),
+            self::EMAIL => $translate->translate('app', 'Email', [], Yii::$app->language),
+            self::SUBJECT => $translate->translate('app', 'Subject', [], Yii::$app->language),
+            self::BODY => $translate->translate('app', 'Message', [], Yii::$app->language),
             self::VERIFY_CODE => $translate->translate('app', 'Verification Code', [], Yii::$app->language),
         ];
     }

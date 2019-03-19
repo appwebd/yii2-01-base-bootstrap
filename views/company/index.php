@@ -12,12 +12,12 @@
  * @version   1.0
  */
 
-use yii\grid\GridView;
-use yii\helpers\Html;
 use app\components\UiComponent;
 use app\controllers\BaseController;
-use app\models\queries\Common;
 use app\models\Company;
+use app\models\queries\Common;
+use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\CompanySearch */
@@ -42,11 +42,11 @@ try {
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'layout'=>'{items}{summary}{pager}',
+        'layout' => '{items}{summary}{pager}',
         'filterSelector' => 'select[name="per-page"]',
-        'tableOptions' =>[STR_CLASS => GRIDVIEW_CSS],
+        'tableOptions' => [STR_CLASS => GRIDVIEW_CSS],
         'columns' => [
-            [STR_CLASS => 'yii\grid\CheckboxColumn', 'options'=>[STR_CLASS => 'width10px']],
+            [STR_CLASS => 'yii\grid\CheckboxColumn', 'options' => [STR_CLASS => 'width10px']],
             Company::COMPANY_ID,
             Company::COMPANY_NAME,
             Company::ADDRESS,
@@ -57,12 +57,12 @@ try {
             Company::CONTACT_EMAIL,
             Company::WEBPAGE,
             [
-                ATTRIBUTE =>  ACTIVE,
+                ATTRIBUTE => ACTIVE,
                 FILTER => UiComponent::yesOrNoArray(),
-                FORMAT=>'raw',
-                OPTIONS => [STR_CLASS=> COLSM1],
+                FORMAT => 'raw',
+                OPTIONS => [STR_CLASS => COLSM1],
                 STR_CLASS => yii\grid\DataColumn::class,
-                VALUE =>  Common::isActive()
+                VALUE => Common::isActive()
             ],
             [
                 'buttons' => UiComponent::buttonsActionColumn(),

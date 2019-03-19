@@ -15,22 +15,22 @@ echo '
 
             <div class="webpage ">';
 
-                echo UiComponent::header(
-                    'home',
-                    $this->title,
-                    Yii::t(
-                        'app',
-                        'About of this webpage'
-                    )
-                );
+echo UiComponent::header(
+    'home',
+    $this->title,
+    Yii::t(
+        'app',
+        'About of this webpage'
+    )
+);
 
 
-                echo '<p>This is the About page. You may modify the following file to customize its content</p>';
-                echo '<code>', __FILE__ ,'</code><br/><br>';
+echo '<p>This is the About page. You may modify the following file to customize its content</p>';
+echo '<code>', __FILE__, '</code><br/><br>';
 
 
-                echo Yii::$app->view->render('@app/views/partials/_links_return_to');
-                echo '
+echo Yii::$app->view->render('@app/views/partials/_links_return_to');
+echo '
             </div>
             <div class="col-sm-3 "> &nbsp;&nbsp; </div>
         </div>

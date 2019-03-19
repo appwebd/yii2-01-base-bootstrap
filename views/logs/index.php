@@ -1,23 +1,23 @@
 <?php
 /**
-  * Logs (Logs user activities)
-  *
-  * @package     Index of Logs
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 19:23:23
-  * @version     1.0
-*/
+ * Logs (Logs user activities)
+ *
+ * @package     Index of Logs
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-07-30 19:23:23
+ * @version     1.0
+ */
 
-use yii\grid\GridView;
 use app\components\UiComponent;
 use app\controllers\BaseController;
-use app\models\search\LogsSearch;
 use app\models\Logs;
+use app\models\search\LogsSearch;
 use app\models\Status;
 use app\models\User;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $controller_id int app\controllers\LogsController */

@@ -15,24 +15,23 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\web\Controller;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use app\components\UiComponent;
 use app\models\search\ActionSearch;
 use app\models\search\BlockedSearch;
 use app\models\search\ControllersSearch;
 use app\models\search\LogsSearch;
 use app\models\search\StatusSearch;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
 
 /**
  * LogsController class permit logs in bitacora table
  */
-
 class LogsController extends Controller
 {
-    const ACTIONS  = 'actions';
+    const ACTIONS = 'actions';
     const BLOCKED = 'blocked';
     const CONTROLLER_ID = 'controller_id';
     const CONTROLLERS = 'controllers';
@@ -94,12 +93,13 @@ class LogsController extends Controller
                     self::ACTIONS => ['get'],
                     self::BLOCKED => ['get'],
                     self::CONTROLLERS => ['get'],
-                    ACTION_INDEX  => ['get'],
-                    self::STATUS  => ['get'],
+                    ACTION_INDEX => ['get'],
+                    self::STATUS => ['get'],
                 ],
             ],
         ];
     }
+
     /**
      * Lists all Action models.
      *
@@ -108,10 +108,10 @@ class LogsController extends Controller
     public function actionActions()
     {
 
-        $actionsSearchModel  = new ActionSearch();
+        $actionsSearchModel = new ActionSearch();
         $dataProvider = $actionsSearchModel->search(Yii::$app->request->queryParams);
         $pageSize = UiComponent::pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
             self::ACTIONS,
@@ -131,18 +131,18 @@ class LogsController extends Controller
     public function actionBlocked()
     {
 
-        $searchModel  = new BlockedSearch();
+        $searchModel = new BlockedSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $pageSize = UiComponent::pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
             self::BLOCKED,
             [
                 SEARCH_MODEL => $searchModel,
                 DATA_PROVIDER => $dataProvider,
-                PAGE_SIZE =>$pageSize
+                PAGE_SIZE => $pageSize
             ]
         );
     }
@@ -154,11 +154,11 @@ class LogsController extends Controller
      */
     public function actionControllers()
     {
-        $searchModel  = new ControllersSearch();
+        $searchModel = new ControllersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $pageSize = UiComponent::pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
             self::CONTROLLERS,
@@ -178,16 +178,16 @@ class LogsController extends Controller
     public function actionIndex()
     {
 
-        $logsSearchModel  = new LogsSearch();
+        $logsSearchModel = new LogsSearch();
         $dataProvider = $logsSearchModel->search(Yii::$app->request->queryParams);
 
         $pageSize = UiComponent::pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
-        $request= Yii::$app->request->get('LogsSearch');
+        $dataProvider->pagination->pageSize = $pageSize;
+        $request = Yii::$app->request->get('LogsSearch');
         if (isset($request[self::CONTROLLER_ID])) {
             $controllerId = $request[self::CONTROLLER_ID];
         } else {
-            $controllerId =null;
+            $controllerId = null;
         }
 
         return $this->render(
@@ -200,6 +200,7 @@ class LogsController extends Controller
             ]
         );
     }
+
     /**
      * Lists all Status models.
      *
@@ -207,11 +208,11 @@ class LogsController extends Controller
      */
     public function actionStatus()
     {
-        $searchModel  = new StatusSearch();
+        $searchModel = new StatusSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $pageSize = UiComponent::pageSize();
-        $dataProvider->pagination->pageSize=$pageSize;
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
             self::STATUS,

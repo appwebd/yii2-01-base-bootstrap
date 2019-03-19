@@ -9,17 +9,17 @@
  * @link        https://appwebd.github.io
  * @date        2018-07-30 19:28:34
  * @version     1.0
-*/
+ */
 
-use yii\helpers\Html;
-use yii\grid\GridView;
 use app\components\UiComponent;
 use app\controllers\BaseController;
-use app\models\queries\Common;
 use app\models\Permission;
+use app\models\queries\Common;
 use app\models\search\ActionSearch;
-use app\models\search\ProfileSearch;
 use app\models\search\ControllersSearch;
+use app\models\search\ProfileSearch;
+use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\PermissionSearch */
@@ -113,7 +113,7 @@ try {
         Yii::t(
             'app',
             ERROR_MODULE,
-            [MODULE=> 'app\views\permission\index::GridView::widget', ERROR => $e]
+            [MODULE => 'app\views\permission\index::GridView::widget', ERROR => $e]
         ),
         MSG_ERROR
     );
@@ -126,7 +126,7 @@ try {
         Yii::t(
             'app',
             ERROR_MODULE,
-            [MODULE=> 'app\views\permission\index::GridView::widget', ERROR => $e]
+            [MODULE => 'app\views\permission\index::GridView::widget', ERROR => $e]
         ),
         MSG_ERROR
     );

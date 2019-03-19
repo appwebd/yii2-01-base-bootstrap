@@ -14,21 +14,21 @@ echo '
         <div class="col-sm-3 "> &nbsp; </div>
         <div class="col-sm-6 box">';
 
-            echo UiComponent::header(
-                'user',
-                Yii::t('app', 'Request password reset'),
-                Yii::t('app', 'Requested password reset')
-            );
-            echo '<div class="success"><h4>',
-                Yii::t(
-                    'app',
-                    'We have sent you an email with a reset link. Please check your Inbox'
-                ),
-                '<br/><br/><br/></h4></div>';
+echo UiComponent::header(
+    'user',
+    Yii::t('app', 'Request password reset'),
+    Yii::t('app', 'Requested password reset')
+);
+echo '<div class="success"><h4>',
+Yii::t(
+    'app',
+    'We have sent you an email with a reset link. Please check your Inbox'
+),
+'<br/><br/><br/></h4></div>';
 
-                echo Yii::$app->view->render('@app/views/partials/_links_return_to');
+echo Yii::$app->view->render('@app/views/partials/_links_return_to');
 
-                echo '
+echo '
         </div>
         <div class="col-sm-3 "> &nbsp; </div>
     </div>

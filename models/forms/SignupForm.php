@@ -1,53 +1,53 @@
 <?php
 /**
-  * Singup Form
-  *
-  * @package     Singup Form
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-06-16 23:03:06
-  * @version     1.0
-*/
+ * Singup Form
+ *
+ * @package     Singup Form
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-06-16 23:03:06
+ * @version     1.0
+ */
 
 namespace app\models\forms;
 
+use app\helpers\Mail;
+use app\models\User;
 use Yii;
 use yii\base\Model;
-use app\models\User;
-use app\helpers\Mail;
 
 /**
  * User signup form
-/**
+ * /**
  * User
  *
- * @property integer    active                      Active
- * @property string     auth_key                    key auth
- * @property string     email                       Email
- * @property string     email_confirmation_token    Email token of confirmation
- * @property integer    email_is_verified           Boolean is email verified
- * @property string     firstName                   First Name
- * @property string     lastName                    Last Name
- * @property string     password_hash               password
- * @property string     password_reset_token        password reset token
- * @property string     password_reset_token_date   password reset token date creation
- * @property integer    profile_id                  Profile
- * @property string     telephone                   Phone number 12 digits
- * @property integer    user_id                     User
- * @property string     username                    User account
- * @property string     ipv4_address_last_login     Ipv4 address of last login
+ * @property integer active                      Active
+ * @property string auth_key                    key auth
+ * @property string email                       Email
+ * @property string email_confirmation_token    Email token of confirmation
+ * @property integer email_is_verified           Boolean is email verified
+ * @property string firstName                   First Name
+ * @property string lastName                    Last Name
+ * @property string password_hash               password
+ * @property string password_reset_token        password reset token
+ * @property string password_reset_token_date   password reset token date creation
+ * @property integer profile_id                  Profile
+ * @property string telephone                   Phone number 12 digits
+ * @property integer user_id                     User
+ * @property string username                    User account
+ * @property string ipv4_address_last_login     Ipv4 address of last login
  *
  */
 class SignupForm extends Model
 {
-    const EMAIL      = 'email';
+    const EMAIL = 'email';
     const FIRST_NAME = 'firstName';
-    const LAST_NAME  = 'lastName';
-    const STRING     = 'string';
-    const USERNAME   = 'username';
-    const PASSWORD   = 'password';
+    const LAST_NAME = 'lastName';
+    const STRING = 'string';
+    const USERNAME = 'username';
+    const PASSWORD = 'password';
     const NEW_PASSWORD = 'new-password';
     const USER_ACTIVE = 1;
     const PROFILE_USER = 20;
@@ -110,19 +110,19 @@ class SignupForm extends Model
         }
 
         $user = new User();
-        $user->username                 = $this->username;
-        $user->email                    = $this->email;
-        $user->email_is_verified        = SignupForm::EMAIL_IS_VERIFIED_FALSE;
+        $user->username = $this->username;
+        $user->email = $this->email;
+        $user->email_is_verified = SignupForm::EMAIL_IS_VERIFIED_FALSE;
         $user->email_confirmation_token = null;
-        $user->firstName                = $this->firstName;
-        $user->lastName                 = $this->lastName;
-        $user->telephone                = '';
+        $user->firstName = $this->firstName;
+        $user->lastName = $this->lastName;
+        $user->telephone = '';
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailConfirmationToken(true);
-        $user->profile_id               = SignupForm::PROFILE_USER; // 20: Usuario comun
-        $user->ipv4_address_last_login  = Yii::$app->getRequest()->getUserIP();
-        $user->active                   = SignupForm::USER_ACTIVE;
+        $user->profile_id = SignupForm::PROFILE_USER; // 20: Usuario comun
+        $user->ipv4_address_last_login = Yii::$app->getRequest()->getUserIP();
+        $user->active = SignupForm::USER_ACTIVE;
         $user->generatePasswordResetToken(true);
 
         if ($user->validate() && $user->save()) {
@@ -146,7 +146,7 @@ class SignupForm extends Model
      */
     private function checkFromEmail()
     {
-        $from   = Yii::$app->params['adminEmail'];
+        $from = Yii::$app->params['adminEmail'];
         if ($from == "email@example.com") {
             Yii::warning(
                 Yii::t(

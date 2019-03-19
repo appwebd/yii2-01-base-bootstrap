@@ -1,12 +1,13 @@
 <?php
+
 namespace app\controllers;
 
+use app\models\forms\ContactForm;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use app\models\forms\ContactForm;
 
 /**
  * Class SiteController
@@ -21,10 +22,10 @@ use app\models\forms\ContactForm;
  */
 class SiteController extends Controller
 {
-    const STR_ABOUT         = 'about';
-    const STR_CONTACT       = 'contact';
+    const STR_ABOUT = 'about';
+    const STR_CONTACT = 'contact';
     const STR_COOKIE_POLICY = 'cookiePolicy';
-    const USER_ID_VISIT     = 1;
+    const USER_ID_VISIT = 1;
 
     public function beforeAction($action)
     {
@@ -41,25 +42,25 @@ class SiteController extends Controller
             'access' => [
                 STR_CLASS => AccessControl::class,
                 'only' => [self::STR_ABOUT,
-                           self::STR_CONTACT,
-                           self::STR_COOKIE_POLICY,
-                           self::STR_CONTACT
-                        ],
+                    self::STR_CONTACT,
+                    self::STR_COOKIE_POLICY,
+                    self::STR_CONTACT
+                ],
                 'rules' => [
                     [
-                        'actions'=>[self::STR_ABOUT,
-                                    self::STR_CONTACT,
-                                    self::STR_COOKIE_POLICY,
-                                    ACTION_INDEX
-                                ],
+                        'actions' => [self::STR_ABOUT,
+                            self::STR_CONTACT,
+                            self::STR_COOKIE_POLICY,
+                            ACTION_INDEX
+                        ],
                         'allow' => true,
                     ],
                 ],
             ],
-            'verbs'=>[
-                STR_CLASS=>VerbFilter::class,
-                'actions' =>[
-                    ACTION_INDEX=>['get']
+            'verbs' => [
+                STR_CLASS => VerbFilter::class,
+                'actions' => [
+                    ACTION_INDEX => ['get']
                 ]
             ]
         ];
@@ -152,7 +153,7 @@ class SiteController extends Controller
     }
 
 
-     /**
+    /**
      * @return string|\yii\web\Response the maintenance page or a redirect
      * response if not in maintenance mode
      */

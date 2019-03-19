@@ -11,7 +11,7 @@
  * @version     1.0
  */
 
-use \app\components\UiComponent;
+use app\components\UiComponent;
 
 /* @var yii\web\View $this */
 /* @var app\models\User $model */
@@ -26,23 +26,23 @@ echo '
         <div class="col-sm-6 box">
 
             <div class=" ">';
-                echo UiComponent::header(
-                    'user',
-                    Yii::t(
-                        'app',
-                        'Thanks for your registration'
-                    ),
-                    ' '
-                );
-                echo '                
+echo UiComponent::header(
+    'user',
+    Yii::t(
+        'app',
+        'Thanks for your registration'
+    ),
+    ' '
+);
+echo '                
                 <p>';
-                echo Yii::t(
-                    'app',
-                    'We have sent an email with a link for your confirmation, please check your inbox'
-                );
-                echo '</p>';
-                echo Yii::$app->view->render('@app/views/partials/_links_return_to');
-                echo '
+echo Yii::t(
+    'app',
+    'We have sent an email with a link for your confirmation, please check your inbox'
+);
+echo '</p>';
+echo Yii::$app->view->render('@app/views/partials/_links_return_to');
+echo '
             </div>
         </div>
         <div class="col-sm-3 "> &nbsp; </div>

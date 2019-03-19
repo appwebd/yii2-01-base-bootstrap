@@ -1,23 +1,23 @@
 <?php
 /**
-  * Permission
-  *
-  * @package     form of Permission
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 19:28:33
-  * @version     1.0
-*/
+ * Permission
+ *
+ * @package     form of Permission
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-07-30 19:28:33
+ * @version     1.0
+ */
 
 use app\components\UiComponent;
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Html;
 use app\models\Action;
 use app\models\Controllers;
 use app\models\Permission;
 use app\models\Profile;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Permission */
@@ -40,9 +40,9 @@ echo '</p></div><div class="col-sm-7">';
 
 $form = ActiveForm::begin(
     [
-       'id' => 'form-permission',
-       'method'  => 'post',
-       'options' => ['class' => 'form-vertical webpage'],
+        'id' => 'form-permission',
+        'method' => 'post',
+        'options' => ['class' => 'form-vertical webpage'],
     ]
 );
 
@@ -51,7 +51,7 @@ $items = Profile::getProfileList();
 echo $form->field($model, Permission::PROFILE_ID)->RadioList(
     $items,
     [
-        PROMPT=>Yii::t('app', 'Select Profile'),
+        PROMPT => Yii::t('app', 'Select Profile'),
         AUTOFOCUS => AUTOFOCUS,
         TABINDEX => 1,
         REQUIRED => REQUIRED,
@@ -68,11 +68,11 @@ echo $form->field($model, Permission::CONTROLLER_ID)->dropDownList(
         TABINDEX => 2,
         REQUIRED => REQUIRED,
         AUTOCOMPLETE => 'off',
-        'onchange'=>'
-            $.get( "'. Yii::$app->urlManager->createUrl('permission/actiondropdown') .
+        'onchange' => '
+            $.get( "' . Yii::$app->urlManager->createUrl('permission/actiondropdown') .
             '", {id: $(this).val()})
                 .done(function( data ) {
-                    $( "#'.Html::getInputId($model, Permission::ACTION_ID) . '" ).html( data );
+                    $( "#' . Html::getInputId($model, Permission::ACTION_ID) . '" ).html( data );
                 }
             );'
     ]
@@ -82,7 +82,7 @@ echo $form->field($model, Permission::CONTROLLER_ID)->dropDownList(
 if ($model->isNewRecord) {
     echo $form->field($model, Permission::ACTION_ID)->dropDownList(
         [
-            1=>'que permiso falta definir aqui'
+            1 => 'que permiso falta definir aqui'
         ],
         [
             AUTOFOCUS => AUTOFOCUS,
@@ -92,35 +92,32 @@ if ($model->isNewRecord) {
         ]
     )->label();
 
-    $model->action_permission=1;
-
+    $model->action_permission = 1;
 } else {
-
     $items = Action::getActionListById($model->controller_id);
     echo $form->field($model, Permission::ACTION_ID)->dropDownList(
-            $items,
-            [
-                PROMPT => Yii::t('app', 'Select Action'),
-                AUTOFOCUS => AUTOFOCUS,
-                TABINDEX => 3,
-                REQUIRED => REQUIRED,
-            ]
+        $items,
+        [
+            PROMPT => Yii::t('app', 'Select Action'),
+            AUTOFOCUS => AUTOFOCUS,
+            TABINDEX => 3,
+            REQUIRED => REQUIRED,
+        ]
     )->label();
 }
 
 echo $form->field($model, Permission::ACTION_PERMISSION)->checkbox(
     [
-        UNCHECK => 0,                
-        AUTOFOCUS   => AUTOFOCUS,
-        TABINDEX    => 4,
+        AUTOFOCUS => AUTOFOCUS,
+        TABINDEX => 4,
+        UNCHECK => 0,
     ]
 );
 
 echo '<div class=\'form-group\'>';
-    echo UiComponent::buttonsCreate(5);
-    echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
+echo UiComponent::buttonsCreate(5);
+echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
 echo '</div>';
 ActiveForm::end();
 
 echo '</div></div>';
-

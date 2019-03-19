@@ -14,15 +14,15 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use app\components\UiComponent;
 use app\models\Profile;
-use app\models\search\ProfileSearch;
 use app\models\queries\Common;
+use app\models\search\ProfileSearch;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class ProfileController
@@ -47,7 +47,7 @@ class ProfileController extends Controller
      *
      * @param object $action action
      *
-     * @return mixed
+     * @return mixed \yii\web\Response
      * @throws \yii\web\BadRequestHttpException
      */
     public function beforeAction($action)
@@ -71,25 +71,25 @@ class ProfileController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                 'only' => [
+                'only' => [
                     ACTION_CREATE,
                     ACTION_DELETE,
                     ACTION_INDEX,
                     ACTION_REMOVE,
-                     self::ACTION_TOGGLE_ACTIVE,
+                    self::ACTION_TOGGLE_ACTIVE,
                     ACTION_UPDATE,
                     ACTION_VIEW
-                    ],
+                ],
                 'rules' => [
                     [
                         ACTIONS => [
-                           ACTION_CREATE,
-                           ACTION_DELETE,
-                           ACTION_INDEX,
-                           ACTION_REMOVE,
-                           self::ACTION_TOGGLE_ACTIVE,
-                           ACTION_UPDATE,
-                           ACTION_VIEW
+                            ACTION_CREATE,
+                            ACTION_DELETE,
+                            ACTION_INDEX,
+                            ACTION_REMOVE,
+                            self::ACTION_TOGGLE_ACTIVE,
+                            ACTION_UPDATE,
+                            ACTION_VIEW
                         ],
                         ALLOW => true,
                         ROLES => ['@'],
@@ -101,11 +101,11 @@ class ProfileController extends Controller
                 ACTIONS => [
                     ACTION_CREATE => ['get', 'post'],
                     ACTION_DELETE => ['post'],
-                    ACTION_INDEX  => ['get'],
+                    ACTION_INDEX => ['get'],
                     ACTION_REMOVE => ['post'],
-                    self::ACTION_TOGGLE_ACTIVE =>['post'],
+                    self::ACTION_TOGGLE_ACTIVE => ['post'],
                     ACTION_UPDATE => ['get', 'post'],
-                    ACTION_VIEW   => ['get'],
+                    ACTION_VIEW => ['get'],
                 ],
             ],
         ];
@@ -123,10 +123,42 @@ class ProfileController extends Controller
 
         $model = new Profile();
         if ($model->load(Yii::$app->request->post())) {
-            return $this->saveRecord($model);
+            $this->saveRecord($model);
         }
 
-        return $this->render(ACTION_CREATE, [MODEL=> $model]);
+        return $this->render(ACTION_CREATE, [MODEL => $model]);
+    }
+
+    /**
+     * @param object $model
+     * @return bool|\yii\web\Response
+     * @throws \yii\db\Exception
+     */
+    private function saveRecord($model)
+    {
+        try {
+            $status = Common::transaction($model, 'save');
+            BaseController::saveReport($status);
+            if ($status) {
+                $primary_key = BaseController::stringEncode($model->profile_id);
+                return $this->redirect([ACTION_VIEW, 'id' => $primary_key]);
+            } else {
+                $this->refresh();
+            }
+        } catch (\yii\db\Exception $error_exception) {
+            BaseController::bitacoraAndFlash(
+                Yii::t(
+                    'app',
+                    ERROR_MODULE,
+                    [
+                        MODULE => 'app\models\queries\Common::transaction method: save',
+                        ERROR => $error_exception
+                    ]
+                ),
+                MSG_ERROR
+            );
+        }
+        return false;
     }
 
     /**
@@ -141,28 +173,28 @@ class ProfileController extends Controller
      */
     public function actionDelete($id)
     {
-        if (! BaseController::okRequirements(ACTION_DELETE)) {
+        if (!BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $model = $this->findModel($id);
-        $profile_id = $model->profile_id;
-        if ($this->fkCheck($profile_id)==0) {
-            if (Common::transaction($model, 'delete')) {
-                BaseController::bitacoraAndFlash(
-                    Yii::t(
-                        'app',
-                        'Record {id} has been deleted',
-                        ['id' => $model->profile_id]
-                    ),
-                    MSG_SUCCESS
-                );
-            }
-        } else {
-            BaseController::bitacoraAndFlash(
+
+        if ($this->fkCheck($model->profile_id)) {
+            BaseController::deleteReport(2);
+            return $this->redirect([ACTION_INDEX]);
+        }
+        try {
+            $status = Common::transaction($model, 'delete');
+            BaseController::deleteReport($status);
+        } catch (\Exception $error_exception) {
+            BaseController::bitacora(
                 Yii::t(
                     'app',
-                    'Record could not be deleted because it is being used in the system'
+                    TRANSACTION_MODULE,
+                    [
+                        METHOD => 'delete',
+                        MODULE => 'app\controllers\UserController::actionDelete',
+                    ]
                 ),
                 MSG_ERROR
             );
@@ -195,6 +227,28 @@ class ProfileController extends Controller
     }
 
     /**
+     * Check nro. records found in other tables related.
+     *
+     * @param integer $profileId integer Primary Key of table Profile
+     *
+     * @return int numbers of rows in other tables with integrity referential found.
+     */
+    private function fkCheck($profileId)
+    {
+        $nro_regs = Common::getNroRowsForeignkey(
+            'permission',
+            self::PROFILE_ID,
+            $profileId
+        );
+
+        return $nro_regs + Common::getNroRowsForeignkey(
+                'user',
+                self::PROFILE_ID,
+                $profileId
+            );
+    }
+
+    /**
      * Lists all Profile models.
      *
      * @return mixed
@@ -202,18 +256,18 @@ class ProfileController extends Controller
     public function actionIndex()
     {
 
-        $searchModelProfile  = new ProfileSearch();
-        $dataProviderProfile = $searchModelProfile->search(Yii::$app->request->queryParams);
+        $sm_profile = new ProfileSearch();
+        $dp_profile = $sm_profile->search(Yii::$app->request->queryParams);
 
-        $pageSize = UiComponent::pageSize();
-        $dataProviderProfile->pagination->pageSize=$pageSize;
+        $page_size = UiComponent::pageSize();
+        $dp_profile->pagination->pageSize = $page_size;
 
         return $this->render(
             ACTION_INDEX,
             [
-                'searchModelProfile' => $searchModelProfile,
-                'dataProviderProfile' => $dataProviderProfile,
-                'pageSize' => $pageSize
+                'searchModelProfile' => $sm_profile,
+                'dataProviderProfile' => $dp_profile,
+                'pageSize' => $page_size
             ]
         );
     }
@@ -229,8 +283,8 @@ class ProfileController extends Controller
 
         $result = Yii::$app->request->post('selection');
 
-        if (! BaseController::okRequirements(ACTION_DELETE) ||
-            ! BaseController::okSeleccionItems($result)
+        if (!BaseController::okRequirements(ACTION_DELETE) ||
+            !BaseController::okSeleccionItems($result)
         ) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -239,17 +293,32 @@ class ProfileController extends Controller
         $delete_ko = "";
         $nro_selections = sizeof($result);
         for ($i = 0; $i < $nro_selections; $i++) {
-            $profile_id = $result[$i];
-
-            if (($model = Profile::findOne($profile_id)) !== null) {
-                $profile_id = $model->profile_id;
-                if ($this->fkCheck($profile_id) <= 0) {
-                    if (Common::transaction($model, 'delete')) {
-                        $delete_ok.= $profile_id  . ", ";
+            try {
+                $profile_id = $result[$i];
+                if (($model = Profile::findOne($profile_id)) !== null) {
+                    $profile_id = $model->profile_id;
+                    if ($this->fkCheck($profile_id) <= 0) {
+                        if (Common::transaction($model, 'delete')) {
+                            $delete_ok .= $profile_id . ", ";
+                        } else {
+                            $delete_ko .= $profile_id . ", ";
+                        }
+                    } else {
+                        $delete_ko .= $profile_id . ", ";
                     }
-                } else {
-                    $delete_ko .= $profile_id . ", ";
                 }
+            } catch (\Exception $exception) {
+                BaseController::bitacora(
+                    Yii::t(
+                        'app',
+                        ERROR_MODULE,
+                        [
+                            MODULE => 'app\controllers\ProfileController::actionRemove',
+                            ERROR => $exception
+                        ]
+                    ),
+                    MSG_ERROR
+                );
             }
         }
 
@@ -287,49 +356,6 @@ class ProfileController extends Controller
 
         return $this->redirect([ACTION_INDEX]);
     }
-    /**
-     * @param object $model
-     * @return bool|\yii\web\Response
-     * @throws \yii\db\Exception
-     */
-    private function saveRecord($model)
-    {
-        try {
-            if (Common::transaction($model, 'save')) {
-                Yii::$app->session->setFlash(
-                    SUCCESS,
-                    Yii::t(
-                        'app',
-                        'Record saved successfully'
-                    )
-                );
-                $primaryKey = BaseController::stringEncode($model->profile_id);
-                return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
-            } else {
-                Yii::$app->session->setFlash(
-                    ERROR,
-                    Yii::t(
-                        'app',
-                        'Error saving record'
-                    )
-                );
-                $this->refresh();
-            }
-        } catch (\yii\db\Exception $e) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [
-                        MODULE => 'app\models\queries\Common::transaction method: save',
-                        ERROR => $e
-                    ]
-                ),
-                MSG_ERROR
-            );
-        }
-        return false;
-    }
 
     /**
      * Updates an existing Profile model.
@@ -348,7 +374,7 @@ class ProfileController extends Controller
             return $this->saveRecord($model);
         }
 
-        return $this->render(ACTION_UPDATE, [MODEL=> $model]);
+        return $this->render(ACTION_UPDATE, [MODEL => $model]);
     }
 
     /**
@@ -363,31 +389,9 @@ class ProfileController extends Controller
     {
         $model = $this->findModel($id);
         BaseController::bitacora(
-            Yii::t('app', 'view record {id}', ['id'=>$model->profile_id]),
+            Yii::t('app', 'view record {id}', ['id' => $model->profile_id]),
             MSG_INFO
         );
         return $this->render(ACTION_VIEW, [MODEL => $model]);
-    }
-
-    /**
-     * Check nro. records found in other tables related.
-     *
-     * @param integer $profileId integer Primary Key of table Profile
-     *
-     * @return int numbers of rows in other tables with integrity referential found.
-     */
-    private function fkCheck($profileId)
-    {
-        $nro_regs = Common::getNroRowsForeignkey(
-            'permission',
-            self::PROFILE_ID,
-            $profileId
-        );
-
-        return $nro_regs + Common::getNroRowsForeignkey(
-            'user',
-            self::PROFILE_ID,
-            $profileId
-        );
     }
 }

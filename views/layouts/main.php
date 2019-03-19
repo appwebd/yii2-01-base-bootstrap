@@ -12,12 +12,13 @@
  */
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
+use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
 
 AppAsset::register($this);
 
@@ -31,7 +32,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta http-equiv="cache-control" content="no-cache">
-    <meta http-equiv="pragma" content="no-cache" >
+    <meta http-equiv="pragma" content="no-cache">
 
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
@@ -40,33 +41,33 @@ AppAsset::register($this);
 <body class="body">
 
 
-    <?php
+<?php
 
-    $this->beginBody();
+$this->beginBody();
 
-    if (Yii::$app->user->isGuest) {
-        echo Yii::$app->view->render('@app/views/partials/_menuGuest');
-    } else {
-        echo Yii::$app->view->render('@app/views/partials/_menuAdmin');
-    }
+if (Yii::$app->user->isGuest) {
+    echo Yii::$app->view->render('@app/views/partials/_menuGuest');
+} else {
+    echo Yii::$app->view->render('@app/views/partials/_menuAdmin');
+}
 
-    echo Breadcrumbs::widget([
-        'links' => isset($this->params[BREADCRUMBS]) ? $this->params[BREADCRUMBS] : [],
-    ]);
+echo Breadcrumbs::widget([
+    'links' => isset($this->params[BREADCRUMBS]) ? $this->params[BREADCRUMBS] : [],
+]);
 
-    echo '<div class="webpage">';
-        echo Alert::widget() ;
-    echo '</div>';
-    
-    echo '<div class="webpage">';
-    echo $content;
-    echo '</div>';
-    
-    echo Yii::$app->view->render('@app/views/partials/_footer');
+echo '<div class="webpage">';
+echo Alert::widget();
+echo '</div>';
 
-    $this->endBody() ;
+echo '<div class="webpage">';
+echo $content;
+echo '</div>';
 
-    ?>
+echo Yii::$app->view->render('@app/views/partials/_footer');
+
+$this->endBody();
+
+?>
 
 
 </body>

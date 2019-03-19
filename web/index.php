@@ -1,15 +1,15 @@
 <?php
 /**
-  * Bitacora
-  *
-  * @package     Bitacora
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private comercial license
-  * @link        https://appwebd.github.io
-  * @date        2018-09-03 14:50:33
-  * @version     1.0
-*/
+ * Bitacora
+ *
+ * @package     Bitacora
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private comercial license
+ * @link        https://appwebd.github.io
+ * @date        2018-09-03 14:50:33
+ * @version     1.0
+ */
 
 require __DIR__ . '/constant.php';
 

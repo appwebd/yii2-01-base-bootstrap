@@ -1,20 +1,20 @@
 <?php
 /**
-  * Informative status of events in all the platform
-  *
-  * @package     Index of Status
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 19:28:34
-  * @version     1.0
-*/
+ * Informative status of events in all the platform
+ *
+ * @package     Index of Status
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-07-30 19:28:34
+ * @version     1.0
+ */
 
-use yii\grid\GridView;
 use app\components\UiComponent;
 use app\controllers\BaseController;
 use app\models\Status;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\StatusSearch */

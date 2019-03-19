@@ -1,32 +1,49 @@
 <?php
 /**
-  * Informative status of events in all the platform
-  *
-  * @package     Model Search of Status
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 20:29:24
-  * @version     1.0
-*/
+ * Informative status of events in all the platform
+ *
+ * @package     Model Search of Status
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-07-30 20:29:24
+ * @version     1.0
+ */
 
 namespace app\models\search;
 
+use app\models\Status;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use app\models\Status;
 
 /**
  * StatusSearch represents the model behind the search form about `app\models\Status`.
  */
-
 class StatusSearch extends Status
 {
-    const ACTIVE          = 'active';
-    const STATUS_ID       = 'status_id';
-    const STATUS_NAME     = 'status_name';
+    const ACTIVE = 'active';
+    const STATUS_ID = 'status_id';
+    const STATUS_NAME = 'status_name';
+
+    /**
+     * Get array from Status (Only records that exists on table $table)
+     * @param $table
+     * @return array
+     */
+    public static function getStatusListSearch($table)
+    {
+        $sqlcode = 'SELECT DISTINCT ' . self::STATUS_ID . ', ' . self::STATUS_NAME . '
+                    FROM status
+                    WHERE ' . self::STATUS_ID . ' in (SELECT DISTINCT ' . self::STATUS_ID . '
+                                            FROM ' . $table . '
+                                       )  ORDER BY ' . self::STATUS_NAME;
+        $droptions = Status::findBySql($sqlcode)
+            ->orderBy([self::STATUS_NAME => SORT_ASC])
+            ->asArray()->all();
+        return ArrayHelper::map($droptions, self::STATUS_ID, self::STATUS_NAME);
+    }
 
     /**
      * Add related fields to searchable attributes
@@ -36,15 +53,15 @@ class StatusSearch extends Status
     public function attributes()
     {
         return array_merge(parent::attributes(), [
-                                                   'blocked.status_id',
-                                                   'logs.status_id',
+            'blocked.status_id',
+            'logs.status_id',
 
-                                                  ]);
+        ]);
     }
 
     /**
-    * @return array the validation rules.
-    */
+     * @return array the validation rules.
+     */
     public function rules()
     {
         return [
@@ -52,7 +69,7 @@ class StatusSearch extends Status
             [[self::ACTIVE], 'boolean'],
             [[self::STATUS_NAME], 'safe'],
 
-         ];
+        ];
     }
 
     /**
@@ -60,7 +77,7 @@ class StatusSearch extends Status
      */
     public function scenarios()
     {
-      // bypass scenarios() implementation in the parent class
+        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
@@ -79,10 +96,10 @@ class StatusSearch extends Status
         ]);
 
         /**
-        * Setup your sorting attributes
-        */
+         * Setup your sorting attributes
+         */
         $dataProvider->setSort([
-            'defaultOrder' => [self::STATUS_ID=>SORT_ASC],
+            'defaultOrder' => [self::STATUS_ID => SORT_ASC],
         ]);
         $this->load($params);
 
@@ -91,10 +108,10 @@ class StatusSearch extends Status
         }
 
         $query->andFilterWhere([
-            'status.active'          => $this->active,
-            'status.status_id'       => $this->status_id,
-            'blocked.status_id'      => $this->status_id,
-            'logs.status_id'         => $this->status_id,
+            'status.active' => $this->active,
+            'status.status_id' => $this->status_id,
+            'blocked.status_id' => $this->status_id,
+            'logs.status_id' => $this->status_id,
 
         ]);
 
@@ -102,25 +119,6 @@ class StatusSearch extends Status
         $query->andFilterWhere(['like', 'status.status_name', $this->status_name]);
 
 
-
         return $dataProvider;
-    }
-
-    /**
-     * Get array from Status (Only records that exists on table $table)
-     * @param $table
-     * @return array
-     */
-    public static function getStatusListSearch($table)
-    {
-        $sqlcode = 'SELECT DISTINCT '. self::STATUS_ID. ', '. self::STATUS_NAME .'
-                    FROM status
-                    WHERE '. self::STATUS_ID. ' in (SELECT DISTINCT '. self::STATUS_ID. '
-                                            FROM '. $table. '
-                                       )  ORDER BY ' . self::STATUS_NAME;
-        $droptions = Status::findBySql($sqlcode)
-                     ->orderBy([self::STATUS_NAME => SORT_ASC])
-                     ->asArray()->all();
-        return ArrayHelper::map($droptions, self::STATUS_ID, self::STATUS_NAME);
     }
 }

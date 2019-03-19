@@ -1,26 +1,26 @@
 <?php
 /**
-  * Common routines
-  *
-  * @package     Common funcions
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-08-23 19:19:35
-  * @version     1.0
-*/
+ * Common routines
+ *
+ * @package     Common funcions
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-08-23 19:19:35
+ * @version     1.0
+ */
 
 namespace app\models\queries;
 
-use yii;
-use yii\db\ActiveQuery;
-use yii\db\Query;
-use yii\db\Exception;
 use app\controllers\BaseController;
 use app\models\Action;
 use app\models\Controllers;
 use app\models\Permission;
+use yii;
+use yii\db\ActiveQuery;
+use yii\db\Exception;
+use yii\db\Query;
 
 class Common extends ActiveQuery
 {
@@ -28,7 +28,7 @@ class Common extends ActiveQuery
     const PERMIT_ACCESS = 1;
     const PROFILE_ID_ADMINISTRATOR = 99;
     const PROFILE_ID_VISIT = 0;
-    const DONT_REMOVE= 1;
+    const DONT_REMOVE = 1;
     const ROWS_ZERO = 0;
     const ROWS_ONE = 1;
     const USER_ID_VISIT = 0;
@@ -44,7 +44,7 @@ class Common extends ActiveQuery
             $now = Common::getNow();
 
             $return = 10000; // default any value greather than zero
-            $differenceMinutes= (strtotime($now) - strtotime($dateInitial))/60; // answer in minutes
+            $differenceMinutes = (strtotime($now) - strtotime($dateInitial)) / 60; // answer in minutes
             if (isset($differenceMinutes)) {
                 $return = $differenceMinutes;
             }
@@ -60,6 +60,22 @@ class Common extends ActiveQuery
             );
         }
         return 10000; // default any value greather than zero
+    }
+
+    /**
+     * @return string Get date time
+     * @throws yii\db\Exception
+     */
+    public static function getNow()
+    {
+        $result = ((new Query())->select('now()')
+            ->limit(1)->createCommand())->queryColumn();
+
+        $return = date(DATEFORMAT);
+        if (isset($result[0])) {
+            $return = $result[0];
+        }
+        return $return;
     }
 
     /**
@@ -102,7 +118,7 @@ class Common extends ActiveQuery
     public static function getNroRows($table)
     {
 
-        $count = (new Query())->select('COUNT(*)')->from($table) ->limit(1);
+        $count = (new Query())->select('COUNT(*)')->from($table)->limit(1);
 
         $return = Common::ROWS_ZERO;
         if (isset($count)) {
@@ -132,33 +148,26 @@ class Common extends ActiveQuery
     }
 
     /**
-     * @return string Get date time
-     * @throws yii\db\Exception
+     * @param $showButtons string what buttons should show in the view
+     * @return string
      */
-    public static function getNow()
+    public static function getProfilePermissionString($showButtons = '111')
     {
-        $result = ((new Query())->select('now()')
-            ->limit(1)->createCommand())->queryColumn();
+        $aButton = str_split($showButtons, 1);
 
-        $return = date(DATEFORMAT);
-        if (isset($result[0])) {
-            $return = $result[0];
-        }
-        return $return;
-    }
-
-    /**
-     * @return int profile of User
-     */
-    public static function getProfile()
-    {
-        $profileId = Common::PROFILE_ID_VISIT;
-
-        if (isset(Yii::$app->user->identity->profile->profile_id)) {
-            $profileId = Yii::$app->user->identity->profile->profile_id;
+        $template = '';
+        if ($aButton[0] && Common::getProfilePermission('view')) {
+            $template .= ' {view} ';
         }
 
-        return $profileId;
+        if ($aButton[1] && Common::getProfilePermission('update')) {
+            $template .= ' {update} ';
+        }
+
+        if ($aButton[2] && Common::getProfilePermission('delete')) {
+            $template .= ' {delete}';
+        }
+        return $template;
     }
 
     /**
@@ -190,7 +199,7 @@ class Common extends ActiveQuery
                 Yii::t(
                     'app',
                     ERROR_MODULE,
-                    [MODULE=> 'app\models\queries\Common::getProfilePermission', ERROR => $e]
+                    [MODULE => 'app\models\queries\Common::getProfilePermission', ERROR => $e]
                 ),
                 MSG_ERROR
             );
@@ -198,29 +207,21 @@ class Common extends ActiveQuery
         }
 
         return $actionPermission;
+
     }
 
     /**
-     * @param $showButtons string what buttons should show in the view
-     * @return string
+     * @return int profile of User
      */
-    public static function getProfilePermissionString($showButtons = '111')
+    public static function getProfile()
     {
-        $aButton = str_split($showButtons, 1);
+        $profileId = Common::PROFILE_ID_VISIT;
 
-        $template = '';
-        if ($aButton[0] && Common::getProfilePermission('view')) {
-            $template .=' {view} ';
+        if (isset(Yii::$app->user->identity->profile->profile_id)) {
+            $profileId = Yii::$app->user->identity->profile->profile_id;
         }
 
-        if ($aButton[1] && Common::getProfilePermission('update')) {
-            $template .=' {update} ';
-        }
-
-        if ($aButton[2] && Common::getProfilePermission('delete')) {
-            $template .=' {delete}';
-        }
-        return $template;
+        return $profileId;
     }
 
     /**
@@ -229,7 +230,7 @@ class Common extends ActiveQuery
     public static function isActive()
     {
         return function ($model) {
-            return ($model->active==1)? Yii::t('app', 'Yes'):'No';
+            return ($model->active == 1) ? Yii::t('app', 'Yes') : 'No';
         };
     }
 
@@ -248,23 +249,23 @@ class Common extends ActiveQuery
         $rows = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
 
         $dropdown = Yii::t('app', 'Please select one option');
-        $dropdown  = HTML_OPTION  . $dropdown . HTML_OPTION_CLOSE;
+        $dropdown = HTML_OPTION . $dropdown . HTML_OPTION_CLOSE;
 
-        if (count($rows)>0) {
+        if (count($rows) > 0) {
             foreach ($rows as $row) {
-                $dropdown  .= '<option value='.$row->$key.'>'.$row->$value . HTML_OPTION_CLOSE;
+                $dropdown .= '<option value=' . $row->$key . '>' . $row->$value . HTML_OPTION_CLOSE;
             }
         } else {
-            $dropdown  .= HTML_OPTION . Yii::t('app', 'No results found') . HTML_OPTION_CLOSE;
+            $dropdown .= HTML_OPTION . Yii::t('app', 'No results found') . HTML_OPTION_CLOSE;
         }
 
-        return $dropdown ;
+        return $dropdown;
     }
 
     /**
      * Execute   the database transactions
      *
-     * @param object $model  mixed class defined in @app\models\
+     * @param object $model mixed class defined in @app\models\
      * @param string $method the method associated with the model (save, delete)
      *
      * @return bool Success o failed to create/update a $model in this view
@@ -272,7 +273,7 @@ class Common extends ActiveQuery
      */
     public static function transaction(&$model, $method)
     {
-        $transaction        = Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         try {
             if ($model->$method()) {
                 $transaction->commit();
@@ -290,13 +291,13 @@ class Common extends ActiveQuery
                 return true;
             }
             $transaction->rollBack();
-        } catch (\Exception $exception) {
+        } catch (\yii\db\Exception $exception) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
                     ERROR_MODULE,
                     [
-                        MODULE => 'app\models\queries\Common::transaction method:'.$method,
+                        MODULE => 'app\models\queries\Common::transaction method:' . $method,
                         ERROR => $exception
                     ]
                 ),
@@ -328,7 +329,7 @@ class Common extends ActiveQuery
                 Yii::t(
                     'app',
                     ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $e]
+                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:' . $sqlcode, ERROR => $e]
                 ),
                 MSG_ERROR
             );
@@ -338,7 +339,7 @@ class Common extends ActiveQuery
                 Yii::t(
                     'app',
                     ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:'.$sqlcode, ERROR => $e]
+                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:' . $sqlcode, ERROR => $e]
                 ),
                 MSG_ERROR
             );

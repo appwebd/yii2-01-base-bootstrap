@@ -11,10 +11,10 @@
   * @version     1.0
 */
 
-use yii\grid\GridView;
 use app\components\UiComponent;
 use app\controllers\BaseController;
 use app\models\Controllers;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\ControllersSearch */

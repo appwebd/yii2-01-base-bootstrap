@@ -2,17 +2,17 @@
 
 namespace app\controllers;
 
+use app\models\Action;
+use app\models\Controllers;
+use app\models\Logs;
+use app\models\queries\Common;
+use app\models\Status;
+use app\models\User;
 use Yii;
 use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use app\models\queries\Common;
-use app\models\Action;
-use app\models\Logs;
-use app\models\Controllers;
-use app\models\Status;
-use app\models\User;
 
 /**
  * Class BaseController
@@ -28,109 +28,13 @@ use app\models\User;
 class BaseController extends Controller
 {
 
-    const SHA256       = 'sha256';
+    const SHA256 = 'sha256';
     const ENCRIPTED_METHOD = 'AES-256-CBC';
     const SECRET_KEY = 'money20343';
-    const SECRET_IV  = '2034312280';
+    const SECRET_IV = '2034312280';
     const DATE_FORMAT = 'php:Y-m-d';
     const DATETIME_FORMAT = 'php:Y-m-d H:i:s';
     const TIME_FORMAT = 'php:H:i:s';
-
-    /**
-     * Save in table logs all events and activities of this web application
-     *
-     * @param string $event events or activities
-     * @param integer $statusId status_id related to table status
-     * @return void
-     */
-    public static function bitacora($event, $statusId)
-    {
-        $error   = false;
-        $model             = new Logs();
-        $model->status_id  = $statusId;
-        $model->event      = $event;
-        $model->user_id    = User::getIdentityUserId();
-        $actionName        = Yii::$app->controller->action->id; // Action name
-        $controllerName    = Yii::$app->controller->id;         // controller name
-
-        $modelControllers  = Controllers::getControllers($controllerName);
-        if ($modelControllers) {
-            $model->controller_id    = $modelControllers->controller_id;
-        } else {
-            Controllers::addControllers($controllerName, 'not verified', 1, 0, 1);
-            $modelControllers = Controllers::getControllers($controllerName);
-            if ($modelControllers) {
-                $model->controller_id = $modelControllers->controller_id;
-            } else {
-                $message = Yii::t(
-                    'app',
-                    'Error creating controlller name: {controller_name}',
-                    ['controllerName' => $controllerName]
-                );
-               Yii::$app->session->setFlash(ERROR, $message);
-                $error = true;
-            }
-        }
-
-        $modelAction = Action::getAction($actionName, $model->controller_id);
-        if ($modelAction) {
-            $model->action_id    = $modelAction->action_id;
-        } else {
-            try {
-                Action::addAction($model->controller_id, $actionName, 'not verified', 1);
-            } catch (Exception $e) {
-                BaseController::bitacora(
-                    Yii::t(
-                        'app',
-                        ERROR_MODULE,
-                        [
-                            MODULE => 'app\controllers\BaseController::bitacora addAction',
-                            ERROR => $e
-                        ]
-                    ),
-                    MSG_ERROR
-                );
-            }
-            $modelAction = Action::getAction($actionName, $model->controller_id);
-            if ($modelAction) {
-                $model->action_id = $modelAction->action_id;
-            } else {
-                $mesage = Yii::t(
-                    'app',
-                    'Error creating action name: {action_name}',
-                    ['action_name' => $actionName]
-                );
-                Yii::$app->session->setFlash(ERROR, $mesage) ;
-                $error = true;
-            }
-        }
-
-
-        if ($error) {
-            $message = Yii::t('app', 'Could not save new log information: {error}', ['error' =>  print_r($model->errors, true)]);
-            Yii::$app->session->setFlash(ERROR, $message);
-        } else {
-            $model->user_agent       = Yii::$app->request->userAgent;
-            $model->ipv4_address     = Yii::$app->getRequest()->getUserIP();
-            $model->ipv4_address_int = ip2long($model->ipv4_address);
-            $model->confirmed        = 0;
-            $model->save();
-        }
-    }
-
-    /**
-     * Save in table logs all events and activities of this web application and flash message respective
-     *
-     * @param string  $event    events or activities
-     * @param integer $statusId status_id related to table status
-     * @return void
-     */
-    public static function bitacoraAndFlash($event, $statusId)
-    {
-        BaseController::bitacora($event, $statusId);
-        $badge = Status::getStatusBadge($statusId);
-        Yii::$app->session->setFlash($badge, $event);
-    }
 
     /**
      * @return array
@@ -170,10 +74,10 @@ class BaseController extends Controller
                 ACTIONS => [
                     ACTION_CREATE => ['get', 'post'],
                     ACTION_DELETE => ['post'],
-                    ACTION_INDEX  => ['get'],
+                    ACTION_INDEX => ['get'],
                     ACTION_REMOVE => ['post'],
                     ACTION_UPDATE => ['get', 'post'],
-                    ACTION_VIEW   => ['get'],
+                    ACTION_VIEW => ['get'],
                 ],
             ],
         ];
@@ -240,11 +144,135 @@ class BaseController extends Controller
     }
 
     /**
+     * Save in table logs all events and activities of this web application and flash message respective
+     *
+     * @param string $event events or activities
+     * @param integer $statusId status_id related to table status
+     * @return void
+     */
+    public static function bitacoraAndFlash($event, $statusId)
+    {
+        BaseController::bitacora($event, $statusId);
+        $badge = Status::getStatusBadge($statusId);
+        Yii::$app->session->setFlash($badge, $event);
+    }
+
+    /**
+     * Save in table logs all events and activities of this web application
+     *
+     * @param string $event events or activities
+     * @param integer $statusId status_id related to table status
+     * @return void
+     */
+    public static function bitacora($event, $statusId)
+    {
+        $error = false;
+        $model = new Logs();
+        $model->status_id = $statusId;
+        $model->event = $event;
+        $model->user_id = User::getIdentityUserId();
+        $actionName = Yii::$app->controller->action->id; // Action name
+        $controllerName = Yii::$app->controller->id;         // controller name
+
+        $modelControllers = Controllers::getControllers($controllerName);
+        if ($modelControllers) {
+            $model->controller_id = $modelControllers->controller_id;
+        } else {
+            Controllers::addControllers($controllerName, 'not verified', 1, 0, 1);
+            $modelControllers = Controllers::getControllers($controllerName);
+            if ($modelControllers) {
+                $model->controller_id = $modelControllers->controller_id;
+            } else {
+                $message = Yii::t(
+                    'app',
+                    'Error creating controlller name: {controller_name}',
+                    ['controllerName' => $controllerName]
+                );
+                Yii::$app->session->setFlash(ERROR, $message);
+                $error = true;
+            }
+        }
+
+        $modelAction = Action::getAction($actionName, $model->controller_id);
+        if ($modelAction) {
+            $model->action_id = $modelAction->action_id;
+        } else {
+            try {
+                Action::addAction($model->controller_id, $actionName, 'not verified', 1);
+            } catch (Exception $e) {
+                BaseController::bitacora(
+                    Yii::t(
+                        'app',
+                        ERROR_MODULE,
+                        [
+                            MODULE => 'app\controllers\BaseController::bitacora addAction',
+                            ERROR => $e
+                        ]
+                    ),
+                    MSG_ERROR
+                );
+            }
+            $modelAction = Action::getAction($actionName, $model->controller_id);
+            if ($modelAction) {
+                $model->action_id = $modelAction->action_id;
+            } else {
+                $mesage = Yii::t(
+                    'app',
+                    'Error creating action name: {action_name}',
+                    ['action_name' => $actionName]
+                );
+                Yii::$app->session->setFlash(ERROR, $mesage);
+                $error = true;
+            }
+        }
+
+
+        if ($error) {
+            $message = Yii::t('app', 'Could not save new log information: {error}', ['error' => print_r($model->errors, true)]);
+            Yii::$app->session->setFlash(ERROR, $message);
+        } else {
+            $model->user_agent = Yii::$app->request->userAgent;
+            $model->ipv4_address = Yii::$app->getRequest()->getUserIP();
+            $model->ipv4_address_int = ip2long($model->ipv4_address);
+            $model->confirmed = 0;
+            $model->save();
+        }
+    }
+
+    /**
+     * To show information about status delete record
+     *
+     * @param integer $status false=0/true=1/2 of transaction delete record in table
+     * @return void
+     */
+    public static function deleteReport($status)
+    {
+
+        switch ($status) {
+            case 0:
+                $msg_text = 'Record has been deleted';
+                $msg_status = SUCCESS;
+                break;
+            case 1:
+                $msg_text = 'There was an error removing the record';
+                $msg_status = ERROR;
+                break;
+            default:
+                $msg_text = 'Record could not be deleted because it is being used in the system';
+                $msg_status = ERROR;
+                break;
+        }
+
+        $msg_text = Yii::t('app', $msg_text);
+        Yii::$app->session->setFlash($msg_status, $msg_text);
+    }
+
+    /**
      * @return string
      */
     public static function getDirectoryUpload()
     {
-        $uploadDirectory =  Yii::$app->params['upload_directory'];
+        $uploadDirectory = Yii::$app->params['upload_directory'];
         if (!isset($uploadDirectory)) {
             $uploadDirectory = '/web/uploads/';
         }
@@ -255,7 +283,7 @@ class BaseController extends Controller
                 Yii::t(
                     'app',
                     'To upload files was created the directory: {dir}',
-                    ['dir' => $uploadDirectory ]
+                    ['dir' => $uploadDirectory]
                 ),
                 MSG_ERROR
             );
@@ -267,7 +295,7 @@ class BaseController extends Controller
     /**
      * Previous requirement to remove a records
      *
-     * @param $action string for valid if this request is Post and get profile permission
+     * @param string $action valid if this request is Post and get profile permission
      * @return boolean
      */
     public static function okRequirements($action)
@@ -295,6 +323,7 @@ class BaseController extends Controller
             );
             return false;
         }
+
         return true;
     }
 
@@ -319,6 +348,7 @@ class BaseController extends Controller
         }
         return true;
     }
+
     /**
      * Resume of operation
      *
@@ -360,7 +390,7 @@ class BaseController extends Controller
     {
 
         $randstr = '';
-        srand((double) microtime(true) * 1000000);
+        srand((double)microtime(true) * 1000000);
         //our array add all letters and numbers if you wish
         $chars = array(
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'p',
@@ -377,7 +407,7 @@ class BaseController extends Controller
                     Yii::t(
                         'app',
                         ERROR_MODULE,
-                        [MODULE=> 'app\controllers\BaseControllers::randomString', ERROR => $e]
+                        [MODULE => 'app\controllers\BaseControllers::randomString', ERROR => $e]
                     ),
                     MSG_ERROR
                 );
@@ -385,6 +415,33 @@ class BaseController extends Controller
             $randstr .= $chars[$random];
         }
         return $randstr;
+    }
+
+    /**
+     *  show a status message of saving record
+     *
+     * @param boolean $status
+     * @return void
+     */
+    public static function saveReport($status)
+    {
+        if ($status) {
+            Yii::$app->session->setFlash(
+                SUCCESS,
+                Yii::t(
+                    'app',
+                    'Record saved successfully'
+                )
+            );
+        } else {
+            Yii::$app->session->setFlash(
+                ERROR,
+                Yii::t(
+                    'app',
+                    'Error saving record'
+                )
+            );
+        }
     }
 
     /**
@@ -397,17 +454,17 @@ class BaseController extends Controller
     {
 
         $encryptmethod = self::ENCRIPTED_METHOD;
-        $secretkey     = self::SECRET_KEY;
-        $secretiv      = self::SECRET_IV;
+        $secretkey = self::SECRET_KEY;
+        $secretiv = self::SECRET_IV;
 
         // hash
-        $keyValue    = hash(self::SHA256, $secretkey);
+        $keyValue = hash(self::SHA256, $secretkey);
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $ivencripted     = substr(hash(self::SHA256, $secretiv), 0, 16);
+        $ivencripted = substr(hash(self::SHA256, $secretiv), 0, 16);
         $output = openssl_encrypt($plaintext, $encryptmethod, $keyValue, 0, $ivencripted);
 
-        return  base64_encode($output);
+        return base64_encode($output);
     }
 
     /**
@@ -419,14 +476,14 @@ class BaseController extends Controller
     {
 
         $encryptmethod = self::ENCRIPTED_METHOD;
-        $secretkey     = self::SECRET_KEY;
-        $secretiv      = self::SECRET_IV;
+        $secretkey = self::SECRET_KEY;
+        $secretiv = self::SECRET_IV;
 
         // hash
-        $keyValue     = hash(self::SHA256, $secretkey);
+        $keyValue = hash(self::SHA256, $secretkey);
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $ivencripted             = substr(hash(self::SHA256, $secretiv), 0, 16);
+        $ivencripted = substr(hash(self::SHA256, $secretiv), 0, 16);
         return openssl_decrypt(base64_decode($ciphertext), $encryptmethod, $keyValue, 0, $ivencripted);
     }
 }

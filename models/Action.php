@@ -1,88 +1,49 @@
 <?php
 /**
-  * Actions
-  *
-  * @package     Model of Action
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-08-02 20:07:02
-  * @version     1.0
-*/
+ * Actions
+ *
+ * @package     Model of Action
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-08-02 20:07:02
+ * @version     1.0
+ */
 
 namespace app\models;
 
+use app\controllers\BaseController;
+use app\models\queries\Common;
 use Yii;
-use yii\db\Query;
-use yii\helpers\HtmlPurifier;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
-use app\controllers\BaseController;
-use app\models\queries\Common;
+use yii\helpers\HtmlPurifier;
 
 /**
  * Action
  * Actions
  *
- * @property string          action_description     Description
- * @property int             action_id              Actions
- * @property int             controller_id          Controller Id associated
- * @property string          action_name            Name
- * @property int             active                 Active
+ * @property string action_description     Description
+ * @property int action_id              Actions
+ * @property int controller_id          Controller Id associated
+ * @property string action_name            Name
+ * @property int active                 Active
  *
  */
 class Action extends ActiveRecord
 {
     const ACTION_DESCRIPTION = 'action_description';
-    const ACTION_NAME   = 'action_name';
-    const ACTIVE        = 'active';
-    const ACTION_ID     = 'action_id';
+    const ACTION_NAME = 'action_name';
+    const ACTIVE = 'active';
+    const ACTION_ID = 'action_id';
     const CONTROLLER_ID = 'controller_id';
     const CONTROLLER_CONTROLLER_NAME = 'controllers.controller_name';
     const TABLE = 'action';
     const TITLE = 'Actions';
-
-    /**
-    * @return array the validation rules.
-    */
-    public function rules()
-    {
-        return [
-            [[self::ACTION_DESCRIPTION,
-              self::ACTION_NAME,
-              self::ACTIVE,
-              self::CONTROLLER_ID], 'required'],
-            [self::ACTION_DESCRIPTION, STRING, LENGTH => [1, 80]],
-            [self::ACTION_NAME, STRING, LENGTH => [1, 100]],
-            [[self::ACTION_ID,
-              self::CONTROLLER_ID], 'integer'],
-            [[self::ACTIVE], 'boolean'],
-            [[self::ACTION_DESCRIPTION,
-              self::ACTION_NAME], 'trim'],
-            [[self::ACTION_DESCRIPTION,
-              self::ACTION_NAME], function ($attribute) {
-                $this->$attribute = HtmlPurifier::process($this->$attribute);
-              }
-            ],
-         ];
-    }
-
-    /**
-    * @return array customized attribute labels (name=>label)
-    */
-    public function attributeLabels()
-    {
-        return [
-            self::ACTION_DESCRIPTION => Yii::t('app', 'Description'),
-            self::ACTION_ID        => Yii::t('app', 'Actions'),
-            self::ACTION_NAME      => Yii::t('app', 'Name'),
-            self::ACTIVE           => Yii::t('app', 'Active'),
-            self::CONTROLLER_ID    => Yii::t('app', 'Controller'),
-        ];
-    }
 
     /**
      * Permits add a Action
@@ -99,7 +60,8 @@ class Action extends ActiveRecord
         $actionName,
         $actionDesc,
         $active
-    ) {
+    )
+    {
         $model = new Action();
         $model->controller_id = $controllerId;
         $model->action_name = $actionName;
@@ -110,7 +72,7 @@ class Action extends ActiveRecord
             $message = Yii::t(
                 'app',
                 'OK your action {actionName} was saved.',
-                ['actionName'=>$actionName]
+                ['actionName' => $actionName]
             );
             Yii::$app->session->setFlash(ERROR, $message);
             return true;
@@ -127,48 +89,12 @@ class Action extends ActiveRecord
         return false;
     }
 
-
-    /**
-     * behaviors
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                //'class' => 'yii\behaviors\TimestampBehavior',
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                'value' => new Expression('now()'),
-            ],
-        ];
-    }
-
     /**
      * @return string the name of the table associated with this ActiveRecord class.
      */
     public static function tableName()
     {
         return Action::TABLE;
-    }
-
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getControllers()
-    {
-        return $this->hasOne(Controllers::class, [self::CONTROLLER_ID => self::CONTROLLER_ID]);
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getLogs()
-    {
-        return $this->hasMany(Logs::class, [self::ACTION_ID => self::ACTION_ID]);
     }
 
     /**
@@ -179,7 +105,7 @@ class Action extends ActiveRecord
      */
     public static function getAction($actionName, $controllerId)
     {
-        return static::findOne([self::ACTION_NAME => $actionName, self::CONTROLLER_ID=>$controllerId]);
+        return static::findOne([self::ACTION_NAME => $actionName, self::CONTROLLER_ID => $controllerId]);
     }
 
     /**
@@ -211,6 +137,7 @@ class Action extends ActiveRecord
         }
         return null;
     }
+
     /**
      * Get array from Actions
      * @return array
@@ -230,6 +157,79 @@ class Action extends ActiveRecord
     {
         $droptions = Action::find()->where([self::CONTROLLER_ID => $actionId])->asArray()->all();
         return ArrayHelper::map($droptions, self::ACTION_ID, self::ACTION_NAME);
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [[self::ACTION_DESCRIPTION,
+                self::ACTION_NAME,
+                self::ACTIVE,
+                self::CONTROLLER_ID], 'required'],
+            [self::ACTION_DESCRIPTION, STRING, LENGTH => [1, 80]],
+            [self::ACTION_NAME, STRING, LENGTH => [1, 100]],
+            [[self::ACTION_ID,
+                self::CONTROLLER_ID], 'integer'],
+            [[self::ACTIVE], 'boolean'],
+            [[self::ACTION_DESCRIPTION,
+                self::ACTION_NAME], 'trim'],
+            [[self::ACTION_DESCRIPTION,
+                self::ACTION_NAME], function ($attribute) {
+                $this->$attribute = HtmlPurifier::process($this->$attribute);
+            }
+            ],
+        ];
+    }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels()
+    {
+        return [
+            self::ACTION_DESCRIPTION => Yii::t('app', 'Description'),
+            self::ACTION_ID => Yii::t('app', 'Actions'),
+            self::ACTION_NAME => Yii::t('app', 'Name'),
+            self::ACTIVE => Yii::t('app', 'Active'),
+            self::CONTROLLER_ID => Yii::t('app', 'Controller'),
+        ];
+    }
+
+    /**
+     * behaviors
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                //'class' => 'yii\behaviors\TimestampBehavior',
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => new Expression('now()'),
+            ],
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getControllers()
+    {
+        return $this->hasOne(Controllers::class, [self::CONTROLLER_ID => self::CONTROLLER_ID]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLogs()
+    {
+        return $this->hasMany(Logs::class, [self::ACTION_ID => self::ACTION_ID]);
     }
 
     /**

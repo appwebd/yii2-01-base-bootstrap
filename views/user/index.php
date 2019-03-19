@@ -1,24 +1,24 @@
 <?php
 /**
-  * User
-  *
-  * @package     Index of user
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 14:27:11
-  * @version     1.0
-*/
+ * User
+ *
+ * @package     Index of user
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-07-30 14:27:11
+ * @version     1.0
+ */
 
-use yii\grid\GridView;
-use yii\helpers\Html;
 use app\components\UiComponent;
 use app\controllers\BaseController;
-use app\models\queries\Common;
 use app\models\Profile;
-use app\models\User;
+use app\models\queries\Common;
 use app\models\search\ProfileSearch;
+use app\models\User;
+use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModelUser app\models\search\UserSearch */
@@ -89,13 +89,13 @@ try {
 
         ]
     ]);
-} catch (\yii\db\Exception $e) {
+} catch (\Exception $e) {
     BaseController::bitacora(
         Yii::t(
             'app',
             ERROR_MODULE,
             [
-                MODULE=> '@app\views\user\index',
+                MODULE => '@app\views\user\index',
                 ERROR => $e
             ]
         ),
@@ -111,7 +111,7 @@ try {
             'app',
             ERROR_MODULE,
             [
-                MODULE=> '@app\views\User\index::UiComponent::buttonsAdmin',
+                MODULE => '@app\views\User\index::UiComponent::buttonsAdmin',
                 ERROR => $e
             ]
         ),

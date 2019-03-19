@@ -19,7 +19,7 @@ $this->params[BREADCRUMBS][] = $this->title;
                 <?= Yii::t(
                     'app',
                     'We are sorry, but the application is currently being maintained.<br>Please try again later.'
-                );?>
+                ); ?>
             </p>
             <br>
 

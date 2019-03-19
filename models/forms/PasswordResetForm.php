@@ -1,49 +1,49 @@
 <?php
 /**
-  * Users
-  *
-  * @package     Model of Users
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-06-16 16:49:58
-  * @version     1.0
-*/
+ * Users
+ *
+ * @package     Model of Users
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-06-16 16:49:58
+ * @version     1.0
+ */
 
 namespace app\models\forms;
 
 use app\controllers\BaseController;
+use app\models\User;
 use Yii;
 use yii\base\Model;
-use app\models\User;
 
 /**
  * User
  *
- * @property integer    active                      Active
- * @property string     password_hash               password
- * @property integer    user_id                     User
+ * @property integer active                      Active
+ * @property string password_hash               password
+ * @property integer user_id                     User
  *
  */
 class PasswordResetForm extends Model
 {
-    const PASSW0RD               = 'passw0rd';
-    const USER_ID                = 'user_id';
-    const TITLE                  = 'Users';
+    const PASSW0RD = 'passw0rd';
+    const USER_ID = 'user_id';
+    const TITLE = 'Users';
 
     public $passw0rd;
     public $user_id;
 
     /**
-    * @return array the validation rules.
-    */
+     * @return array the validation rules.
+     */
     public function rules()
     {
         return [
             [[
-              self::PASSW0RD
-              ], 'required'],
+                self::PASSW0RD
+            ], 'required'],
 
             [[self::PASSW0RD], STRING, LENGTH => [8, 255]],
             [[self::USER_ID], STRING],
@@ -51,13 +51,13 @@ class PasswordResetForm extends Model
     }
 
     /**
-    * @return array customized attribute labels (name=>label)
-    */
+     * @return array customized attribute labels (name=>label)
+     */
     public function attributeLabels()
     {
         return [
-            self::PASSW0RD            => Yii::t('app', 'password'),
-            self::USER_ID             => Yii::t('app', 'user'),
+            self::PASSW0RD => Yii::t('app', 'password'),
+            self::USER_ID => Yii::t('app', 'user'),
 
         ];
     }

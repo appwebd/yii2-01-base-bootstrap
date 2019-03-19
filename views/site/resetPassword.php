@@ -1,8 +1,8 @@
 <?php
 
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
 use app\components\UiComponent;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
@@ -19,45 +19,45 @@ echo '
 
             <div class="webpage ">';
 
-                echo UiComponent::header(
-                    'user',
-                    $this->title,
-                    Yii::t(
-                        'app',
-                        'Please, choose your new password'
-                    )
-                );
+echo UiComponent::header(
+    'user',
+    $this->title,
+    Yii::t(
+        'app',
+        'Please, choose your new password'
+    )
+);
 
 
-                $form = ActiveForm::begin([
-                    'id' => 'reset-password-form',
-                    'options' => ['class' => 'form-horizontal webpage'],
-                ]);
+$form = ActiveForm::begin([
+    'id' => 'reset-password-form',
+    'options' => ['class' => 'form-horizontal webpage'],
+]);
 
-                echo $form->field($model, 'password')->passwordInput();
+echo $form->field($model, 'password')->passwordInput();
 
-                echo '
+echo '
                 <div class="form-group">
                     <div class="help-block text-justify">';
-                        echo Yii::t(
-                        'app',
-                        'Your new password will be saved in your user account.'
-                        );
-                        echo '
+echo Yii::t(
+    'app',
+    'Your new password will be saved in your user account.'
+);
+echo '
                     </div>';
 
-                    echo Html::submitButton(
-                    Yii::t('app', 'Save'),
-                    ['class' => 'btn btn-primary']
-                    );
+echo Html::submitButton(
+    Yii::t('app', 'Save'),
+    ['class' => 'btn btn-primary']
+);
 
-                    echo '&nbsp;
+echo '&nbsp;
                 </div>';
 
-                ActiveForm::end();
+ActiveForm::end();
 
-                echo Yii::$app->view->render('@app/views/partials/_links_return_to');
-                echo '
+echo Yii::$app->view->render('@app/views/partials/_links_return_to');
+echo '
             </div>
             <div class="col-sm-3 "> &nbsp;&nbsp; </div>
         </div>

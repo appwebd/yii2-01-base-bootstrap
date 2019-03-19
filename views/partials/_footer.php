@@ -1,55 +1,55 @@
 <?php
 
-const A_HREF='<a href=\'';
+const A_HREF = '<a href=\'';
 
 ?>
 
-<div class="footer-before">
-    <div class="row ">
-        <div class="col-sm-12 text-right ">
-            <p>
-            &nbsp;
-            <?= A_HREF . Yii::$app->urlManager->createUrl('index.php/site/about') . ' \'>' .
-            Yii::t('app', 'ABOUT').'</a>';
-            ?>
-            &nbsp;&nbsp;
-            &bullet;
-            &nbsp;&nbsp;
-            <?= A_HREF . Yii::$app->urlManager->createUrl('index.php/site/cookiePolicy') .' \'>'.
-            Yii::t('app', 'COOKIES POLICY').'</a>';?>
-            &nbsp;&nbsp;
-            &bullet;
-            &nbsp;&nbsp;
-            <?= A_HREF . Yii::$app->urlManager->createUrl('site/privacy_policy') .' \'>'.
-            Yii::t('app', 'PRIVACY POLICY').'</a>';?>
-            &nbsp;&nbsp;
-            &bullet;
-            &nbsp;&nbsp;
-            <?= A_HREF . Yii::$app->urlManager->createUrl('pages/user_agreement') .' \'>'.
-            Yii::t('app', 'TERM OF USE').'</a>';?>
-            </p>
+    <div class="footer-before">
+        <div class="row ">
+            <div class="col-sm-12 text-right ">
+                <p>
+                    &nbsp;
+                    <?= A_HREF . Yii::$app->urlManager->createUrl('index.php/site/about') . ' \'>' .
+                    Yii::t('app', 'ABOUT') . '</a>';
+                    ?>
+                    &nbsp;&nbsp;
+                    &bullet;
+                    &nbsp;&nbsp;
+                    <?= A_HREF . Yii::$app->urlManager->createUrl('index.php/site/cookiePolicy') . ' \'>' .
+                    Yii::t('app', 'COOKIES POLICY') . '</a>'; ?>
+                    &nbsp;&nbsp;
+                    &bullet;
+                    &nbsp;&nbsp;
+                    <?= A_HREF . Yii::$app->urlManager->createUrl('site/privacy_policy') . ' \'>' .
+                    Yii::t('app', 'PRIVACY POLICY') . '</a>'; ?>
+                    &nbsp;&nbsp;
+                    &bullet;
+                    &nbsp;&nbsp;
+                    <?= A_HREF . Yii::$app->urlManager->createUrl('pages/user_agreement') . ' \'>' .
+                    Yii::t('app', 'TERM OF USE') . '</a>'; ?>
+                </p>
+            </div>
         </div>
     </div>
-</div>
-<footer class="footer">
+    <footer class="footer">
 
-  <div class="row">
-        <div class="col-sm-6">
-            <p class="text-left copyright">
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="text-left copyright">
 
-                Copyright 2016-<?php echo date("Y") ?>&nbsp; &nbsp; &copy;&nbsp; &nbsp;
-                <a href="http://appwebd.github.io" title="Patricio Rojas Ortiz">
-                    Patricio Rojas Ortiz
-                </a>
-            </p>
-        </div>
-        <div class="col-sm-6 payment-ways">
+                    Copyright 2016-<?php echo date("Y") ?>&nbsp; &nbsp; &copy;&nbsp; &nbsp;
+                    <a href="http://appwebd.github.io" title="Patricio Rojas Ortiz">
+                        Patricio Rojas Ortiz
+                    </a>
+                </p>
+            </div>
+            <div class="col-sm-6 payment-ways">
                 <div class="payment-icons inline-block">
-                  <div class="payment-icon"> <!--visa -->
-                      <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
-                      "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+                    <div class="payment-icon"> <!--visa -->
+                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+                        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 64 32">
+                             viewBox="0 0 64 32">
                             <path d="M10.781 7.688c-0.251-1.283-1.219-1.688-2.344-1.688h-8.376l-0.061 0.405c5.749
 1.469 10.469 4.595 12.595 10.501l-1.813-9.219zM13.125
 19.688l-0.531-2.781c-1.096-2.907-3.752-5.594-6.752-6.813l4.219
@@ -71,10 +71,10 @@ const A_HREF='<a href=\'';
                         </svg>
                     </div>
                     <div class="payment-icon">  <!--mastercard -->
-                      <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
                         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 64 32">
+                             viewBox="0 0 64 32">
                             <path d="M42.667-0c-4.099 0-7.836 1.543-10.667
 4.077-2.831-2.534-6.568-4.077-10.667-4.077-8.836 0-16 7.163-16
 16s7.164 16 16 16c4.099 0 7.835-1.543 10.667-4.077 2.831 2.534
@@ -142,7 +142,7 @@ const A_HREF='<a href=\'';
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
                         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 64 32">
+                             viewBox="0 0 64 32">
                             <path d="M35.255 12.078h-2.396c-0.229 0-0.444
 0.114-0.572 0.303l-3.306 4.868-1.4-4.678c-0.088-0.292-0.358-0.493-0.663-0.493h-2.355c-0.284
 0-0.485 0.28-0.393 0.548l2.638 7.745-2.481 3.501c-0.195 0.275 0.002 0.655 0.339
@@ -184,8 +184,8 @@ const A_HREF='<a href=\'';
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
                         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 64 32">
-<path d="M14.127 17.572c-0.405 1.693-1.351 2.984-2.842 3.87-1.494 0.888-3.084 1.13-4.778
+                             viewBox="0 0 64 32">
+                            <path d="M14.127 17.572c-0.405 1.693-1.351 2.984-2.842 3.87-1.494 0.888-3.084 1.13-4.778
 0.726-1.774-0.403-3.105-1.37-3.991-2.903-0.889-1.531-1.131-3.144-0.726-4.838 0.403-1.693
 1.37-2.982 2.903-3.87 1.53-0.886 3.144-1.128 4.838-0.726 1.693 0.404 2.981 1.372 3.87 2.903
 0.887 1.532 1.129 3.144 0.726 4.838zM9.41 13.46l0.242-1.089-0.726-0.242-0.242
@@ -251,7 +251,7 @@ const A_HREF='<a href=\'';
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
                         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 64 32">
+                             viewBox="0 0 64 32">
                             <path d="M7.114 14.656c-1.375-0.5-2.125-0.906-2.125-1.531 0-0.531 0.437-0.812 1.188-0.812
 1.437 0 2.875 0.531 3.875 1.031l0.563-3.5c-0.781-0.375-2.406-1-4.656-1-1.594 0-2.906 0.406-3.844 1.188-1 0.812-1.5
 2-1.5 3.406 0 2.563 1.563 3.688 4.125 4.594 1.625 0.594 2.188 1 2.188 1.656 0 0.625-0.531 0.969-1.5 0.969-1.188
@@ -278,7 +278,7 @@ const A_HREF='<a href=\'';
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
                         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 64 32">
+                             viewBox="0 0 64 32">
                             <path d="M8.498 23.915h-1.588l1.322-5.127h-1.832l0.286-1.099h5.259l-0.287
 1.099h-1.837l-1.323 5.127zM13.935 21.526l-0.62 2.389h-1.588l1.608-6.226h1.869c0.822 0 1.44 0.145 1.853 0.435 0.412
 0.289 0.62 0.714 0.62 1.273 0 0.449-0.145 0.834-0.432 1.156-0.289 0.322-0.703 0.561-1.245 0.717l1.359
@@ -319,17 +319,17 @@ const A_HREF='<a href=\'';
                         </svg>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
 <?php
 
 if (YII_DEBUG) {
     echo '<br/><div class=\'row\'><div class=\'col-sm-12 text-center\'><p>';
     echo Yii::t('app', 'Web page loaded in:'), ' ',
-        round((microtime(1) - $_SERVER['REQUEST_TIME_FLOAT'])*1000, 4) ,
-        Yii::t('app', ' ms. using'), ' ', number_format(memory_get_usage() / 1048576, 3),
-        Yii::t('app', ' MB of memory'), '&nbsp;&nbsp;</p>',
+    round((microtime(1) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 4),
+    Yii::t('app', ' ms. using'), ' ', number_format(memory_get_usage() / 1048576, 3),
+    Yii::t('app', ' MB of memory'), '&nbsp;&nbsp;</p>',
     '</div></div>';
 }

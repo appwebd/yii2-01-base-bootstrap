@@ -11,12 +11,12 @@
  * @version     1.0
  */
 
-use yii\grid\GridView;
-use yii\helpers\Html;
 use app\components\UiComponent;
 use app\controllers\BaseController;
-use app\models\queries\Common;
 use app\models\Profile;
+use app\models\queries\Common;
+use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModelProfile app\models\search\ProfileSearch */
@@ -55,7 +55,7 @@ try {
                 FORMAT => 'raw',
                 OPTIONS => [STR_CLASS => 'col-sm-1'],
                 STR_CLASS => yii\grid\DataColumn::class,
-                VALUE =>  Common::isActive()
+                VALUE => Common::isActive()
             ],
             [
                 'buttons' => UiComponent::buttonsActionColumn(),
@@ -72,7 +72,7 @@ try {
         Yii::t(
             'app',
             ERROR_MODULE,
-            [MODULE=> 'app\views\profile\index::GridView::widget', ERROR => $errorexception]
+            [MODULE => 'app\views\profile\index::GridView::widget', ERROR => $errorexception]
         ),
         MSG_ERROR
     );

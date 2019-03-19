@@ -1,8 +1,9 @@
 <?php
+
 namespace app\models\queries;
 
-use yii\db\ActiveQuery;
 use app\models\User;
+use yii\db\ActiveQuery;
 
 class UserQuery extends ActiveQuery
 {
@@ -34,7 +35,7 @@ class UserQuery extends ActiveQuery
     {
         $expire = \Yii::$app->params['user.emailConfirmationTokenExpire'];
         $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
+        $timestamp = (int)end($parts);
         if ($timestamp + $expire < time()) {
             // token expired
             return $this->andWhere('FALSE');
@@ -50,7 +51,7 @@ class UserQuery extends ActiveQuery
     {
         $expire = \Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
+        $timestamp = (int)end($parts);
         if ($timestamp + $expire < time()) {
             // token expired
             return $this->andWhere('FALSE');

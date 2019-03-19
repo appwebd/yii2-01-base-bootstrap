@@ -1,15 +1,15 @@
 <?php
 /**
-  * Company
-  *
-  * @package     Update of Company
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-09-16 18:30:44
-  * @version     1.0
-*/
+ * Company
+ *
+ * @package     Update of Company
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-09-16 18:30:44
+ * @version     1.0
+ */
 
 use app\components\UiComponent;
 use app\models\Company;

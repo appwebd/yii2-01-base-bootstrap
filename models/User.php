@@ -1,74 +1,74 @@
 <?php
 /**
-  * Users
-  *
-  * @package     Model of Users
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-06-16 16:49:58
-  * @version     1.0
-*/
+ * Users
+ *
+ * @package     Model of Users
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-06-16 16:49:58
+ * @version     1.0
+ */
 
 namespace app\models;
 
+use app\controllers\BaseController;
+use app\models\queries\UserQuery;
 use Yii;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\web\IdentityInterface;
 use yii\helpers\HtmlPurifier;
-use app\controllers\BaseController;
-use app\models\queries\UserQuery;
+use yii\web\IdentityInterface;
 
 /**
  * User
  *
- * @property integer    active                      Active
- * @property string     auth_key                    key auth
- * @property string     email                       Email
- * @property string     email_confirmation_token    Email token of confirmation
- * @property integer    email_is_verified           Boolean is email verified
- * @property string     firstName                   First Name
- * @property string     lastName                    Last Name
- * @property string     password_hash               password
- * @property string     password_reset_token        password reset token
- * @property string     password_reset_token_date   password reset token date creation
- * @property integer    profile_id                  Profile
- * @property string     telephone                   Phone number 12 digits
- * @property integer    user_id                     User
- * @property string     username                    User account
- * @property string     ipv4_address_last_login     Ipv4 address of last login
+ * @property integer active                      Active
+ * @property string auth_key                    key auth
+ * @property string email                       Email
+ * @property string email_confirmation_token    Email token of confirmation
+ * @property integer email_is_verified           Boolean is email verified
+ * @property string firstName                   First Name
+ * @property string lastName                    Last Name
+ * @property string password_hash               password
+ * @property string password_reset_token        password reset token
+ * @property string password_reset_token_date   password reset token date creation
+ * @property integer profile_id                  Profile
+ * @property string telephone                   Phone number 12 digits
+ * @property integer user_id                     User
+ * @property string username                    User account
+ * @property string ipv4_address_last_login     Ipv4 address of last login
  *
  */
 class User extends ActiveRecord implements IdentityInterface
 {
 
-    const ACTIVE                        = 'active';
-    const AUTH_KEY                      = 'auth_key';
-    const EMAIL                         = 'email';
-    const EMAIL_CONFIRMATION_TOKEN      = 'email_confirmation_token';
-    const EMAIL_IS_VERIFIED             = 'email_is_verified';
-    const EMAIL_IS_VERIFIES_VALUE       = 1;
-    const FIRSTNAME                     = 'firstName';
-    const IPV4_ADDRESS_LAST_LOGIN       = 'ipv4_address_last_login';
-    const LASTNAME                      = 'lastName';
-    const PASSWORD_HASH                 = 'password_hash';
-    const PASSWORD_RESET_TOKEN          = 'password_reset_token';
-    const PASSWORD_RESET_TOKEN_DATE     = 'password_reset_token_date';
-    const PROFILE_USER                  = 20;
-    const PROFILE_VISIT                 = 0;
-    const PROFILE_ID                    = 'profile_id';
-    const STATUS_ACTIVE                 = 1;
-    const STATUS_DELETED                = 0;
-    const STATUS_FALSE                  = 0;
-    const STATUS_TRUE                   = 1;
-    const TELEPHONE                     = 'telephone';
-    const TITLE                         = 'Users';
-    const USERNAME                      = 'username';
-    const USER_ID                       = 'user_id';
-    const USER_ID_VISIT                 = 1;
+    const ACTIVE = 'active';
+    const AUTH_KEY = 'auth_key';
+    const EMAIL = 'email';
+    const EMAIL_CONFIRMATION_TOKEN = 'email_confirmation_token';
+    const EMAIL_IS_VERIFIED = 'email_is_verified';
+    const EMAIL_IS_VERIFIES_VALUE = 1;
+    const FIRSTNAME = 'firstName';
+    const IPV4_ADDRESS_LAST_LOGIN = 'ipv4_address_last_login';
+    const LASTNAME = 'lastName';
+    const PASSWORD_HASH = 'password_hash';
+    const PASSWORD_RESET_TOKEN = 'password_reset_token';
+    const PASSWORD_RESET_TOKEN_DATE = 'password_reset_token_date';
+    const PROFILE_USER = 20;
+    const PROFILE_VISIT = 0;
+    const PROFILE_ID = 'profile_id';
+    const STATUS_ACTIVE = 1;
+    const STATUS_DELETED = 0;
+    const STATUS_FALSE = 0;
+    const STATUS_TRUE = 1;
+    const TELEPHONE = 'telephone';
+    const TITLE = 'Users';
+    const USERNAME = 'username';
+    const USER_ID = 'user_id';
+    const USER_ID_VISIT = 1;
 
     /**
      * @var string|null the current password value from form input
@@ -78,119 +78,8 @@ class User extends ActiveRecord implements IdentityInterface
     public $password;
 
     /**
-    * @return array the validation rules.
-    */
-    public function rules()
-    {
-        return [
-            [[self::ACTIVE,
-              self::AUTH_KEY,
-              self::EMAIL,
-              self::EMAIL_IS_VERIFIED,
-              self::FIRSTNAME,
-              self::LASTNAME,
-              self::PASSWORD_HASH,
-              self::PROFILE_ID,
-              self::USERNAME], 'required'],
-
-            [self::AUTH_KEY, STRING, LENGTH => [1, 32]],
-            [self::EMAIL, 'email'],
-            [[self::EMAIL, self::USERNAME], 'unique'],
-            [self::EMAIL_CONFIRMATION_TOKEN, STRING, LENGTH => [1, 255]],
-            [self::EMAIL_CONFIRMATION_TOKEN, 'unique'],
-            [self::FIRSTNAME, STRING, LENGTH => [1, 80]],
-            [self::LASTNAME, STRING, LENGTH => [1, 80]],
-            [self::PASSWORD_HASH, STRING, LENGTH => [1, 255]],
-            [self::PASSWORD_RESET_TOKEN, STRING, 'max' => 255],
-            [[self::PROFILE_ID], 'in', 'range'=>array_keys(Profile::getProfileList())],
-            [self::TELEPHONE, STRING, 'max' => 15],
-            [[self::USERNAME, self::IPV4_ADDRESS_LAST_LOGIN], STRING, LENGTH => [1, 20]],
-            [[
-              self::PROFILE_ID,
-              self::USER_ID], 'integer'],
-            [[self::ACTIVE,
-              self::EMAIL_IS_VERIFIED], 'boolean'],
-            [[self::AUTH_KEY,
-              self::EMAIL,
-              self::FIRSTNAME,
-              self::LASTNAME,
-              self::PASSWORD_HASH,
-              self::PASSWORD_RESET_TOKEN,
-              self::TELEPHONE,
-              self::USERNAME], 'trim'],
-            [[self::AUTH_KEY,
-              self::EMAIL,
-              self::FIRSTNAME,
-              self::LASTNAME,
-              self::PASSWORD_HASH,
-              self::PASSWORD_RESET_TOKEN,
-              self::TELEPHONE,
-              self::USERNAME], function ($attribute) {
-                $this->$attribute = HtmlPurifier::process($this->$attribute);
-              }
-            ],
-        ];
-    }
-
-    /**
-    * @return array customized attribute labels (name=>label)
-    */
-    public function attributeLabels()
-    {
-        return [
-            self::ACTIVE                  => Yii::t('app', 'Active'),
-            self::AUTH_KEY                => Yii::t('app', 'key auth'),
-            self::EMAIL                   => Yii::t('app', 'Email'),
-            self::EMAIL_CONFIRMATION_TOKEN => Yii::t('app', 'Email token of confirmation '),
-            self::EMAIL_IS_VERIFIED       => Yii::t('app', 'Boolean is email verified '),
-            self::FIRSTNAME               => Yii::t('app', 'First name'),
-            self::IPV4_ADDRESS_LAST_LOGIN => Yii::t('app', 'Last ipv4 address used'),
-            self::LASTNAME                => Yii::t('app', 'Last name'),
-            self::PASSWORD_HASH           => Yii::t('app', 'password'),
-            self::PASSWORD_RESET_TOKEN    => Yii::t('app', 'password reset token'),
-            self::PASSWORD_RESET_TOKEN_DATE => Yii::t('app', 'password reset token date creation'),
-            self::PROFILE_ID              => Yii::t('app', 'Profile'),
-            self::TELEPHONE               => Yii::t('app', 'Phone number'),
-            self::USERNAME                => Yii::t('app', 'User account'),
-            self::USER_ID                 => Yii::t('app', 'user'),
-
-        ];
-    }
-
-    /**
-     * behaviors
-     * The fields created_at, updated_at, password_reset_token_date should not
-     * be declared as required in rules.
+     * @return UserQuery custom query class with user scopes
      */
-    public function behaviors()
-    {
-
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at','password_reset_token_date'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-
-    public function getProfile()
-    {
-        return $this->hasOne(
-            Profile::class,
-            [self::PROFILE_ID => self::PROFILE_ID]
-        );
-    }
-
-    /**
-    * @return UserQuery custom query class with user scopes
-    */
     public static function find()
     {
         return new UserQuery(get_called_class());
@@ -246,7 +135,127 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne([self::USERNAME => $username, self::ACTIVE =>self::STATUS_ACTIVE]);
+        return static::findOne([self::USERNAME => $username, self::ACTIVE => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'user';
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [[self::ACTIVE,
+                self::AUTH_KEY,
+                self::EMAIL,
+                self::EMAIL_IS_VERIFIED,
+                self::FIRSTNAME,
+                self::LASTNAME,
+                self::PASSWORD_HASH,
+                self::PROFILE_ID,
+                self::USERNAME], 'required'],
+
+            [self::AUTH_KEY, STRING, LENGTH => [1, 32]],
+            [self::EMAIL, 'email'],
+            [[self::EMAIL, self::USERNAME], 'unique'],
+            [self::EMAIL_CONFIRMATION_TOKEN, STRING, LENGTH => [1, 255]],
+            [self::EMAIL_CONFIRMATION_TOKEN, 'unique'],
+            [self::FIRSTNAME, STRING, LENGTH => [1, 80]],
+            [self::LASTNAME, STRING, LENGTH => [1, 80]],
+            [self::PASSWORD_HASH, STRING, LENGTH => [1, 255]],
+            [self::PASSWORD_RESET_TOKEN, STRING, 'max' => 255],
+            [[self::PROFILE_ID], 'in', 'range' => array_keys(Profile::getProfileList())],
+            [self::TELEPHONE, STRING, 'max' => 15],
+            [[self::USERNAME, self::IPV4_ADDRESS_LAST_LOGIN], STRING, LENGTH => [1, 20]],
+            [[
+                self::PROFILE_ID,
+                self::USER_ID], 'integer'],
+            [[self::ACTIVE,
+                self::EMAIL_IS_VERIFIED], 'boolean'],
+            [[self::AUTH_KEY,
+                self::EMAIL,
+                self::FIRSTNAME,
+                self::LASTNAME,
+                self::PASSWORD_HASH,
+                self::PASSWORD_RESET_TOKEN,
+                self::TELEPHONE,
+                self::USERNAME], 'trim'],
+            [[self::AUTH_KEY,
+                self::EMAIL,
+                self::FIRSTNAME,
+                self::LASTNAME,
+                self::PASSWORD_HASH,
+                self::PASSWORD_RESET_TOKEN,
+                self::TELEPHONE,
+                self::USERNAME], function ($attribute) {
+                $this->$attribute = HtmlPurifier::process($this->$attribute);
+            }
+            ],
+        ];
+    }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels()
+    {
+        return [
+            self::ACTIVE => Yii::t('app', 'Active'),
+            self::AUTH_KEY => Yii::t('app', 'key auth'),
+            self::EMAIL => Yii::t('app', 'Email'),
+            self::EMAIL_CONFIRMATION_TOKEN => Yii::t('app', 'Email token of confirmation '),
+            self::EMAIL_IS_VERIFIED => Yii::t('app', 'Boolean is email verified '),
+            self::FIRSTNAME => Yii::t('app', 'First name'),
+            self::IPV4_ADDRESS_LAST_LOGIN => Yii::t('app', 'Last ipv4 address used'),
+            self::LASTNAME => Yii::t('app', 'Last name'),
+            self::PASSWORD_HASH => Yii::t('app', 'password'),
+            self::PASSWORD_RESET_TOKEN => Yii::t('app', 'password reset token'),
+            self::PASSWORD_RESET_TOKEN_DATE => Yii::t('app', 'password reset token date creation'),
+            self::PROFILE_ID => Yii::t('app', 'Profile'),
+            self::TELEPHONE => Yii::t('app', 'Phone number'),
+            self::USERNAME => Yii::t('app', 'User account'),
+            self::USER_ID => Yii::t('app', 'user'),
+
+        ];
+    }
+
+    /**
+     * behaviors
+     * The fields created_at, updated_at, password_reset_token_date should not
+     * be declared as required in rules.
+     */
+    public function behaviors()
+    {
+
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at', 'password_reset_token_date'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+
+    public function getProfile()
+    {
+        return $this->hasOne(
+            Profile::class,
+            [self::PROFILE_ID => self::PROFILE_ID]
+        );
     }
 
     /**
@@ -257,14 +266,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->getPrimaryKey();
-    }
-
-    /**
-     * @getAuthKey
-     */
-    public function getAuthKey()
-    {
-        return $this->auth_key;
     }
 
     /**
@@ -327,7 +328,7 @@ class User extends ActiveRecord implements IdentityInterface
                     'app',
                     ERROR_MODULE,
                     [
-                        MODULE=> '@app\models\User\generateEmailConfirmationToken',
+                        MODULE => '@app\models\User\generateEmailConfirmationToken',
                         ERROR => $errorexception
                     ]
                 ),
@@ -353,14 +354,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'user';
-    }
-
-    /**
      * Generates password hash from password and sets it to the model
      *
      * @param string $password
@@ -376,7 +369,7 @@ class User extends ActiveRecord implements IdentityInterface
                     Yii::t(
                         'app',
                         ERROR_MODULE,
-                        [MODULE=> '@app\models\User\setPassword', ERROR => $errorexception]
+                        [MODULE => '@app\models\User\setPassword', ERROR => $errorexception]
                     ),
                     MSG_ERROR
                 );
@@ -392,6 +385,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey() === $authKey;
+    }
+
+    /**
+     * @getAuthKey
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
     }
 
     /**

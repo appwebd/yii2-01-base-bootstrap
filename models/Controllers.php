@@ -1,75 +1,48 @@
 <?php
 /**
-  * Controllers
-  *
-  * @package     Model of Controllers
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 20:29:23
-  * @version     1.0
-*/
+ * Controllers
+ *
+ * @package     Model of Controllers
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-07-30 20:29:23
+ * @version     1.0
+ */
 
 namespace app\models;
 
-use Yii;
-use yii\db\Query;
-use yii\helpers\HtmlPurifier;
-use yii\db\ActiveRecord;
-use yii\db\Expression;
-use yii\db\Exception;
-use yii\helpers\ArrayHelper;
 use app\controllers\BaseController;
+use Yii;
+use yii\db\ActiveRecord;
+use yii\db\Exception;
+use yii\db\Expression;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
+use yii\helpers\HtmlPurifier;
 
 /**
  * Controllers
  * Controllers
  *
- * @property integer      active                     Active
- * @property string        controller_description     Description
- * @property integer         controller_id              Controller
- * @property string       controller_name            Name
- * @property integer      menu_boolean_private       Menu is private
- * @property integer      menu_boolean_visible       Menu is visible
+ * @property integer active                     Active
+ * @property string controller_description     Description
+ * @property integer controller_id              Controller
+ * @property string controller_name            Name
+ * @property integer menu_boolean_private       Menu is private
+ * @property integer menu_boolean_visible       Menu is visible
  *
  */
 class Controllers extends ActiveRecord
 {
-    const ACTIVE                     = 'active';
-    const CONTROLLER_DESCRIPTION     = 'controller_description';
-    const CONTROLLER_ID              = 'controller_id';
-    const CONTROLLER_NAME            = 'controller_name';
-    const MENU_BOOLEAN_PRIVATE       = 'menu_boolean_private';
-    const MENU_BOOLEAN_VISIBLE       = 'menu_boolean_visible';
+    const ACTIVE = 'active';
+    const CONTROLLER_DESCRIPTION = 'controller_description';
+    const CONTROLLER_ID = 'controller_id';
+    const CONTROLLER_NAME = 'controller_name';
+    const MENU_BOOLEAN_PRIVATE = 'menu_boolean_private';
+    const MENU_BOOLEAN_VISIBLE = 'menu_boolean_visible';
     const TITLE = 'Controllers';
-
-    /**
-    * @return array the validation rules.
-    */
-    public function rules()
-    {
-        return [
-            [[self::ACTIVE,
-              self::CONTROLLER_DESCRIPTION,
-              self::CONTROLLER_NAME,
-              self::MENU_BOOLEAN_PRIVATE,
-              self::MENU_BOOLEAN_VISIBLE], 'required'],
-            [self::CONTROLLER_DESCRIPTION, STRING, LENGTH => [1, 80]],
-            [self::CONTROLLER_NAME, STRING, LENGTH => [1, 100]],
-            [[self::CONTROLLER_ID], 'integer'],
-            [[self::ACTIVE,
-              self::MENU_BOOLEAN_PRIVATE,
-              self::MENU_BOOLEAN_VISIBLE], 'boolean'],
-            [[self::CONTROLLER_DESCRIPTION,
-              self::CONTROLLER_NAME], 'trim'],
-            [[self::CONTROLLER_DESCRIPTION,
-              self::CONTROLLER_NAME], function ($attribute) {
-                $this->$attribute = HtmlPurifier::process($this->$attribute);
-              }
-            ],
-         ];
-    }
 
     /**
      * Permits add a controller
@@ -87,7 +60,8 @@ class Controllers extends ActiveRecord
         $menuBooleanPrivate,
         $menuBooleanVisible,
         $active
-    ) {
+    )
+    {
         $model = new Controllers();
         $model->controller_name = $controllerName;
         $model->controller_description = $controllerDesc;
@@ -96,45 +70,13 @@ class Controllers extends ActiveRecord
         $model->active = $active;
 
         if ($model->save()) {
-            Yii::$app->session->setFlash(SUCCESS, Yii::t('app', 'Controller was saved successfully.')) ;
+            Yii::$app->session->setFlash(SUCCESS, Yii::t('app', 'Controller was saved successfully.'));
             return true;
         }
 
-        $message = 'Could not save new Controller:\n'. print_r($model->errors, true);
-        Yii::$app->session->setFlash(ERROR, $message) ;
+        $message = 'Could not save new Controller:\n' . print_r($model->errors, true);
+        Yii::$app->session->setFlash(ERROR, $message);
         return false;
-    }
-
-    /**
-    * @return array customized attribute labels (name=>label)
-    */
-    public function attributeLabels()
-    {
-        return [
-            self::ACTIVE               => Yii::t('app', 'Active'),
-            self::CONTROLLER_DESCRIPTION => Yii::t('app', 'Description'),
-            self::CONTROLLER_ID        => Yii::t('app', 'Controller'),
-            self::CONTROLLER_NAME      => Yii::t('app', 'Name'),
-            self::MENU_BOOLEAN_PRIVATE => Yii::t('app', 'Menu is private'),
-            self::MENU_BOOLEAN_VISIBLE => Yii::t('app', 'Menu is visible'),
-
-        ];
-    }
-    /**
-     * behaviors
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ],
-                'value' => new Expression('NOW()'),
-            ],
-        ];
     }
 
     /**
@@ -143,39 +85,6 @@ class Controllers extends ActiveRecord
     public static function tableName()
     {
         return 'controllers';
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getAction()
-    {
-        return $this->hasMany(
-            Action::class,
-            [self::CONTROLLER_ID => self::CONTROLLER_ID]
-        );
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getLogs()
-    {
-        return $this->hasMany(
-            Logs::class,
-            [self::CONTROLLER_ID => self::CONTROLLER_ID]
-        );
-    }
-
-    /**
-    * @return \yii\db\ActiveQuery
-    */
-    public function getPermission()
-    {
-        return $this->hasMany(
-            Permission::class,
-            [self::CONTROLLER_ID => self::CONTROLLER_ID]
-        );
     }
 
     /**
@@ -216,6 +125,7 @@ class Controllers extends ActiveRecord
         }
         return null;
     }
+
     /**
      * Get array from Controllers
      * @return array
@@ -223,9 +133,102 @@ class Controllers extends ActiveRecord
     public static function getControllersList()
     {
         $droptions = Controllers::find()->where([self::ACTIVE => 1])
-               ->orderBy([self::CONTROLLER_NAME => SORT_ASC])
-               ->asArray()->all();
+            ->orderBy([self::CONTROLLER_NAME => SORT_ASC])
+            ->asArray()->all();
         return ArrayHelper::map($droptions, self::CONTROLLER_ID, self::CONTROLLER_NAME);
+    }
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            [[self::ACTIVE,
+                self::CONTROLLER_DESCRIPTION,
+                self::CONTROLLER_NAME,
+                self::MENU_BOOLEAN_PRIVATE,
+                self::MENU_BOOLEAN_VISIBLE], 'required'],
+            [self::CONTROLLER_DESCRIPTION, STRING, LENGTH => [1, 80]],
+            [self::CONTROLLER_NAME, STRING, LENGTH => [1, 100]],
+            [[self::CONTROLLER_ID], 'integer'],
+            [[self::ACTIVE,
+                self::MENU_BOOLEAN_PRIVATE,
+                self::MENU_BOOLEAN_VISIBLE], 'boolean'],
+            [[self::CONTROLLER_DESCRIPTION,
+                self::CONTROLLER_NAME], 'trim'],
+            [[self::CONTROLLER_DESCRIPTION,
+                self::CONTROLLER_NAME], function ($attribute) {
+                $this->$attribute = HtmlPurifier::process($this->$attribute);
+            }
+            ],
+        ];
+    }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels()
+    {
+        return [
+            self::ACTIVE => Yii::t('app', 'Active'),
+            self::CONTROLLER_DESCRIPTION => Yii::t('app', 'Description'),
+            self::CONTROLLER_ID => Yii::t('app', 'Controller'),
+            self::CONTROLLER_NAME => Yii::t('app', 'Name'),
+            self::MENU_BOOLEAN_PRIVATE => Yii::t('app', 'Menu is private'),
+            self::MENU_BOOLEAN_VISIBLE => Yii::t('app', 'Menu is visible'),
+
+        ];
+    }
+
+    /**
+     * behaviors
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAction()
+    {
+        return $this->hasMany(
+            Action::class,
+            [self::CONTROLLER_ID => self::CONTROLLER_ID]
+        );
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLogs()
+    {
+        return $this->hasMany(
+            Logs::class,
+            [self::CONTROLLER_ID => self::CONTROLLER_ID]
+        );
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPermission()
+    {
+        return $this->hasMany(
+            Permission::class,
+            [self::CONTROLLER_ID => self::CONTROLLER_ID]
+        );
     }
 
     /**

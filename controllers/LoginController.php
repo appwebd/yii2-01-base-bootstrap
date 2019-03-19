@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\web\Controller;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use app\models\forms\LoginForm;
 use app\models\User;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
 
 /**
  * Class LoginController
@@ -22,7 +22,7 @@ use app\models\User;
  */
 class LoginController extends Controller
 {
-    const LOGOUT               = 'logout';
+    const LOGOUT = 'logout';
 
     /**
      * {@inheritdoc}
@@ -49,7 +49,7 @@ class LoginController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 ACTIONS => [
-                    ACTION_INDEX => ['get','post'],
+                    ACTION_INDEX => ['get', 'post'],
                     self::LOGOUT => ['post'],
                 ],
             ],
@@ -70,7 +70,7 @@ class LoginController extends Controller
             return $this->goBack();
         }
 
-        return $this->render(ACTION_INDEX, [ MODEL => $model,]);
+        return $this->render(ACTION_INDEX, [MODEL => $model,]);
     }
 
     /**
@@ -93,7 +93,7 @@ class LoginController extends Controller
         $token = BaseController::stringDecode($token);
         $model = User::find()->emailConfirmationToken($token)->one();
 
-        if ($model!==null && LoginForm::removeTokenEmail($model->user_id)) {
+        if ($model !== null && LoginForm::removeTokenEmail($model->user_id)) {
             Yii::$app->getUser()->login($model);
             return $this->goHome();
         }
