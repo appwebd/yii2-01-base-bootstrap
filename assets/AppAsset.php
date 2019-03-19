@@ -18,13 +18,13 @@ use yii\web\AssetBundle;
 class AppAsset extends AssetBundle
 {
     public $basePath = '@webroot';
-    public $baseUrl  = '@web';
+    public $baseUrl = '@web';
     public $css = [
 
-        ['css/site.min.css', 'media' => 'all', 'type'=>'text/css'],
+        ['css/site.min.css', 'media' => 'all', 'type' => 'text/css'],
     ];
     public $js = [
-        ['js/custom.min.js', 'async'=> true] // or defer
+        ['js/custom.min.js', 'async' => true] // or defer
     ];
     public $depends = [
         'yii\web\YiiAsset',
