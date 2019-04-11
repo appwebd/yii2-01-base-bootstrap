@@ -60,7 +60,7 @@ try {
             ],
         ],
     ]);
-} catch (\Exception $errorexception) {
+} catch (Exception $errorexception) {
     BaseController::bitacora(
         Yii::t(
             'app',

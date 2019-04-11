@@ -1,9 +1,10 @@
 <?php
 
 use app\components\UiComponent;
+use app\models\User;
 
 /* @var yii\web\View $this */
-/* @var \app\models\User $model */
+/* @var User $model */
 
 $this->title = Yii::t('app', 'Password was updated');
 $this->params[BREADCRUMBS][] = $this->title;

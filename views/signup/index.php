@@ -13,12 +13,13 @@
 
 use app\components\UiComponent;
 use app\models\forms\SignupForm;
+use app\models\User;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
-/* @var \app\models\User $model */
+/* @var User $model */
 
 $this->title = Yii::t('app', 'Signup view');
 $this->params[BREADCRUMBS][] = $this->title;

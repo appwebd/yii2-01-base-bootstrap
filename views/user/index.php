@@ -21,9 +21,9 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $searchModelUser app\models\search\UserSearch */
-/* @var $dataProviderUser yii\data\ActiveDataProvider */
-/* @var $pageSize int */
+/* @var object $searchModelUser app\models\search\UserSearch */
+/* @var object $dataProviderUser yii\data\ActiveDataProvider */
+/* @var int $pageSize Number of rows to show in the gridView object */
 
 $this->title = Yii::t('app', User::TITLE);
 
@@ -89,7 +89,7 @@ try {
 
         ]
     ]);
-} catch (\Exception $e) {
+} catch (Exception $e) {
     BaseController::bitacora(
         Yii::t(
             'app',

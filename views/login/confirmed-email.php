@@ -1,8 +1,8 @@
 <?php
 /**
- * Company
+ * Login
  *
- * @package     form of Company
+ * @package     confirmed email
  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright   (C) Copyright - Web Application development
  * @license     Private license

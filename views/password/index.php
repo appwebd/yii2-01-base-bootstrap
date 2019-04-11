@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
-/* @var \app\models\forms\PasswordResetRequestForm $model */
+/* @var PasswordResetRequestForm $model */
 
 $this->title = Yii::t('app', 'Request password reset');
 $this->params[BREADCRUMBS][] = $this->title;
