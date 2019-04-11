@@ -1,6 +1,6 @@
 <?php
 
-$bundles = require __DIR__  . '/bundles.php';
+$bundles = require __DIR__ . '/bundles.php';
 $db = require __DIR__ . '/db.php';
 $params = require __DIR__ . '/params.php';
 
@@ -9,7 +9,7 @@ $config = [
     'id' => 'basic',
     'name' => 'Base',
     'basePath' => dirname(__DIR__),
-    'language'=>'en',
+    'language' => 'en',
     'sourceLanguage' => 'en',
     'charset' => 'UTF-8',
     'layoutPath' => '@app/views/layouts',
@@ -31,7 +31,7 @@ $config = [
 */
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'bootstrap' => [
         [
@@ -78,9 +78,9 @@ $config = [
             'flushInterval' => 1,
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
-                'file'=>[
+                'file' => [
                     STR_CLASS => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning','info'],
+                    'levels' => ['error', 'warning', 'info'],
                     'logFile' => '@runtime/logs/app.log',
                     'except' => [
                       'yii\web\HttpException:404',
@@ -112,19 +112,19 @@ $config = [
             STR_CLASS => 'yii\swiftmailer\Mailer',
             'viewPath' => '@app/mail',
             'transport' => [
-                STR_CLASS      => 'Swift_SmtpTransport',
-                'host'       => 'localhost',
-                'username'   => 'pro@dev-master.local',
-                'password'   => 'password', // your password
-                'port'       => '25',
+                STR_CLASS => 'Swift_SmtpTransport',
+                'host' => 'localhost',
+                'username' => 'pro@dev-master.local',
+                'password' => 'password', // your password
+                'port' => '25',
 //                'encryption' => 'tls',
             ],
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '-ep1N8LQ66XkS34oQIEgZAogO466l7HX',
-            'enableCsrfValidation'=>true,
-            'enableCookieValidation'=>true,
+            'enableCsrfValidation' => true,
+            'enableCookieValidation' => true,
         ],
         'session' => [
             STR_CLASS => 'yii\web\DbSession',
@@ -141,24 +141,25 @@ $config = [
         'ui' => [
             STR_CLASS => 'app\components\UiComponent',
         ],
-/*
-        'urlManager' => [
-            STR_CLASS => 'yii\web\UrlManager',
-            // Disable r= routes
-            'enablePrettyUrl' => true,
-            // Disable index.php
-            'showScriptName' => true,
-//            'enableStrictParsing' => true,
-            'rules' => [
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-                'defaultRoute' => '/site/index',
-            ],
-        ],
-*/
+
     ],
     'params' => $params,
 ];
 
+if (YII_ENV_DEV) {
+    // configuration adjustments for 'dev' environment
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = [
+        'class' => 'yii\debug\Module',
+        // uncomment the following to add your IP if you are not connecting from localhost.
+        //'allowedIPs' => ['127.0.0.1', '::1'],
+    ];
+
+    $config['bootstrap'][] = 'gii';
+    $config['modules']['gii'] = [
+        'class' => 'yii\gii\Module',
+        // uncomment the following to add your IP if you are not connecting from localhost.
+        //'allowedIPs' => ['127.0.0.1', '::1'],
+    ];
+}
 return $config;
