@@ -93,44 +93,6 @@ p {
     border-top: 1px solid silver;
 }
 
-.ui-tabs .ui-tabs-nav {
-    margin: 0;
-    padding: .2em .2em 0;
-    background: white;
-    border: none;
-}
-
-.ui-widget.ui-widget-content {
-    border: 1px solid #F2F2F2;
-}
-
-.classTabs {
-    font-weight: normal !important;
-    background-color: transparent;
-}
-
-.classTabs .ui-tabs-tab .ui-tabs-anchor {
-    background: black;
-}
-
-.ui-widget.ui-widget-content {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
-    background-color: white;
-}
-
-.bg-light {
-    background: #F5F7F8;
-}
-
-.bg-light-1 {
-    background: #F1FBFD;
-}
-
-.invisible {
-    display: none;
-}
-
 .maxwidth {
     width: 100%;
 }
@@ -168,10 +130,6 @@ p {
                                                                                       NAVIGATION
 -------------------------------------------------------------------------------------------------
 */
-.breadcrumb {
-    margin-bottom: 3px;
-    background: #FAFAFA;
-}
 
 a {
     color: var(--status-bar-background);
@@ -316,13 +274,6 @@ a.desc:after {
     top: -5px;
 }
 
-.pagination {
-    float: right;
-    display: block;
-    position: relative;
-    top: -30px;
-}
-
 .width5px {
     width: 5px;
 }
@@ -373,11 +324,6 @@ a.desc:after {
                                         FORM STYLE
 ---------------------------------------------------
 */
-.formLayout {
-    width: 100%;
-    margin-left: 15px;
-    padding: 0;
-}
 
 .formTitle {
     color: var(--text-slategray);
@@ -459,10 +405,6 @@ a.desc:after {
                                                                                       GRAPH INDEX
 -------------------------------------------------------------------------------------------------
 */
-.graph-frequency-quality {
-    height: 30px;
-    width: 100%;
-}
 
 /*
 ------------------------------------------------------------------------------------------------
@@ -519,110 +461,6 @@ a.desc:after {
     top: -10px;
 }
 
-.badge {
-    display: inline-block;
-    padding: 0.25em 0.4em;
-    font-size: 75%;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: 3px;
-}
-
-.badge:empty {
-    display: none;
-}
-
-.btn .badge {
-    position: relative;
-    top: -1px;
-}
-
-.badge-pill {
-    padding-right: 0.6em;
-    padding-left: 0.6em;
-    border-radius: 10rem;
-}
-
-.badge-primary {
-    color: #fff;
-    background-color: #467fcf;
-}
-
-.badge-primary[href]:hover, .badge-primary[href]:focus {
-    color: #fff;
-    text-decoration: none;
-    background-color: #2f66b3;
-}
-
-.badge-secondary {
-    color: #fff;
-    background-color: #868e96;
-}
-
-.badge-secondary[href]:hover, .badge-secondary[href]:focus {
-    color: #fff;
-    text-decoration: none;
-    background-color: #6c757d;
-}
-
-.badge-success {
-    color: #fff;
-    background-color: #5eba00;
-}
-
-.badge-success[href]:hover, .badge-success[href]:focus {
-    color: #fff;
-    text-decoration: none;
-    background-color: #448700;
-}
-
-.badge-info {
-    color: #fff;
-    background-color: #45aaf2;
-}
-
-.badge-info[href]:hover, .badge-info[href]:focus {
-    color: #fff;
-    text-decoration: none;
-    background-color: #1594ef;
-}
-
-.badge-warning {
-    color: #fff;
-    background-color: #f1c40f;
-}
-
-.badge-warning[href]:hover, .badge-warning[href]:focus {
-    color: #fff;
-    text-decoration: none;
-    background-color: #c29d0b;
-}
-
-.badge-danger {
-    color: #fff;
-    background-color: #cd201f;
-}
-
-.badge-danger[href]:hover, .badge-danger[href]:focus {
-    color: #fff;
-    text-decoration: none;
-    background-color: #a11918;
-}
-
-.badge-error {
-    color: #fff;
-    background-color: red;
-}
-
-.badge-error[href]:hover, .badge-error[href]:focus {
-    color: #fff;
-    text-decoration: none;
-    background-color: red;
-}
-
 /*
 -------------------------------------------------------------------------------------------------
                                                                                           TOGGLE
@@ -639,16 +477,6 @@ a[data-value="0"] {
 }
 
 a[data-value=""] {
-    color: red !important;
-    background-color: transparent;
-}
-
-.glyphicon.glyphicon-ok-circle {
-    color: green !important;
-    background-color: transparent;
-}
-
-.glyphicon.glyphicon-remove-sign {
     color: red !important;
     background-color: transparent;
 }
@@ -679,11 +507,6 @@ footer {
 
 .copyright a {
     color: #999999;
-}
-
-.footer-secondary {
-    padding: 8px 0;
-    background-color: #F4F5F7;
 }
 
 .payment-icon {
@@ -730,14 +553,6 @@ footer {
 @media all and (max-width: 1024px) {
     .form-control-autocomplete {
         width: 85%;
-    }
-
-    #sidebar {
-        margin-left: -250px;
-    }
-
-    #sidebar.active {
-        margin-left: 0;
     }
 
     #sidebarCollapse span {
