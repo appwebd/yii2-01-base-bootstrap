@@ -15,11 +15,12 @@ namespace app\controllers;
 
 use app\models\forms\PasswordResetForm;
 use app\models\forms\PasswordResetRequestForm;
+use Exception;
 use Yii;
-use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\Response;
 
 class PasswordController extends Controller
 {
@@ -68,7 +69,7 @@ class PasswordController extends Controller
 
     /**
      * Request password reset
-     * @return string|\yii\web\Response the login form or a redirect response
+     * @return string|Response the login form or a redirect response
      */
     public function actionIndex()
     {
@@ -86,7 +87,7 @@ class PasswordController extends Controller
      * @param string $token . Token is a cryptographed string, which must contain password_reset_token and the
      *  date / time for its validity. The token is set '' like parameter only for don't show ways to corrupt this
      * web application.
-     * @return \yii\web\Response
+     * @return Response
      */
     public function actionReset($token = '')
     {
@@ -96,7 +97,7 @@ class PasswordController extends Controller
             if ($model->tokenIsValid($tokendecode)) {
                 $this->wrongToken($token);
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             BaseController::bitacora(
                 Yii::t('app', 'Error, {module} {error}', ['module' => 'actionReset', 'error' => $exception]),
                 MSG_SECURITY_ISSUE
@@ -109,7 +110,7 @@ class PasswordController extends Controller
 
     /**
      * @param $token string encoded with token for change password
-     * @return \yii\web\Response
+     * @return Response
      */
     public function wrongToken($token)
     {
@@ -123,7 +124,7 @@ class PasswordController extends Controller
     /**
      * @param $userId integer primary key of table user
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function actionResetpassword($userId)
     {

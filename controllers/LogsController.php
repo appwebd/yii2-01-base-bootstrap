@@ -24,6 +24,7 @@ use app\models\search\StatusSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
 /**
@@ -41,9 +42,8 @@ class LogsController extends Controller
      * Before action instructions for to do before call actions
      *
      * @param object $action name of object invoked.
-     * @return mixed
-     * @throws \yii\db\Exception
-     * @throws \yii\web\BadRequestHttpException
+     * @return mixed \yii\web\Response
+     * @throws BadRequestHttpException
      */
     public function beforeAction($action)
     {

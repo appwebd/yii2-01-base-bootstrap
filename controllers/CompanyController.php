@@ -250,22 +250,24 @@ class CompanyController extends Controller
         }
 
         $model = $this->findModel($id);
-        if ($this->fkCheck() == 0) {
-            if (Common::transaction($model, 'delete')) {
-                BaseController::bitacoraAndFlash(
-                    Yii::t(
-                        'app',
-                        'Record {id} has been deleted',
-                        ['id' => $model->company_id]
-                    ),
-                    MSG_SUCCESS
-                );
-            }
-        } else {
-            BaseController::bitacoraAndFlash(
+        if ($this->fkCheck() > 0) {
+            BaseController::deleteReport(2);
+            return $this->redirect([ACTION_INDEX]);
+        }
+
+        try {
+            $status = Common::transaction($model, ACTION_DELETE);
+            BaseController::deleteReport($status);
+        } catch (\Exception $error_exception) {
+            BaseController::bitacora(
                 Yii::t(
                     'app',
-                    'Record could not be deleted because it is being used in the system'
+                    TRANSACTION_MODULE,
+                    [
+                        ERROR => $error_exception,
+                        METHOD => ACTION_DELETE,
+                        MODULE => 'app\controllers\CompanyController::actionDelete',
+                    ]
                 ),
                 MSG_ERROR
             );
@@ -278,19 +280,20 @@ class CompanyController extends Controller
      * Finds the Company model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param int $companyId company primary key
+     * @param int $company_id company primary key
      *
      * @return string Company the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($companyId)
+    protected function findModel($company_id)
     {
-        if (($model = Company::findOne($companyId)) !== null) {
+        $company_id = BaseController::stringDecode($company_id);
+        if (($model = Company::findOne($company_id)) !== null) {
             return $model;
         }
 
         BaseController::bitacora(
-            Yii::t('app', 'The requested page does not exist {id}', ['id' => $companyId]),
+            Yii::t('app', 'The requested page does not exist {id}', ['id' => $company_id]),
             MSG_ERROR
         );
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
@@ -395,9 +398,8 @@ class CompanyController extends Controller
      */
     public function actionUpdate($id)
     {
-        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             return $this->saveRecord($model);
         }
 
@@ -414,7 +416,6 @@ class CompanyController extends Controller
      */
     public function actionView($id)
     {
-        $id = BaseController::stringDecode($id);
         $model = $this->findModel($id);
         BaseController::bitacora(
             Yii::t('app', 'view record {id}', ['id' => $model->company_id]),

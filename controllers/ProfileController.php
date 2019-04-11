@@ -19,10 +19,13 @@ use app\models\Profile;
 use app\models\queries\Common;
 use app\models\search\ProfileSearch;
 use Yii;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class ProfileController
@@ -48,7 +51,7 @@ class ProfileController extends Controller
      * @param object $action action
      *
      * @return mixed \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function beforeAction($action)
     {
@@ -56,7 +59,6 @@ class ProfileController extends Controller
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
-
         BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
@@ -116,7 +118,7 @@ class ProfileController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionCreate()
     {
@@ -131,8 +133,8 @@ class ProfileController extends Controller
 
     /**
      * @param object $model
-     * @return bool|\yii\web\Response
-     * @throws \yii\db\Exception
+     * @return bool|Response
+     * @throws Exception
      */
     private function saveRecord($model)
     {
@@ -142,10 +144,8 @@ class ProfileController extends Controller
             if ($status) {
                 $primary_key = BaseController::stringEncode($model->profile_id);
                 return $this->redirect([ACTION_VIEW, 'id' => $primary_key]);
-            } else {
-                $this->refresh();
             }
-        } catch (\yii\db\Exception $error_exception) {
+        } catch (Exception $error_exception) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
@@ -169,7 +169,7 @@ class ProfileController extends Controller
      *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionDelete($id)
     {
@@ -184,7 +184,7 @@ class ProfileController extends Controller
             return $this->redirect([ACTION_INDEX]);
         }
         try {
-            $status = Common::transaction($model, 'delete');
+            $status = Common::transaction($model, ACTION_DELETE);
             BaseController::deleteReport($status);
         } catch (\Exception $error_exception) {
             BaseController::bitacora(
@@ -192,7 +192,8 @@ class ProfileController extends Controller
                     'app',
                     TRANSACTION_MODULE,
                     [
-                        METHOD => 'delete',
+                        ERROR => $error_exception,
+                        METHOD => ACTION_DELETE,
                         MODULE => 'app\controllers\UserController::actionDelete',
                     ]
                 ),
@@ -276,7 +277,7 @@ class ProfileController extends Controller
      * Delete many records of this table Profile
      *
      * @return mixed
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionRemove()
     {
@@ -298,7 +299,7 @@ class ProfileController extends Controller
                 if (($model = Profile::findOne($profile_id)) !== null) {
                     $profile_id = $model->profile_id;
                     if ($this->fkCheck($profile_id) <= 0) {
-                        if (Common::transaction($model, 'delete')) {
+                        if (Common::transaction($model, ACTION_DELETE)) {
                             $delete_ok .= $profile_id . ", ";
                         } else {
                             $delete_ko .= $profile_id . ", ";
@@ -331,7 +332,7 @@ class ProfileController extends Controller
      *
      * @param $id integer primary Key of table profile
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Exception
      */
     public function actionToggle($id)
@@ -365,7 +366,7 @@ class ProfileController extends Controller
      *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionUpdate($id)
     {

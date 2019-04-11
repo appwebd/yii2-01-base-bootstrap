@@ -7,6 +7,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\Response;
 
 /**
  * Class SingupController
@@ -42,14 +43,14 @@ class SignupController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 ACTIONS => [
-                    ACTION_INDEX => ['GET','POST'],
+                    ACTION_INDEX => ['GET', 'POST'],
                 ],
             ],
         ];
     }
 
-     /**
-     * @return string|\yii\web\Response the singup form, the singup message or
+    /**
+     * @return string|Response the singup form, the singup message or
      * a redirect response
      */
     public function actionIndex()
@@ -61,6 +62,6 @@ class SignupController extends Controller
         }
 
         BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
-        return $this->render(ACTION_INDEX, ['model'=> $model]);
+        return $this->render(ACTION_INDEX, ['model' => $model]);
     }
 }

@@ -20,11 +20,14 @@ use app\models\Action;
 use app\models\Permission;
 use app\models\queries\Common;
 use app\models\search\PermissionSearch;
+use Exception;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class PermissionController extends Controller
 {
@@ -36,7 +39,7 @@ class PermissionController extends Controller
      *
      * @param object $action action
      * @return mixed \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function beforeAction($action)
     {
@@ -57,7 +60,7 @@ class PermissionController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
+                'class' => AccessControl::className(),
                 'only' => [
                     self::ACTION_DROPDOWN,
                     ACTION_CREATE,
@@ -84,7 +87,7 @@ class PermissionController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+                'class' => VerbFilter::className(),
                 ACTIONS => [
                     self::ACTION_DROPDOWN => ['get'],
                     ACTION_CREATE => ['get', 'post'],
@@ -117,7 +120,8 @@ class PermissionController extends Controller
 
     /**
      * @param object $model
-     * @return bool|\yii\web\Response
+     * @return bool|Response
+     * @throws \yii\db\Exception
      */
     private function saveRecord($model)
     {
@@ -127,23 +131,23 @@ class PermissionController extends Controller
             if ($status) {
                 $primary_key = BaseController::stringEncode($model->permission_id);
                 return $this->redirect([ACTION_VIEW, 'id' => $primary_key]);
-            } else {
-                $this->refresh();
             }
-        } catch (\Exception $e) {
+        } catch (\yii\db\Exception $exception_error) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
-                    ERROR_MODULE,
+                    TRANSACTION_MODULE,
                     [
-                        MODULE => 'app\models\queries\Common::transaction method: save',
-                        ERROR => $e
+                        ERROR => $exception_error,
+                        METHOD => 'saveRecord',
+                        MODULE => 'app\controllers\PermissionController',
+
                     ]
                 ),
                 MSG_ERROR
             );
+            throw $exception_error;
         }
-        return false;
     }
 
     /**
@@ -163,15 +167,16 @@ class PermissionController extends Controller
 
         $model = $this->findModel($id);
         try {
-            $status = Common::transaction($model, 'delete');
+            $status = Common::transaction($model, ACTION_DELETE);
             BaseController::deleteReport($status);
-        } catch (\Exception $error_exception) {
+        } catch (Exception $error_exception) {
             BaseController::bitacora(
                 Yii::t(
                     'app',
                     TRANSACTION_MODULE,
                     [
-                        METHOD => 'delete',
+                        ERROR => $error_exception,
+                        METHOD => ACTION_DELETE,
                         MODULE => 'app\controllers\PermissionController::actionDelete',
                     ]
                 ),
@@ -227,7 +232,7 @@ class PermissionController extends Controller
     {
         if (Yii::$app->request->isAjax) {
             echo Common::relatedDropdownList(
-                Action::class,
+                Action::className(),
                 self::CONTROLLER_ID,
                 $id,
                 'action_id',
@@ -291,12 +296,12 @@ class PermissionController extends Controller
         for ($i = 0; $i < $nro_selections; $i++) {
             if (($model = Permission::findOne($result[$i])) !== null) {
                 try {
-                    if (Common::transaction($model, 'delete')) {
+                    if (Common::transaction($model, ACTION_DELETE)) {
                         $delete_ok .= $model->permission_id . ", ";
                     } else {
                         $delete_ko .= $model->permission_id . ", ";
                     }
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     BaseController::bitacora(
                         Yii::t(
                             'app',
@@ -334,7 +339,7 @@ class PermissionController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             try {
                 return $this->saveRecord($model);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 BaseController::bitacora(
                     Yii::t(
                         'app',

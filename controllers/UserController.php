@@ -7,8 +7,11 @@ use app\models\queries\Common;
 use app\models\search\UserSearch;
 use app\models\User;
 use Yii;
+use yii\db\Exception;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class UserController
@@ -30,16 +33,17 @@ class UserController extends Controller
     /**
      * Before action instructions for to do before call actions
      *
-     * @param string $action action name
+     * @param object $action action name
      *
      * @return mixed \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function beforeAction($action)
     {
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
+        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return parent::beforeAction($action);
     }
 
@@ -58,7 +62,7 @@ class UserController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionCreate()
     {
@@ -74,7 +78,6 @@ class UserController extends Controller
 
             $model->generateEmailConfirmationToken(true);
             $this->saveRecord($model);
-
         }
 
         return $this->render(ACTION_CREATE, [MODEL => $model]);
@@ -82,8 +85,8 @@ class UserController extends Controller
 
     /**
      * @param object $model
-     * @return bool|\yii\web\Response
-     * @throws \yii\db\Exception
+     * @return bool|Response
+     * @throws Exception
      */
     private function saveRecord($model)
     {
@@ -94,7 +97,7 @@ class UserController extends Controller
                 $primary_key = BaseController::stringEncode($model->user_id);
                 return $this->redirect([ACTION_VIEW, 'id' => $primary_key]);
             }
-        } catch (\yii\db\Exception $exception_error) {
+        } catch (Exception $exception_error) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
@@ -108,21 +111,21 @@ class UserController extends Controller
             );
             throw $exception_error;
         }
+        return false;
     }
 
     /**
-     * Deletes an existing row of User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Deletes an existing row of User model. If deletion is successful,
+     * the browser will be redirected to the 'index' page.
      *
      * @param integer $id primary key iof table user
      *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionDelete($id)
     {
-
         if (!BaseController::okRequirements(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -134,7 +137,7 @@ class UserController extends Controller
         }
 
         try {
-            $status = Common::transaction($model, 'delete');
+            $status = Common::transaction($model, ACTION_DELETE);
             BaseController::deleteReport($status);
         } catch (\Exception $error_exception) {
             BaseController::bitacora(
@@ -142,7 +145,8 @@ class UserController extends Controller
                     'app',
                     TRANSACTION_MODULE,
                     [
-                        METHOD => 'delete',
+                        ERROR => $error_exception,
+                        METHOD => ACTION_DELETE,
                         MODULE => 'app\controllers\UserController::actionDelete',
                     ]
                 ),
@@ -231,7 +235,7 @@ class UserController extends Controller
      * Delete many records of this table User
      *
      * @return mixed
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionRemove()
     {
@@ -251,8 +255,8 @@ class UserController extends Controller
             try {
                 $user_id = $result[$counter];
                 if (($model = User::findOne($user_id)) !== null) {
-                    if ($this->fkCheck($user_id) <= 0) {
-                        if (Common::transaction($model, 'delete')) {
+                    if ($this->fkCheck($user_id) == 0) {
+                        if (Common::transaction($model, ACTION_DELETE)) {
                             $delete_ok .= $user_id . ', ';
                         } else {
                             $delete_ko .= $user_id . ', ';
@@ -289,8 +293,8 @@ class UserController extends Controller
      * @param integer $id primary key of table user
      *
      * @return mixed
-     * @throws NotFoundHttpException
-     * @throws \yii\db\Exception
+     * @throws NotFoundHttpException if the model cannot be found
+     * @throws Exception
      */
     public function actionUpdate($id)
     {

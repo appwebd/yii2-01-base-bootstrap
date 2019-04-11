@@ -8,6 +8,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\Response;
 
 /**
  * Class LoginController
@@ -57,7 +58,7 @@ class LoginController extends Controller
     }
 
     /**
-     * @return string|\yii\web\Response the login form or a redirect response
+     * @return string|Response the login form or a redirect response
      */
     public function actionIndex()
     {
@@ -74,7 +75,7 @@ class LoginController extends Controller
     }
 
     /**
-     * @return \yii\web\Response a redirect response
+     * @return Response a redirect response
      */
     public function actionLogout()
     {
@@ -84,7 +85,7 @@ class LoginController extends Controller
 
     /**
      * @param $token string encoded of email confirmation token
-     * @return string|\yii\web\Response the confirmation failure message or a
+     * @return string|Response the confirmation failure message or a
      * redirect response
      */
     public function actionConfirmemail($token)

@@ -122,7 +122,7 @@ class BaseController extends Controller
 
     /**
      * Check if user profile has access privilege over one controller/action
-     * @param  string $action action name
+     * @param string $action action name
      * @return bool
      */
     public static function checkBadAccess($action)
@@ -250,13 +250,14 @@ class BaseController extends Controller
 
         switch ($status) {
             case 0:
-                $msg_text = 'Record has been deleted';
-                $msg_status = SUCCESS;
-                break;
-            case 1:
                 $msg_text = 'There was an error removing the record';
                 $msg_status = ERROR;
                 break;
+            case 1:
+                $msg_text = 'Record has been deleted';
+                $msg_status = SUCCESS;
+                break;
+
             default:
                 $msg_text = 'Record could not be deleted because it is being used in the system';
                 $msg_status = ERROR;
