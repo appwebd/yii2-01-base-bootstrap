@@ -13,8 +13,6 @@
 
 namespace app\models;
 
-use app\models\Contacts;
-use app\models\Products;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -163,22 +161,6 @@ class Company extends ActiveRecord
                 'value' => new Expression('NOW()'),
             ],
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasMany(Product::class, [self::COMPANY_ID => self::COMPANY_ID]);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getContact()
-    {
-        return $this->hasMany(Contact::class, [self::COMPANY_ID => self::COMPANY_ID]);
     }
 
     /**

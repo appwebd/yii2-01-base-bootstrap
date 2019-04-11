@@ -15,6 +15,7 @@ namespace app\models;
 
 use app\controllers\BaseController;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Expression;
@@ -199,7 +200,7 @@ class Controllers extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getAction()
     {
@@ -210,7 +211,7 @@ class Controllers extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getLogs()
     {
@@ -221,7 +222,7 @@ class Controllers extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getPermission()
     {

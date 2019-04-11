@@ -15,8 +15,10 @@ namespace app\models;
 
 use app\controllers\BaseController;
 use app\models\queries\Common;
+use Exception;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\db\Query;
@@ -125,7 +127,7 @@ class Action extends ActiveRecord
             if (isset($actionId[0])) {
                 return $actionId[0];
             }
-        } catch (\Exception $errorexception) {
+        } catch (Exception $errorexception) {
             BaseController::bitacora(
                 Yii::t(
                     'app',
@@ -217,7 +219,7 @@ class Action extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getControllers()
     {
@@ -225,7 +227,7 @@ class Action extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getLogs()
     {

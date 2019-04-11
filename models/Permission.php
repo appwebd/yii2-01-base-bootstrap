@@ -14,7 +14,9 @@
 namespace app\models;
 
 use app\controllers\BaseController;
+use Exception;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
@@ -73,7 +75,7 @@ class Permission extends ActiveRecord
             if (isset($actionPermission[0])) {
                 return $actionPermission[0];
             }
-        } catch (\Exception $errorException) {
+        } catch (Exception $errorException) {
             BaseController::bitacora(
                 Yii::t(
                     'app',
@@ -139,7 +141,7 @@ class Permission extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getAction()
     {
@@ -150,7 +152,7 @@ class Permission extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getControllers()
     {
@@ -161,7 +163,7 @@ class Permission extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getProfile()
     {

@@ -17,6 +17,7 @@ use app\controllers\BaseController;
 use app\models\queries\UserQuery;
 use Yii;
 use yii\base\Exception;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\HtmlPurifier;
@@ -31,6 +32,7 @@ use yii\web\IdentityInterface;
  * @property string email_confirmation_token    Email token of confirmation
  * @property integer email_is_verified           Boolean is email verified
  * @property string firstName                   First Name
+ * @property string ipv4_address_last_login     ipv4 address of last login
  * @property string lastName                    Last Name
  * @property string password_hash               password
  * @property string password_reset_token        password reset token
@@ -39,7 +41,6 @@ use yii\web\IdentityInterface;
  * @property string telephone                   Phone number 12 digits
  * @property integer user_id                     User
  * @property string username                    User account
- * @property string ipv4_address_last_login     Ipv4 address of last login
  *
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -247,7 +248,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
 
     public function getProfile()
