@@ -15,6 +15,7 @@ namespace app\models\forms;
 
 use app\controllers\BaseController;
 use app\models\User;
+use Exception;
 use Yii;
 use yii\base\Model;
 
@@ -65,7 +66,7 @@ class PasswordResetForm extends Model
     /**
      * @param @app\models\forms\PasswordResetForm $modelForm
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function passwordUpdate($modelForm)
     {
@@ -82,7 +83,7 @@ class PasswordResetForm extends Model
                 }
             }
 
-        } catch (\Exception $errorexception) {
+        } catch (Exception $errorexception) {
             BaseController::bitacoraAndFlash(
                 Yii::t('app', 'Error, updating password {error}', ['error' => $errorexception]),
                 MSG_ERROR

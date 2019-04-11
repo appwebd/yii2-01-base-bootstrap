@@ -17,6 +17,8 @@ use app\controllers\BaseController;
 use app\models\Action;
 use app\models\Controllers;
 use app\models\Permission;
+use Closure;
+use Throwable;
 use yii;
 use yii\db\ActiveQuery;
 use yii\db\Exception;
@@ -64,7 +66,7 @@ class Common extends ActiveQuery
 
     /**
      * @return string Get date time
-     * @throws yii\db\Exception
+     * @throws Exception
      */
     public static function getNow()
     {
@@ -225,7 +227,7 @@ class Common extends ActiveQuery
     }
 
     /**
-     * @return \Closure
+     * @return Closure
      */
     public static function isActive()
     {
@@ -269,7 +271,7 @@ class Common extends ActiveQuery
      * @param string $method the method associated with the model (save, delete)
      *
      * @return bool Success o failed to create/update a $model in this view
-     * @throws yii\db\Exception Failed to save a record error: {error}
+     * @throws Exception Failed to save a record error: {error}
      */
     public static function transaction(&$model, $method)
     {
@@ -282,6 +284,7 @@ class Common extends ActiveQuery
                         'app',
                         TRANSACTION_MODULE,
                         [
+                            ERROR => '',
                             METHOD => $method,
                             MODULE => 'app\models\queries\Common::transaction',
                         ]
@@ -291,7 +294,7 @@ class Common extends ActiveQuery
                 return true;
             }
             $transaction->rollBack();
-        } catch (\yii\db\Exception $exception) {
+        } catch (Exception $exception) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',
@@ -334,7 +337,7 @@ class Common extends ActiveQuery
                 MSG_ERROR
             );
             $transaction->rollBack();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             BaseController::bitacoraAndFlash(
                 Yii::t(
                     'app',

@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use app\models\forms\PasswordResetRequestForm;
 
 /* @var $this yii\web\View */
-/* @var $user app\models\User */
+/* @var object $model app\models\User */
 
 $token = PasswordResetRequestForm::generateToken($model->password_reset_token, $model->user_id);
 
