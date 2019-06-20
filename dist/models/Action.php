@@ -13,7 +13,7 @@
 
 namespace app\models;
 
-use app\controllers\BaseController;
+use app\models\queries\Bitacora;
 use app\models\queries\Common;
 use Exception;
 use Yii;
@@ -101,7 +101,7 @@ class Action extends ActiveRecord
      *
      * @param string $actionName column action_name of table actions
      * @return int column of action_id
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public static function getActionId($actionName)
     {
@@ -113,15 +113,9 @@ class Action extends ActiveRecord
             if (isset($actionId[0])) {
                 return $actionId[0];
             }
-        } catch (Exception $errorexception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => 'getActionId', ERROR => $errorexception]
-                ),
-                MSG_ERROR
-            );
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register($exception, 'app\models\Action::getActionId', MSG_ERROR);
         }
         return null;
     }

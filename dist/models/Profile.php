@@ -16,6 +16,7 @@ namespace app\models;
 use app\models\queries\Bitacora;
 use app\models\queries\Common;
 use Yii;
+use yii\base\Model;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;

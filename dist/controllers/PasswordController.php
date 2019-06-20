@@ -34,7 +34,7 @@ class PasswordController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [
                     ACTION_INDEX,                // Request password reset
                     self::ACTION_RESET,          // password reset
@@ -57,7 +57,7 @@ class PasswordController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                     self::ACTION_RESET => ['get', 'post'],
@@ -93,7 +93,7 @@ class PasswordController extends BaseController
      */
     public function actionReset($token = '')
     {
-        $tokendecode= BaseController::stringDecode($token);
+        $tokendecode = BaseController::stringDecode($token);
         $model = new PasswordResetRequestForm();
         try {
             if ($model->tokenIsValid($tokendecode)) {

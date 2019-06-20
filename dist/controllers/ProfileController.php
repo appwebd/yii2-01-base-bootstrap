@@ -21,6 +21,8 @@ use app\models\queries\Common;
 use app\models\search\ProfileSearch;
 use Exception;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -72,7 +74,7 @@ class ProfileController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [
                     ACTION_CREATE,
                     ACTION_DELETE,
@@ -99,7 +101,7 @@ class ProfileController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 ACTIONS => [
                     ACTION_CREATE => ['get', 'post'],
                     ACTION_DELETE => ['post'],

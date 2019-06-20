@@ -5,6 +5,8 @@ namespace app\controllers;
 use app\models\forms\ContactForm;
 use app\models\queries\Bitacora;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -49,7 +51,7 @@ class SiteController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [self::STR_ABOUT,
                     self::STR_CONTACT,
                     self::STR_COOKIE_POLICY,
@@ -67,7 +69,7 @@ class SiteController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 'actions' => [
                     ACTION_INDEX => ['get']
                 ]

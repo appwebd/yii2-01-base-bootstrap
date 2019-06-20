@@ -4,7 +4,6 @@
 namespace app\models\queries;
 
 use app\models\User;
-use phpDocumentor\Reflection\Types\Static_;
 use Yii;
 
 class UserMethods extends User

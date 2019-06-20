@@ -5,9 +5,9 @@ namespace app\components;
 
 use app\models\queries\Bitacora;
 use app\models\queries\Common;
+use Exception;
 use Yii;
 use yii\base\Component;
-use yii\base\Exception;
 
 /**
  * Class TaskDelete

@@ -4,9 +4,9 @@ namespace app\controllers;
 
 use app\models\forms\SignupForm;
 use Yii;
-use yii\web\Response;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * Class SingupController
@@ -29,7 +29,7 @@ class SignupController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [ACTION_INDEX],
                 'rules' => [
                     [
@@ -40,7 +40,7 @@ class SignupController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                 ],

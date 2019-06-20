@@ -13,7 +13,8 @@
 
 namespace app\models;
 
-use app\controllers\BaseController;
+use app\models\queries\Bitacora;
+use app\models\queries\Common;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -112,15 +113,10 @@ class Controllers extends ActiveRecord
             if (isset($controllerId[0])) {
                 return $controllerId[0];
             }
-        } catch (Exception $errorexception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => 'getControllerId', ERROR => $errorexception]
-                ),
-                MSG_ERROR
-            );
+        } catch (Exception $exception) {
+
+            $bitacora = new Bitacora();
+            $bitacora->register($exception, 'app\models\Controllers::getControllerId', MSG_ERROR);
         }
         return null;
     }

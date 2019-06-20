@@ -22,6 +22,8 @@ use app\models\search\ControllersSearch;
 use app\models\search\LogsSearch;
 use app\models\search\StatusSearch;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 
 /**
  * LogsController class permit logs in bitacora table
@@ -61,7 +63,7 @@ class LogsController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [
                     self::ACTIONS,
                     self::BLOCKED,
@@ -84,7 +86,7 @@ class LogsController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 ACTIONS => [
                     self::ACTIONS => ['get'],
                     self::BLOCKED => ['get'],

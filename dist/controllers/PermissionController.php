@@ -61,7 +61,7 @@ class PermissionController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [
                     self::ACTION_DROPDOWN,
                     ACTION_CREATE,
@@ -88,7 +88,7 @@ class PermissionController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 ACTIONS => [
                     self::ACTION_DROPDOWN => ['get'],
                     ACTION_CREATE => ['get', 'post'],
@@ -125,6 +125,7 @@ class PermissionController extends BaseController
      * @param object $model
      * @param string $columnPk Primary Key column name
      * @return bool|Response
+     * @Exception
      */
     private function saveRecord($model, $columnPk)
     {
@@ -135,15 +136,15 @@ class PermissionController extends BaseController
                 $primaryKey = BaseController::stringDecode($model->$columnPk);
                 return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
             }
-        } catch (\yii\db\Exception $exception) {
+        } catch (Exception $exception) {
             $event = Yii::t('app', 'Error saving record: {error}', ['error' => $exception]);
             $bitacora = new Bitacora();
-            $bitacora->registerAndFlash($event, 'saveRecord',MSG_ERROR);
+            $bitacora->registerAndFlash($event, 'saveRecord', MSG_ERROR);
         }
         return false;
     }
 
-/**
+    /**
      * Deletes an existing row of Permission model. If deletion is successful,
      * the browser will be redirected to the 'index' page.
      *
@@ -224,14 +225,14 @@ class PermissionController extends BaseController
         }
     }
 
-       /**
+    /**
      * Lists all Permission models.
      * @return mixed
      */
     public function actionIndex()
     {
 
-        $sm_permission  = new PermissionSearch();
+        $sm_permission = new PermissionSearch();
         $dp_permission = $sm_permission->search(
             Yii::$app->request->queryParams
         );
@@ -295,7 +296,7 @@ class PermissionController extends BaseController
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
-             $this->saveRecord($model, 'permission_id');
+            $this->saveRecord($model, 'permission_id');
         }
 
         return $this->render(ACTION_UPDATE, [MODEL => $model]);
@@ -311,7 +312,7 @@ class PermissionController extends BaseController
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $event = Yii::t('app', 'view record {id}', ['id'=>$model->permission_id]);
+        $event = Yii::t('app', 'view record {id}', ['id' => $model->permission_id]);
         $bitacora = New Bitacora();
         $bitacora->registerAndFlash($event, 'actionView', MSG_INFO);
 

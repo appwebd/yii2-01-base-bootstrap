@@ -30,7 +30,7 @@ class LoginController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [ACTION_INDEX, self::LOGOUT],
                 'rules' => [
                     [
@@ -46,7 +46,7 @@ class LoginController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                     self::LOGOUT => ['post'],
