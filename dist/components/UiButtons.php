@@ -11,13 +11,27 @@ use Yii;
 use yii\base\Component;
 use yii\helpers\Html;
 
+/**
+ * Class UiButtons
+ *
+ * @package  Components
+ * @author   Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @category Category
+ * @license  Private license
+ * @link     https://appwebd.github.io
+ */
 class UiButtons extends Component
 {
-    const BUTTON_ICON_BACK_INDEX = '<span class="glyphicon glyphicon-list"></span>&nbsp;';
-    const BUTTON_ICON_DELETE = '<span class="glyphicon glyphicon-trash"></span>&nbsp;';
-    const BUTTON_ICON_CREATE = '<span class="glyphicon glyphicon-plus"></span>&nbsp;';
-    const BUTTON_ICON_REFRESH = '<span class="glyphicon glyphicon-refresh"></span>&nbsp;';
-    const BUTTON_ICON_UPDATE = '<span class="glyphicon glyphicon-pencil"></span>&nbsp;';
+    const BUTTON_ICON_BACK_INDEX = '<span class="glyphicon glyphicon-list">
+                                    </span>&nbsp;';
+    const BUTTON_ICON_DELETE = '<span class="glyphicon glyphicon-trash">
+                               </span>&nbsp;';
+    const BUTTON_ICON_CREATE = '<span class="glyphicon glyphicon-plus">
+                               </span>&nbsp;';
+    const BUTTON_ICON_REFRESH = '<span class="glyphicon glyphicon-refresh"> 
+                                </span>&nbsp;';
+    const BUTTON_ICON_UPDATE = '<span class="glyphicon glyphicon-pencil">
+                                </span>&nbsp;';
     const BUTTON_ICON_SAVE = '<span class="glyphicon glyphicon-save"></span>&nbsp;';
     const BUTTON_TEXT_BACK_INDEX = 'Back to admin list';
     const BUTTON_TEXT_CREATE = 'New';
@@ -46,9 +60,9 @@ class UiButtons extends Component
     /**
      * Get Buttons action for action in gridview
      *
-     * @param string $icon Icon style for example glyphicon glyphicon-eye-open
-     * @param string $url Url
-     * @param string $key key encoded
+     * @param string $icon  Icon style for example glyphicon glyphicon-eye-open
+     * @param string $url   Url
+     * @param string $key   key encoded
      * @param string $title title of links
      *
      * @return string
@@ -79,15 +93,20 @@ class UiButtons extends Component
 
         return [
             ACTION_VIEW => function ($url, $model, $key) {
-                return UiButtons::getUrlButtonAction(self::ACTION_VIEW_ICON, '/view', $key, 'Show more details');
+                return UiButtons::getUrlButtonAction(
+                    self::ACTION_VIEW_ICON, '/view', $key, 'Show more details'
+                );
             },
             ACTION_UPDATE => function ($url, $model, $key) {
-                return UiButtons::getUrlButtonAction(self::ACTION_UPDATE_ICON, '/update', $key,'Update');
+                return UiButtons::getUrlButtonAction(
+                    self::ACTION_UPDATE_ICON, '/update', $key,'Update'
+                );
             },
             ACTION_DELETE => function ($url, $model, $key) {
 
                 $key = BaseController::stringEncode($key);
-                return Html::a(self::ACTION_DELETE_ICON,
+                return Html::a(
+                    self::ACTION_DELETE_ICON,
                     [
                         Yii::$app->controller->id . '/delete',
                         'id' => $key
@@ -95,7 +114,10 @@ class UiButtons extends Component
                     [
                         TITLE => Yii::t('app', 'Delete record'),
                         self::STR_CLASS_DATA_PJAX => '0',
-                        'data-confirm' => Yii::t('yii', 'Are you sure you want to delete?'),
+                        'data-confirm' => Yii::t(
+                            'yii',
+                            'Are you sure you want to delete?'
+                        ),
                         'data-method' => 'post',
                     ]
                 );
@@ -106,9 +128,10 @@ class UiButtons extends Component
     /**
      * Show actions with buttons
      *
-     * @param $model mixed
+     * @param object $model mixed
+     *
+     * @return void
      */
-
     public  function buttonsViewBottom(&$model)
     {
         $primaryKey = $model->getId();
@@ -150,7 +173,10 @@ class UiButtons extends Component
         $buttonDelete,
         self::HTML_SPACE,
         $this->button(
-            self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
+            self::BUTTON_ICON_BACK_INDEX . Yii::t(
+                'app',
+                self::BUTTON_TEXT_BACK_INDEX
+            ),
             self::CSS_BTN_PRIMARY,
             Yii::t('app', 'Back to administration view'),
             [ACTION_INDEX]
@@ -158,10 +184,13 @@ class UiButtons extends Component
     }
 
     /**
-     * @param $caption string caption of button
-     * @param $css     string style of button
-     * @param $buttonToolTip  string help tooltip
-     * @param array $aAction array of string with action to do
+     * Show a button in view
+     *
+     * @param string $caption       string caption of button
+     * @param string $css           string style of button
+     * @param string $buttonToolTip string help tooltip
+     * @param array  $aAction       array of string with action to do
+     *
      * @return string
      */
     public function button($caption, $css, $buttonToolTip, $aAction = [])
@@ -180,8 +209,11 @@ class UiButtons extends Component
     }
 
     /**
-     * @param $action array action
-     * @param $css    string style
+     * Show button delete in view
+     *
+     * @param array  $action array action
+     * @param string $css    string style
+     *
      * @return string
      */
     public function buttonDelete($action, $css)
@@ -195,7 +227,10 @@ class UiButtons extends Component
                 self::HTML_DATA_TOGGLE => self::HTML_TOOLTIP,
                 self::HTML_DATA_PLACEMENT => self::HTML_DATA_PLACEMENT_VALUE,
                 'data' => [
-                    self::STR_CONFIRM => Yii::t('app', 'Are you sure you want to delete this item?'),
+                    self::STR_CONFIRM => Yii::t(
+                        'app',
+                        'Are you sure you want to delete this item?'
+                    ),
                     METHOD => 'post',
                 ]
             ]
@@ -203,8 +238,12 @@ class UiButtons extends Component
     }
 
     /**
-     * @param $tabIndex
-     * @param bool $showBackToIndex
+     * Buttons in view create
+     *
+     * @param int  $tabIndex        nro secuence
+     * @param bool $showBackToIndex Visible or not button "back to index list"
+     *
+     * @return void
      */
     public function buttonsCreate($tabIndex, $showBackToIndex = true)
     {
@@ -219,12 +258,17 @@ class UiButtons extends Component
         self::HTML_TITLE, '=\'', Yii::t('app', self::BUTTON_TEXT_REFRESH), '\' ',
         self::HTML_DATA_TOGGLE, '=\'', self::HTML_TOOLTIP, '\' ',
         self::HTML_DATA_PLACEMENT, '=\'', self::HTML_DATA_PLACEMENT_VALUE,
-        '\'>', self::BUTTON_ICON_REFRESH . Yii::t('app', self::BUTTON_TEXT_REFRESH), '</button>',
-
+        '\'>', self::BUTTON_ICON_REFRESH , Yii::t(
+            'app',
+            self::BUTTON_TEXT_REFRESH
+        ), '</button>',
         self::HTML_SPACE;
         if ($showBackToIndex) {
             echo $this->button(
-                self::BUTTON_ICON_BACK_INDEX . Yii::t('app', self::BUTTON_TEXT_BACK_INDEX),
+                self::BUTTON_ICON_BACK_INDEX . Yii::t(
+                    'app',
+                    self::BUTTON_TEXT_BACK_INDEX
+                ),
                 self::CSS_BTN_DEFAULT,
                 Yii::t('app', 'Back to administration view'),
                 [ACTION_INDEX]
@@ -235,7 +279,8 @@ class UiButtons extends Component
     /**
      * Return html for button save
      *
-     * @param integer $tabIndex
+     * @param int $tabIndex Nro. secuense order in tab forms.
+     *
      * @return string declaration of buttonSave
      */
     public function buttonSave($tabIndex)
@@ -244,7 +289,10 @@ class UiButtons extends Component
             self::BUTTON_ICON_SAVE . Yii::t('app', self::BUTTON_TEXT_SAVE),
             [
                 STR_CLASS => self::CSS_BTN_PRIMARY,
-                self::HTML_TITLE => Yii::t('app', 'Save the information of this form'),
+                self::HTML_TITLE => Yii::t(
+                    'app',
+                    'Save the information of this form'
+                ),
                 self::HTML_DATA_TOGGLE => self::HTML_TOOLTIP,
                 self::HTML_DATA_PLACEMENT => self::HTML_DATA_PLACEMENT_VALUE,
                 'name' => 'save-button',
@@ -257,8 +305,13 @@ class UiButtons extends Component
     }
 
     /**
-     * @param $showButtons String with boolean values to show Create, refresh, delete buttons.
-     * @param bool $buttonHeader
+     * Buttons in admin view
+     *
+     * @param string $showButtons  String with boolean values to show
+     *                             Create, refresh, delete buttons.
+     * @param bool   $buttonHeader boolean indicator visible or not visible
+     *                             button header
+     *
      * @return void
      */
     public function buttonsAdmin($showButtons = '111', $buttonHeader = true)
@@ -269,7 +322,10 @@ class UiButtons extends Component
             $buttonCreate = '';
             if ($showButtons[0] && Common::getProfilePermission(ACTION_CREATE)) {
                 $buttonCreate = $this->button(
-                    self::BUTTON_ICON_CREATE . Yii::t('app', self::BUTTON_TEXT_CREATE),
+                    self::BUTTON_ICON_CREATE . Yii::t(
+                        'app',
+                        self::BUTTON_TEXT_CREATE
+                    ),
                     self::CSS_BTN_PRIMARY,
                     Yii::t('app', self::BUTTON_TEXT_TOOLTIP),
                     [ACTION_CREATE]
@@ -290,9 +346,11 @@ class UiButtons extends Component
             }
 
             if ($buttonHeader) {
-                echo '<br/>', $buttonCreate, self::HTML_SPACE, $buttonRefresh, self::HTML_SPACE, $buttonDelete;
+                echo '<br/>', $buttonCreate, self::HTML_SPACE,
+                $buttonRefresh, self::HTML_SPACE, $buttonDelete;
             } else {
-                echo '<br/><br/><br/>', $buttonDelete, self::HTML_SPACE, $buttonRefresh, self::HTML_SPACE, $buttonCreate;
+                echo '<br/><br/><br/>', $buttonDelete, self::HTML_SPACE,
+                $buttonRefresh, self::HTML_SPACE, $buttonCreate;
             }
         } catch (Exception $exception) {
             $bitacora = new Bitacora();
@@ -302,7 +360,9 @@ class UiButtons extends Component
 
     /**
      * Button Refresh view
-     * @param string $caption
+     *
+     * @param string $caption Caption of button
+     *
      * @return string
      */
     public function buttonRefresh($caption = self::BUTTON_TEXT_REFRESH)
