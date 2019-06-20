@@ -4,41 +4,34 @@ $bundles = require __DIR__ . '/bundles.php';
 $db = require __DIR__ . '/db.php';
 $params = require __DIR__ . '/params.php';
 
-
 $config = [
-    'id' => 'basic',
-    'name' => 'Base',
-    'basePath' => dirname(__DIR__),
-    'language' => 'en',
-    'sourceLanguage' => 'en',
-    'charset' => 'UTF-8',
-    'layoutPath' => '@app/views/layouts',
-    'vendorPath' => '@app/vendor',
-    'defaultRoute' => 'site/index',
-    //'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
-
-// https://www.yiiframework.com/doc/api/2.0/yii-filters-hostcontrol
-// the following configuration is only preferred like last resource (is preferable web server configuration instead)
-/*
-    'as hostControl' => [
-        'class' => 'yii\filters\HostControl',
-        'allowedHosts' => [
-            'base.local',
-            '*.base.local',
-        ],
-        'fallbackHostInfo' => 'https://base.local',
-    ],
-*/
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm' => '@vendor/npm-asset',
+        '@npm'   => '@vendor/npm-asset',
     ],
+    'basePath' => dirname(__DIR__),
     'bootstrap' => [
+        'log',
         [
             'class' => 'app\components\LanguageSelector',
             'supportedLanguages' => ['en', 'es'],
         ],
     ],
+    //'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
+// https://www.yiiframework.com/doc/api/2.0/yii-filters-hostcontrol
+// the following configuration is only preferred like last resource (is preferable web server configuration instead)
+    /*
+        'as hostControl' => [
+            'class' => 'yii\filters\HostControl',
+            'allowedHosts' => [
+                'base.local',
+                '*.base.local',
+            ],
+            'fallbackHostInfo' => 'https://base.local',
+        ],
+    */
+
+    'charset' => 'UTF-8',
     'components' => [
         'assetManager' => [
             'appendTimestamp' => true,
@@ -74,7 +67,6 @@ $config = [
             ],
         ],
         'log' => [
-
             'flushInterval' => 1,
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -120,6 +112,7 @@ $config = [
 //                'encryption' => 'tls',
             ],
         ],
+
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '-ep1N8LQ66XkS34oQIEgZAogO466l7HX',
@@ -132,18 +125,29 @@ $config = [
             //'savePath' => '@app/tmp/sessions',
             'timeout' => 1440, //24 minutos?
         ],
+        /*
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+            ],
+        ],
+        */
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
             'loginUrl' => ['/login/index'],
         ],
-
-        'ui' => [
-            STR_CLASS => 'app\components\UiComponent',
-        ],
-
     ],
+
+    'defaultRoute' => 'site/index',
+    'id' => 'basic',
+    'name' => 'Base',
+    'language' => 'en',
+    'layoutPath' => '@app/views/layouts',
     'params' => $params,
+    'sourceLanguage' => 'en',
+    'vendorPath' => '@app/vendor',
 ];
 
 if (YII_ENV_DEV) {
@@ -162,4 +166,5 @@ if (YII_ENV_DEV) {
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
+
 return $config;
