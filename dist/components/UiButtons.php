@@ -1,6 +1,5 @@
 <?php
 
-
 namespace app\components;
 
 
@@ -54,7 +53,7 @@ class UiButtons extends Component
      *
      * @return string
      */
-    public static function getUrlButtonAction($icon, $url, $key, $title)
+    public function getUrlButtonAction($icon, $url, $key, $title)
     {
         $url = Yii::$app->controller->id . $url;
         return Html::a(
@@ -75,35 +74,22 @@ class UiButtons extends Component
      *
      * @return array
      */
-    public static function buttonsActionColumn()
+    public  function buttonsActionColumn()
     {
 
         return [
             ACTION_VIEW => function ($url, $model, $key) {
-                return UiButtons::getUrlButtonAction(
-                    self::ACTION_VIEW_ICON,
-                    '/view',
-                    $key,
-                    'Show more details'
-                );
+                return UiButtons::getUrlButtonAction(self::ACTION_VIEW_ICON, '/view', $key, 'Show more details');
             },
-
             ACTION_UPDATE => function ($url, $model, $key) {
-                return UiButtons::getUrlButtonAction(
-                    self::ACTION_UPDATE_ICON,
-                    '/update',
-                    $key,
-                    'Update'
-                );
+                return UiButtons::getUrlButtonAction(self::ACTION_UPDATE_ICON, '/update', $key,'Update');
             },
             ACTION_DELETE => function ($url, $model, $key) {
 
                 $key = BaseController::stringEncode($key);
-                return Html::a(
-                    self::ACTION_DELETE_ICON,
+                return Html::a(self::ACTION_DELETE_ICON,
                     [
                         Yii::$app->controller->id . '/delete',
-
                         'id' => $key
                     ],
                     [
