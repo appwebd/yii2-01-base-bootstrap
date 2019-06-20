@@ -1,0 +1,21 @@
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                 COLOR DEFINITION
+-------------------------------------------------------------------------------------------------
+*/
+:root {
+    --status-bar-background: #0071ce;
+    --status-bar-font-color: white;
+    --background-button: #0071ce;
+    --text-primary: #6f309b;
+    --text-secondary: #82757D;
+    --text-success: #49A745;
+    --text-danger: #DC355C;
+    --text-warning: #FFC107;
+    --text-info: #17A2B8;
+    --text-slategray: orange;
+    --text-aquamarine: #E7F5FF;
+
+    --color-primary: black;
+    --color-error: red;
+}

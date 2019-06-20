@@ -1,0 +1,17 @@
+
+
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                          BUTTONS
+-------------------------------------------------------------------------------------------------
+*/
+.btn-primary {
+    background-color: var(--status-bar-background);
+}
+
+.btn-primary:hover {
+    background-color: var(--status-bar-background);
+    color: #fff;
+    border-color: #204d74;
+    opacity: 0.8;
+}

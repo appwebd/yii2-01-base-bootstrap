@@ -1,0 +1,20 @@
+
+/*
+-------------------------------------------------------------------------------------------------
+                                                                                          TOGGLE
+-------------------------------------------------------------------------------------------------
+*/
+a[data-value="1"] {
+    color: green !important;
+    background-color: transparent;
+}
+
+a[data-value="0"] {
+    color: red !important;
+    background-color: transparent;
+}
+
+a[data-value=""] {
+    color: red !important;
+    background-color: transparent;
+}
