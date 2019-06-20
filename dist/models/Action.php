@@ -71,23 +71,9 @@ class Action extends ActiveRecord
         $model->active = $active;
 
         if (Common::transaction($model, 'save')) {
-            $message = Yii::t(
-                'app',
-                'OK your action {actionName} was saved.',
-                ['actionName' => $actionName]
-            );
-            Yii::$app->session->setFlash(ERROR, $message);
             return true;
         }
 
-        $message = yii::t(
-            'app',
-            'Could not save new Action: {error}\n',
-            [
-                'error' => print_r($model->errors, true)
-            ]
-        );
-        Yii::$app->session->setFlash(ERROR, $message);
         return false;
     }
 
@@ -142,6 +128,7 @@ class Action extends ActiveRecord
 
     /**
      * Get array from Actions
+     *
      * @return array
      */
     public static function getActionList()
@@ -152,7 +139,9 @@ class Action extends ActiveRecord
 
     /**
      * Get array from Actions
+     *
      * @param $actionId integer primary key of table action
+     *
      * @return array
      */
     public static function getActionListById($actionId)
@@ -208,7 +197,7 @@ class Action extends ActiveRecord
         return [
             'timestamp' => [
                 //'class' => 'yii\behaviors\TimestampBehavior',
-                'class' => TimestampBehavior::class,
+                'class' => TimestampBehavior::className(),
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
@@ -223,7 +212,7 @@ class Action extends ActiveRecord
      */
     public function getControllers()
     {
-        return $this->hasOne(Controllers::class, [self::CONTROLLER_ID => self::CONTROLLER_ID]);
+        return $this->hasOne(Controllers::className(), [self::CONTROLLER_ID => self::CONTROLLER_ID]);
     }
 
     /**
@@ -231,7 +220,7 @@ class Action extends ActiveRecord
      */
     public function getLogs()
     {
-        return $this->hasMany(Logs::class, [self::ACTION_ID => self::ACTION_ID]);
+        return $this->hasMany(Logs::className(), [self::ACTION_ID => self::ACTION_ID]);
     }
 
     /**

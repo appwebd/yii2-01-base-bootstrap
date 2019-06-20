@@ -12,8 +12,9 @@
  */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
+use app\components\UiButtons;
 use app\models\Permission;
+use app\models\queries\Bitacora;
 use app\models\queries\Common;
 use app\models\search\ActionSearch;
 use app\models\search\ControllersSearch;
@@ -99,37 +100,26 @@ try {
             ],
 
             [
-                'buttons' => UiComponent::buttonsActionColumn(),
+                'buttons' => UiButtons::buttonsActionColumn(),
                 'contentOptions' => [STR_CLASS => 'GridView'],
                 HEADER => UiComponent::pageSizeDropDownList($pageSize),
                 'headerOptions' => ['style' => 'color:#337ab7'],
-                STR_CLASS => yii\grid\ActionColumn::class,
+                STR_CLASS => yii\grid\ActionColumn::className(),
                 TEMPLATE => Common::getProfilePermissionString('111'),
             ]
         ]
     ]);
-} catch (Exception $e) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\permission\index::GridView::widget', ERROR => $e]
-        ),
-        MSG_ERROR
-    );
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->registerAndFlash($exception, 'app\views\permission\index::GridView', MSG_ERROR);
 }
 
 try {
-    UiComponent::buttonsAdmin('111', false);
-} catch (\yii\db\Exception $e) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\permission\index::GridView::widget', ERROR => $e]
-        ),
-        MSG_ERROR
-    );
+    $buttons = new UiButtons();
+    $buttons->buttonsAdmin('111', false);
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\permission\index::GridView', MSG_ERROR);
 }
 Html::endForm();
 echo HTML_WEBPAGE_CLOSE;

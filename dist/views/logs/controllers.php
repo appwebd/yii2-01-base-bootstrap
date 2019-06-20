@@ -1,19 +1,19 @@
 <?php
 /**
-  * Controllers
-  *
-  * @package     Index of Controllers
-  * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
-  * @copyright   (C) Copyright - Web Application development
-  * @license     Private license
-  * @link        https://appwebd.github.io
-  * @date        2018-07-30 19:20:11
-  * @version     1.0
-*/
+ * Controllers
+ *
+ * @package     Index of Controllers
+ * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright   (C) Copyright - Web Application development
+ * @license     Private license
+ * @link        https://appwebd.github.io
+ * @date        2018-07-30 19:20:11
+ * @version     1.0
+ */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
 use app\models\Controllers;
+use app\models\queries\Bitacora;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -83,14 +83,8 @@ try {
         ]
     ]);
 } catch (Exception $errorException) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\logs\controllers::gridView::widget', ERROR => $errorException]
-        ),
-        MSG_ERROR
-    );
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\logs\controllers::GridView', MSG_ERROR);
 }
 
 echo '<br/><br/>';

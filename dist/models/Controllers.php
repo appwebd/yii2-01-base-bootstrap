@@ -41,6 +41,7 @@ class Controllers extends ActiveRecord
     const CONTROLLER_DESCRIPTION = 'controller_description';
     const CONTROLLER_ID = 'controller_id';
     const CONTROLLER_NAME = 'controller_name';
+    const ICON = 'fas fa-gamepad';
     const MENU_BOOLEAN_PRIVATE = 'menu_boolean_private';
     const MENU_BOOLEAN_VISIBLE = 'menu_boolean_visible';
     const TITLE = 'Controllers';
@@ -70,13 +71,10 @@ class Controllers extends ActiveRecord
         $model->menu_boolean_visible = $menuBooleanVisible;
         $model->active = $active;
 
-        if ($model->save()) {
-            Yii::$app->session->setFlash(SUCCESS, Yii::t('app', 'Controller was saved successfully.'));
+        if (Common::transaction($model, 'save')) {
             return true;
         }
 
-        $message = 'Could not save new Controller:\n' . print_r($model->errors, true);
-        Yii::$app->session->setFlash(ERROR, $message);
         return false;
     }
 
@@ -205,7 +203,7 @@ class Controllers extends ActiveRecord
     public function getAction()
     {
         return $this->hasMany(
-            Action::class,
+            Action::className(),
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }
@@ -216,7 +214,7 @@ class Controllers extends ActiveRecord
     public function getLogs()
     {
         return $this->hasMany(
-            Logs::class,
+            Logs::className(),
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }
@@ -227,7 +225,7 @@ class Controllers extends ActiveRecord
     public function getPermission()
     {
         return $this->hasMany(
-            Permission::class,
+            Permission::className(),
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }

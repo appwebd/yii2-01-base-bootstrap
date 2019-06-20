@@ -13,18 +13,16 @@
 
 namespace app\models\queries;
 
-use app\controllers\BaseController;
 use app\models\Action;
 use app\models\Controllers;
 use app\models\Permission;
 use Closure;
-use Throwable;
 use yii;
-use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Query;
 
-class Common extends ActiveQuery
+class Common extends ActiveRecord
 {
     const DENY_ACCESS = 0;
     const PERMIT_ACCESS = 1;
@@ -34,6 +32,17 @@ class Common extends ActiveQuery
     const ROWS_ZERO = 0;
     const ROWS_ONE = 1;
     const USER_ID_VISIT = 0;
+
+    /**
+     * Get database name current conextion
+     *
+     * @return string
+     * @throws Exception
+     */
+    public static function getDatabase()
+    {
+        return Yii::$app->db->createCommand("SELECT DATABASE()")->queryScalar();
+    }
 
     /**
      * @param $dateInitial string in format YYYY-mm-dd H:i:s
@@ -52,19 +61,15 @@ class Common extends ActiveQuery
             }
             return $return;
         } catch (Exception $exception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => 'getDateDiffNow', ERROR => $exception]
-                ),
-                MSG_ERROR
-            );
+            $bitacora = new Bitacora();
+            $bitacora->register($exception, 'app\models\queries\common::getDateDiffNow', MSG_ERROR);
         }
         return 10000; // default any value greather than zero
     }
 
     /**
+     * Get date time of database
+     *
      * @return string Get date time
      * @throws Exception
      */
@@ -81,10 +86,13 @@ class Common extends ActiveQuery
     }
 
     /**
-     * @param $table string name of table
-     * @param $column string name of column
-     * @param $field string name of column
-     * @param $value  string value of column to compare
+     * Get column description of table
+     *
+     * @param string $table name of table
+     * @param string $column name of column
+     * @param string $field name of column
+     * @param string $value value of column to compare
+     *
      * @return string description value
      */
     public static function getDescription($table, $column, $field, $value)
@@ -99,22 +107,19 @@ class Common extends ActiveQuery
             if (isset($result[0])) {
                 $return = $result[0];
             }
-        } catch (Exception $errorexception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => '@app\models\queries\getDescription', ERROR => $errorexception]
-                ),
-                MSG_ERROR
-            );
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register($exception, 'app\models\queries\Common::getDescription', MSG_ERROR);
         }
 
         return $return;
     }
 
     /**
-     * @param $table string table name
+     * Get the count of a table
+     *
+     * @param string $table table name
+     *
      * @return int value of count nro of records in table
      */
     public static function getNroRows($table)
@@ -130,9 +135,12 @@ class Common extends ActiveQuery
     }
 
     /**
-     * @param $table string name of table in database
-     * @param $field string column name in table
-     * @param $value string value
+     * Get the numbers of rows in other tables with integrity referential found.
+     *
+     * @param string $table name of table in database
+     * @param string $field column name in table
+     * @param string $value value of column field
+     *
      * @return int numbers of rows in other tables with integrity referential found.
      */
     public static function getNroRowsForeignkey($table, $field, $value)
@@ -150,7 +158,10 @@ class Common extends ActiveQuery
     }
 
     /**
-     * @param $showButtons string what buttons should show in the view
+     * Get formatted token template of widget gridView
+     *
+     * @param string $showButtons what buttons should show in the view
+     *
      * @return string
      */
     public static function getProfilePermissionString($showButtons = '111')
@@ -159,7 +170,7 @@ class Common extends ActiveQuery
 
         $template = '';
         if ($aButton[0] && Common::getProfilePermission('view')) {
-            $template .= ' {view} ';
+            $template .= '{view} ';
         }
 
         if ($aButton[1] && Common::getProfilePermission('update')) {
@@ -174,14 +185,21 @@ class Common extends ActiveQuery
 
     /**
      * Check user permission for any resources like tables (Controllers/Action)
-     * @param $actionName
+     *
+     * @param string $actionName Name of action
+     *
      * @return int grant or deny access
      */
     public static function getProfilePermission($actionName)
     {
         try {
 
-            $profileId = Common::getProfile();
+            $userId = Yii::$app->user->getId();
+            $profileId = UserMethods::getProfileUser($userId);
+            if (!$profileId) {
+                $profileId = Common::PROFILE_ID_VISIT;
+            }
+
             $actionPermission = Common::DENY_ACCESS;
 
             if ($profileId == Common::PROFILE_ID_ADMINISTRATOR) {
@@ -196,13 +214,11 @@ class Common extends ActiveQuery
                 $actionPermission = Permission::getPermission($actionId, $controllerId, $profileId);
             }
 
-        } catch (Exception $e) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::getProfilePermission', ERROR => $e]
-                ),
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                $exception,
+                'app\models\queries\Common::getProfilePermission',
                 MSG_ERROR
             );
             $actionPermission = Common::DENY_ACCESS;
@@ -210,20 +226,6 @@ class Common extends ActiveQuery
 
         return $actionPermission;
 
-    }
-
-    /**
-     * @return int profile of User
-     */
-    public static function getProfile()
-    {
-        $profileId = Common::PROFILE_ID_VISIT;
-
-        if (isset(Yii::$app->user->identity->profile->profile_id)) {
-            $profileId = Yii::$app->user->identity->profile->profile_id;
-        }
-
-        return $profileId;
     }
 
     /**
@@ -238,30 +240,79 @@ class Common extends ActiveQuery
 
     /**
      * Get information for dropdown list
-     * @param $model object defined in app\models to get information
+     * @param mixed $model Object defined in app\models to get information
      * @param $parentModelId string column related model
      * @param $valueId integer id to search in model
      * @param $key integer column to get column code
      * @param $value string column to get column description
      * @param $orderBy String Order by column
+     * @param string $selected Selected column
      * @return string String
      */
-    public static function relatedDropdownList($model, $parentModelId, $valueId, $key, $value, $orderBy)
+    public static function relatedDropdownList($model, $parentModelId, $valueId, $key, $value, $orderBy, $selected = '')
     {
         $rows = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
 
-        $dropdown = Yii::t('app', 'Please select one option');
-        $dropdown = HTML_OPTION . $dropdown . HTML_OPTION_CLOSE;
+        $dropdown = '<select>';
+        $dropdown .= HTML_OPTION . Yii::t('app', 'Please select one option') . HTML_OPTION_CLOSE;
 
         if (count($rows) > 0) {
             foreach ($rows as $row) {
-                $dropdown .= '<option value=' . $row->$key . '>' . $row->$value . HTML_OPTION_CLOSE;
+                if ($selected == $row->$key) {
+                    $dropdown .= '<option value="' . $row->$key . '" selected>' . $row->$value . HTML_OPTION_CLOSE;
+                } else {
+                    $dropdown .= '<option value="' . $row->$key . '">' . $row->$value . HTML_OPTION_CLOSE;
+                }
+
+
             }
         } else {
             $dropdown .= HTML_OPTION . Yii::t('app', 'No results found') . HTML_OPTION_CLOSE;
         }
 
-        return $dropdown;
+        return $dropdown . '</select>';
+    }
+
+    /**
+     * Toggle some value of table tabl_tablas
+     *
+     * @param string $tableName
+     * @param string $columnName toggle
+     * @param string $pkName primary key of table $tableName
+     * @param int $pkValue
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public static function toggleColumn($tableName, $columnName, $pkName, $pkValue)
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $sqlcode = 'UPDATE ' . $tableName .
+                ' SET ' . $columnName . '= not(' . $columnName . ')                        
+                         WHERE
+                        ' . $pkName . ' = ' . $pkValue;
+
+            Yii::$app->db->createCommand($sqlcode)->execute();
+            $transaction->commit();
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                'ok Transaction sqlcode: ' . $sqlcode,
+                'app\models\queries\Common::toggleColumn',
+                MSG_SUCCESS
+            );
+            return true;
+
+        } catch (Exception $exception) {
+            $transaction->rollBack();
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                $exception,
+                'app\models\queries\Common::toggleColumn',
+                MSG_ERROR
+            );
+            throw $exception;
+        }
     }
 
     /**
@@ -271,7 +322,6 @@ class Common extends ActiveQuery
      * @param string $method the method associated with the model (save, delete)
      *
      * @return bool Success o failed to create/update a $model in this view
-     * @throws Exception Failed to save a record error: {error}
      */
     public static function transaction(&$model, $method)
     {
@@ -279,31 +329,20 @@ class Common extends ActiveQuery
         try {
             if ($model->$method()) {
                 $transaction->commit();
-                BaseController::bitacora(
-                    Yii::t(
-                        'app',
-                        TRANSACTION_MODULE,
-                        [
-                            ERROR => '',
-                            METHOD => $method,
-                            MODULE => 'app\models\queries\Common::transaction',
-                        ]
-                    ),
+                $bitacora = new Bitacora();
+                $bitacora->register(
+                    'OK transaction method:' . $method,
+                    'app\models\queries\Common::transaction',
                     MSG_SUCCESS
                 );
                 return true;
             }
             $transaction->rollBack();
         } catch (Exception $exception) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [
-                        MODULE => 'app\models\queries\Common::transaction method:' . $method,
-                        ERROR => $exception
-                    ]
-                ),
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                $exception,
+                'app\models\queries\Common::transaction::' . $method,
                 MSG_ERROR
             );
             $transaction->rollBack();
@@ -318,7 +357,6 @@ class Common extends ActiveQuery
      * @param string $sqlcode string sql instruction
      *
      * @return bool int true/false answer: query was executed with errors?
-     * @throws Exception
      */
     public static function sqlCreateCommand($sqlcode)
     {
@@ -327,23 +365,11 @@ class Common extends ActiveQuery
             Yii::$app->db->createCommand($sqlcode)->execute();
             $transaction->commit();
             return true;
-        } catch (\Exception $e) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:' . $sqlcode, ERROR => $e]
-                ),
-                MSG_ERROR
-            );
-            $transaction->rollBack();
-        } catch (Throwable $e) {
-            BaseController::bitacoraAndFlash(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => 'app\models\queries\Common::sqlCreateCommand sqlcode:' . $sqlcode, ERROR => $e]
-                ),
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                $exception,
+                'app\models\queries\Common::sqlCreateCommand::' . $sqlcode,
                 MSG_ERROR
             );
             $transaction->rollBack();

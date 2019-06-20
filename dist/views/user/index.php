@@ -11,9 +11,10 @@
  * @version     1.0
  */
 
+use app\components\UiButtons;
 use app\components\UiComponent;
-use app\controllers\BaseController;
 use app\models\Profile;
+use app\models\queries\Bitacora;
 use app\models\queries\Common;
 use app\models\search\ProfileSearch;
 use app\models\User;
@@ -79,7 +80,7 @@ try {
                 FORMAT => 'raw'
             ],
             [
-                'buttons' => UiComponent::buttonsActionColumn(),
+                'buttons' => UiButtons::buttonsActionColumn(),
                 'contentOptions' => [STR_CLASS => 'GridView'],
                 HEADER => UiComponent::pageSizeDropDownList($pageSize),
                 'headerOptions' => ['style' => 'color:#337ab7'],
@@ -89,34 +90,17 @@ try {
 
         ]
     ]);
-} catch (Exception $e) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [
-                MODULE => '@app\views\user\index',
-                ERROR => $e
-            ]
-        ),
-        MSG_ERROR
-    );
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, '@app\views\User\index::GridView', MSG_ERROR);
 }
 
 try {
-    UiComponent::buttonsAdmin('111', false);
-} catch (\yii\db\Exception $e) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [
-                MODULE => '@app\views\User\index::UiComponent::buttonsAdmin',
-                ERROR => $e
-            ]
-        ),
-        MSG_ERROR
-    );
+    $buttons = new UiButtons();
+    $buttons->buttonsAdmin('111', false);
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, '@app\views\User\index::UiComponent::buttonsAdmin', MSG_ERROR);
 }
 
 Html::endForm();

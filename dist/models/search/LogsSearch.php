@@ -198,6 +198,7 @@ class LogsSearch extends Logs
             'logs.controller_id' => $this->controller_id,
             'logs.ipv4_address_int' => $this->ipv4_address_int,
             'logs.logs_id' => $this->logs_id,
+
             'logs.status_id' => $this->status_id,
             'logs.user_id' => $this->user_id,
             'action.action_id' => $this->action_id,
@@ -209,6 +210,7 @@ class LogsSearch extends Logs
 
         $query->andFilterWhere(['like', 'logs.date', $this->date]);
         $query->andFilterWhere(['like', 'logs.event', $this->event])
+            ->andFilterWhere(['like', 'logs.functionCode', $this->functionCode])
             ->andFilterWhere(['like', 'logs.ipv4_address', $this->ipv4_address])
             ->andFilterWhere(['like', 'logs.user_agent', $this->user_agent]);
 

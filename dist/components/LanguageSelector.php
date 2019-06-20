@@ -28,13 +28,12 @@ class LanguageSelector implements BootstrapInterface
     public $supportedLanguages = ['es', 'en'];
 
     /**
-     * @param \yii\base\Application $app
+     * @param object $app \yii\base\Application
      */
     public function bootstrap($app)
     {
 
         $preflang = $app->request->getPreferredLanguage($this->supportedLanguages);
-
         $app->language = $preflang;
     }
 }

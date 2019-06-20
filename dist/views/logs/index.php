@@ -12,11 +12,10 @@
  */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
 use app\models\Logs;
+use app\models\queries\Bitacora;
 use app\models\search\LogsSearch;
 use app\models\Status;
-use app\models\User;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -83,7 +82,7 @@ try {
                 FORMAT => 'raw',
                 STR_CLASS => GRID_DATACOLUMN,
                 VALUE => function ($model) {
-                    if (($model = User::getUsername($model->user_id)) !== null) {
+                    if (isset($model->username)) {
                         $return = $model->username;
                     } else {
                         $return = Yii::t('app', 'Unknown');
@@ -93,15 +92,9 @@ try {
 
             ],
         ]]);
-} catch (Exception $errorException) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\logs\index::gridView::widget', ERROR => $errorException]
-        ),
-        MSG_ERROR
-    );
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\log\index::GridView', MSG_ERROR);
 }
 
 echo '<br/><br/>';

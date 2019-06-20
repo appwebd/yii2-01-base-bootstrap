@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @app/view/layout/main.php
  *
@@ -11,15 +12,13 @@
  * @version     1.0
  */
 
-/* @var $this \yii\web\View */
-
 /* @var $content string */
 
 use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-
+use app\models\queries\Bitacora;
 AppAsset::register($this);
 
 ?>
@@ -30,9 +29,6 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta http-equiv="cache-control" content="no-cache">
-    <meta http-equiv="pragma" content="no-cache">
 
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
@@ -51,12 +47,23 @@ if (Yii::$app->user->isGuest) {
     echo Yii::$app->view->render('@app/views/partials/_menuAdmin');
 }
 
-echo Breadcrumbs::widget([
-    'links' => isset($this->params[BREADCRUMBS]) ? $this->params[BREADCRUMBS] : [],
-]);
+try {
+    echo Breadcrumbs::widget([
+        'links' => isset($this->params[BREADCRUMBS]) ? $this->params[BREADCRUMBS] : [],
+    ]);
+
+} catch(Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'views\layout\main::Breadcrumbs', MSG_ERROR);
+}
 
 echo '<div class="webpage">';
-echo Alert::widget();
+try {
+    echo Alert::widget();
+} catch(Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'views\layout\main::Alert', MSG_ERROR);
+}
 echo '</div>';
 
 echo '<div class="webpage">';

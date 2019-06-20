@@ -13,14 +13,16 @@
 
 namespace app\models;
 
-use app\controllers\BaseController;
+use app\models\queries\Bitacora;
 use app\models\queries\UserQuery;
 use Yii;
 use yii\base\Exception;
+use yii\base\Security;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\HtmlPurifier;
+use yii\helpers\Url;
 use yii\web\IdentityInterface;
 
 /**
@@ -70,7 +72,7 @@ class User extends ActiveRecord implements IdentityInterface
     const USERNAME = 'username';
     const USER_ID = 'user_id';
     const USER_ID_VISIT = 1;
-
+    const ICON = 'fas fa-user';
     /**
      * @var string|null the current password value from form input
      */
@@ -86,14 +88,7 @@ class User extends ActiveRecord implements IdentityInterface
         return new UserQuery(get_called_class());
     }
 
-    /**
-     * @param $userId integer primary key of table User
-     * @return User|null
-     */
-    public static function getUsername($userId)
-    {
-        return static::findOne([self::USER_ID => $userId]);
-    }
+
 
     /**
      * Find user by AccessToken
@@ -119,14 +114,7 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne([self::USER_ID => $userId, self::ACTIVE => self::STATUS_ACTIVE]);
     }
 
-    /**
-     * Get the user_id of table user
-     * @return int user_id primary key of table user
-     */
-    public static function getIdentityUserId()
-    {
-        return Yii::$app->user->isGuest ? User::USER_ID_VISIT : Yii::$app->user->identity->getId();
-    }
+
 
     /**
      * Finds user by username
@@ -146,6 +134,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return 'user';
     }
+
+
 
     /**
      * @return array the validation rules.
@@ -254,7 +244,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function getProfile()
     {
         return $this->hasOne(
-            Profile::class,
+            Profile::className(),
             [self::PROFILE_ID => self::PROFILE_ID]
         );
     }
@@ -275,16 +265,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateAuthKey()
     {
         try {
-            $this->auth_key = Yii::$app->security->generateRandomString();
-        } catch (Exception $errorexception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => '@app\models\User\generateAuthKey', ERROR => $errorexception]
-                ),
-                MSG_ERROR
-            );
+            $security = new yii\base\Security();
+            $this->auth_key = $security->generateRandomString();
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register($exception, 'app\models\User\generateAuthKey', MSG_ERROR);
         }
     }
 
@@ -296,14 +281,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function generatePasswordResetToken($save)
     {
         try {
-            $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-        } catch (Exception $errorexception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => '@app\models\User\generatePasswordResetToken', ERROR => $errorexception]
-                ),
+            $security  = new yii\base\Security();
+            $this->auth_key = $security->generateRandomString();
+            $this->password_reset_token = $security->generateRandomString() . '_' . time();
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                $exception,
+                'app\models\User::generatePasswordResetToken',
                 MSG_ERROR
             );
         }
@@ -322,17 +307,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateEmailConfirmationToken($save)
     {
         try {
-            $this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
-        } catch (Exception $errorexception) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [
-                        MODULE => '@app\models\User\generateEmailConfirmationToken',
-                        ERROR => $errorexception
-                    ]
-                ),
+            $security = new yii\base\Security();
+            $this->email_confirmation_token = $security->generateRandomString() . '_' . time();
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                $exception,
+                'app\models\User::generateEmailConfirmationToken',
                 MSG_ERROR
             );
         }
@@ -342,17 +323,6 @@ class User extends ActiveRecord implements IdentityInterface
         return false;
     }
 
-    /**
-     * Resets to a new password and deletes the password reset token.
-     * @param string $password the new password for this user.
-     * @return bool whether the record was updated successfully
-     */
-    public function resetPassword($password)
-    {
-        $this->setPassword($password);
-        $this->password_reset_token = null;
-        return $this->save();
-    }
 
     /**
      * Generates password hash from password and sets it to the model
@@ -364,23 +334,19 @@ class User extends ActiveRecord implements IdentityInterface
         $this->_password = $password;
         if (!empty($password)) {
             try {
-                $this->password_hash = Yii::$app->security->generatePasswordHash($password);
-            } catch (Exception $errorexception) {
-                BaseController::bitacora(
-                    Yii::t(
-                        'app',
-                        ERROR_MODULE,
-                        [MODULE => '@app\models\User\setPassword', ERROR => $errorexception]
-                    ),
-                    MSG_ERROR
-                );
+                $security = new yii\base\Security();
+                $this->password_hash = $security->generatePasswordHash($password);
+            } catch (Exception $exception) {
+                $bitacora = new Bitacora();
+                $bitacora->register($exception, 'app\models\User::setPassword', MSG_ERROR);
             }
         }
     }
 
     /**
      * @validateAuthKey
-     * @param $authKey
+     *
+     * @param string $authKey
      * @return bool
      */
     public function validateAuthKey($authKey)
@@ -404,6 +370,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
-        return Yii::$app->security->validatePassword($password, $this->password_hash);
+        $security = new yii\base\Security();
+        return $security->validatePassword($password, $this->password_hash);
     }
+
 }

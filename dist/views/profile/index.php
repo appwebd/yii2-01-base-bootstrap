@@ -12,8 +12,9 @@
  */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
+use app\components\UiButtons;
 use app\models\Profile;
+use app\models\queries\Bitacora;
 use app\models\queries\Common;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -54,11 +55,11 @@ try {
                 FILTER => UiComponent::yesOrNoArray(),
                 FORMAT => 'raw',
                 OPTIONS => [STR_CLASS => 'col-sm-1'],
-                STR_CLASS => yii\grid\DataColumn::class,
+                STR_CLASS => yii\grid\DataColumn::className(),
                 VALUE => Common::isActive()
             ],
             [
-                'buttons' => UiComponent::buttonsActionColumn(),
+                'buttons' => UiButtons::buttonsActionColumn(),
                 'contentOptions' => [STR_CLASS => 'GridView'],
                 HEADER => UiComponent::pageSizeDropDownList($pageSize),
                 'headerOptions' => ['style' => 'color:#337ab7'],
@@ -68,17 +69,12 @@ try {
         ]
     ]);
 } catch (Exception $errorexception) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\profile\index::GridView::widget', ERROR => $errorexception]
-        ),
-        MSG_ERROR
-    );
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\profile\index::GridView', MSG_ERROR);
 }
 
-UiComponent::buttonsAdmin('111', false);
+$buttons = new UiButtons();
+$buttons->buttonsAdmin('111', false);
 
 Html::endForm();
 

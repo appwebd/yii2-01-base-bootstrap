@@ -12,7 +12,7 @@
  */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
+use app\models\queries\Bitacora;
 use app\models\Status;
 use yii\grid\GridView;
 
@@ -62,15 +62,9 @@ try {
 
         ]
     ]);
-} catch (Exception $errorException) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\logs\status::gridView::widget', ERROR => $errorException]
-        ),
-        MSG_ERROR
-    );
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\log\status::GridView', MSG_ERROR);
 }
 
 echo '<br/><br/>';

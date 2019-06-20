@@ -13,6 +13,8 @@
 
 namespace app\models;
 
+use app\models\queries\Bitacora;
+use app\models\queries\Common;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -38,43 +40,7 @@ class Profile extends ActiveRecord
     const TITLE = 'Profiles';
     const CREATED_AT = 'created_at';
     const UPDATE_AT = 'updated_at';
-
-    /**
-     * @return string the name of the table associated with this ActiveRecord class.
-     */
-    public static function tableName()
-    {
-        return 'profile';
-    }
-
-    /**
-     * Get a Profile name given a profile_id
-     *
-     * @param integer $profile_id
-     * @return String Name of profile
-     */
-    public static function getProfileName($profileId)
-    {
-        $model = Profile::find()->where([self::PROFILE_ID => $profileId])->one();
-
-        $return = ' ';
-        if (isset($model->profile_name)) {
-            $return = $model->profile_name;
-        }
-
-        return $return;
-    }
-
-    /**
-     * Get array from Profiles
-     * @return array
-     */
-    public static function getProfileList()
-    {
-        $droptions = Profile::find()->where([self::ACTIVE => 1])->orderBy(self::PROFILE_NAME)->asArray()->all();
-        return ArrayHelper::map($droptions, self::PROFILE_ID, self::PROFILE_NAME);
-    }
-
+    const ICON = 'fas fa-globe';
     /**
      * @return array the validation rules.
      */
@@ -125,11 +91,43 @@ class Profile extends ActiveRecord
     }
 
     /**
+     * Get a Profile name given a profile_id
+     *
+     * @param integer $profileId
+     * @return String Name of profile
+     */
+    public static function getProfileName($profileId)
+    {
+        $model = Profile::find()->where([self::PROFILE_ID => $profileId])->one();
+
+        $return = ' ';
+        if (isset($model->profile_name)) {
+            $return = $model->profile_name;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Get array from Profiles
+     * @return array
+     */
+    public static function getProfileList()
+    {
+        $droptions = Profile::find()->where([self::ACTIVE => 1])->orderBy(self::PROFILE_NAME)->asArray()->all();
+        return ArrayHelper::map($droptions, self::PROFILE_ID, self::PROFILE_NAME);
+    }
+
+
+
+
+
+    /**
      * @return ActiveQuery
      */
     public function getPermission()
     {
-        return $this->hasMany(Permission::class, [self::PROFILE_ID => self::PROFILE_ID]);
+        return $this->hasMany(Permission::className(), [self::PROFILE_ID => self::PROFILE_ID]);
     }
 
     /**
@@ -137,7 +135,7 @@ class Profile extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasMany(User::class, [self::PROFILE_ID => self::PROFILE_ID]);
+        return $this->hasMany(User::className(), [self::PROFILE_ID => self::PROFILE_ID]);
     }
 
     /**
@@ -148,5 +146,33 @@ class Profile extends ActiveRecord
     public function getId()
     {
         return $this->getPrimaryKey();
+    }
+
+    /**
+     * @return string the name of the table associated with this ActiveRecord class.
+     */
+    public static function tableName()
+    {
+        return 'profile';
+    }
+
+    /**
+     * Change/Toogle value of active
+     *
+     * @param int $profileId Primary key of table Profile
+     * @return bool
+     *
+     */
+    public static function toggleActive($profileId)
+    {
+
+        try {
+            $sqlcode = "UPDATE profile SET active=not(active) WHERE profile_id = " . $profileId;
+            return Common::sqlCreateCommand($sqlcode);
+        } catch (\yii\db\Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register($exception, 'toggleActive', MSG_ERROR);
+        }
+        return false;
     }
 }

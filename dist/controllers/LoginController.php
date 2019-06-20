@@ -7,8 +7,6 @@ use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\web\Controller;
-use yii\web\Response;
 
 /**
  * Class LoginController
@@ -21,7 +19,7 @@ use yii\web\Response;
  * @date        11/1/18 10:07 PM
  * @version     1.0
  */
-class LoginController extends Controller
+class LoginController extends BaseController
 {
     const LOGOUT = 'logout';
 
@@ -32,7 +30,7 @@ class LoginController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
+                STR_CLASS => \yii\filters\AccessControl::className(),
                 'only' => [ACTION_INDEX, self::LOGOUT],
                 'rules' => [
                     [
@@ -48,7 +46,7 @@ class LoginController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+                STR_CLASS => \yii\filters\VerbFilter::className(),
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                     self::LOGOUT => ['post'],
@@ -58,10 +56,15 @@ class LoginController extends Controller
     }
 
     /**
-     * @return string|Response the login form or a redirect response
+     * @return string|object \yii\web\Response the login form or a redirect response
      */
     public function actionIndex()
     {
+        $headers = Yii::$app->response->headers;
+
+// set a Pragma header. Any existing Pragma headers will be discarded.
+        $headers->set('Pragma', 'no-cache');
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -75,7 +78,7 @@ class LoginController extends Controller
     }
 
     /**
-     * @return Response a redirect response
+     * @return object \yii\web\Response a redirect response
      */
     public function actionLogout()
     {
@@ -85,7 +88,7 @@ class LoginController extends Controller
 
     /**
      * @param $token string encoded of email confirmation token
-     * @return string|Response the confirmation failure message or a
+     * @return string|object \yii\web\Response the confirmation failure message or a
      * redirect response
      */
     public function actionConfirmemail($token)

@@ -3,10 +3,10 @@
 namespace app\controllers;
 
 use app\models\forms\ContactForm;
+use app\models\queries\Bitacora;
 use Yii;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use yii\web\Controller;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -20,16 +20,25 @@ use yii\web\Response;
  * @date        11/1/18 10:31 PM
  * @version     1.0
  */
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     const STR_ABOUT = 'about';
     const STR_CONTACT = 'contact';
     const STR_COOKIE_POLICY = 'cookiePolicy';
     const USER_ID_VISIT = 1;
 
+    /**
+     * Before action instructions for to do before call actions
+     *
+     * @param object $action action name
+     *
+     * @return mixed \yii\web\Response
+     * @throws BadRequestHttpException
+     */
     public function beforeAction($action)
     {
-        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
+        $bitacora = new Bitacora();
+        $bitacora->register(Yii::t('app', 'showing the view'), 'beforeAction', MSG_INFO);
         return parent::beforeAction($action);
     }
 
@@ -40,7 +49,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                STR_CLASS => AccessControl::class,
+                STR_CLASS => \yii\filters\AccessControl::className(),
                 'only' => [self::STR_ABOUT,
                     self::STR_CONTACT,
                     self::STR_COOKIE_POLICY,
@@ -58,7 +67,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                STR_CLASS => VerbFilter::class,
+                STR_CLASS => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     ACTION_INDEX => ['get']
                 ]
@@ -134,7 +143,7 @@ class SiteController extends Controller
     public function actionError()
     {
         $exception = Yii::$app->errorHandler->exception;
-        if ($exception instanceof \yii\web\NotFoundHttpException) {
+        if ($exception instanceof NotFoundHttpException) {
             return $this->render('404', ['message' => $exception]);
         } else {
             return $this->render(ERROR, ['exception' => $exception]);
@@ -148,13 +157,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
         return $this->render(ACTION_INDEX);
     }
 
 
     /**
-     * @return string|\yii\web\Response the maintenance page or a redirect
+     * @return string|Response the maintenance page or a redirect
      * response if not in maintenance mode
      */
     public function actionMaintenanc()

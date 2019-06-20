@@ -12,8 +12,8 @@
  */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
 use app\models\Action;
+use app\models\queries\Bitacora;
 use app\models\search\ControllersSearch;
 use yii\grid\GridView;
 
@@ -74,15 +74,9 @@ try {
             ],
         ]
     ]);
-} catch (Exception $errorException) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\logs\actions::gridView::widget', ERROR => $errorException]
-        ),
-        MSG_ERROR
-    );
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\logs\actions::GridView', MSG_ERROR);
 }
 
 echo '<br/><br/>';

@@ -12,8 +12,8 @@
  */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
 use app\models\Blocked;
+use app\models\queries\Bitacora;
 use app\models\search\BlockedSearch;
 use yii\grid\GridView;
 
@@ -63,15 +63,9 @@ try {
                 VALUE => Blocked::STATUS_STATUS_NAME,
             ],
         ]]);
-} catch (Exception $errorException) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            ERROR_MODULE,
-            [MODULE => 'app\views\logs\blocked::gridView::widget', ERROR => $errorException]
-        ),
-        MSG_ERROR
-    );
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\logs\blocked::GridView', MSG_ERROR);
 }
 
 echo HTML_WEBPAGE_CLOSE;

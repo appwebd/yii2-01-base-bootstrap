@@ -11,9 +11,9 @@
  * @version     1.0
  */
 
-use app\components\UiComponent;
 use app\models\Profile;
 use yii\bootstrap\ActiveForm;
+use \app\components\UiButtons;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Profile */
@@ -60,7 +60,10 @@ echo $form->field($model, Profile::ACTIVE)->checkbox(
 )->label();
 
 echo '<div class=\'form-group\'>';
-echo UiComponent::buttonsCreate(3);
+
+$buttons = new UiButtons();
+$buttons->buttonsCreate(3);
+
 echo $form->errorSummary($model, array(STR_CLASS => "error-summary"));
 echo '</div>';
 ActiveForm::end();

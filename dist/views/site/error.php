@@ -11,7 +11,7 @@
  * @version     1.0
  */
 
-use app\controllers\BaseController;
+use app\models\queries\Bitacora;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -23,7 +23,10 @@ $this->title = Yii::t('app', 'Error');
 $this->params[BREADCRUMBS][] = $this->title;
 
 $error = nl2br(Html::encode($message . ' url: ' . Yii::$app->request->url));
-BaseController::bitacora(Yii::t('app', 'Error: {error}', ['error' => $error]), MSG_ERROR);
+
+$bitacora = new Bitacora();
+$bitacora->register($error, 'app\views\site\error', MSG_ERROR);
+
 ?>
 
 <div class="webpage ">

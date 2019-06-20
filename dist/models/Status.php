@@ -34,9 +34,11 @@ use yii\helpers\HtmlPurifier;
 class Status extends ActiveRecord
 {
     const ACTIVE = 'active';
+    const ICON = 'fas fa-road';
     const STATUS_ID = 'status_id';
     const STATUS_NAME = 'status_name';
     const TITLE = 'Status';
+
 
     /**
      * @return string the name of the table associated with this ActiveRecord class.
@@ -81,7 +83,8 @@ class Status extends ActiveRecord
     /**
      * Get status description for a status_id
      *
-     * @param $statusID
+     * @param int $statusID number of badge status 
+     * 
      * @return string
      */
     public static function getStatusBadge($statusID)
@@ -178,7 +181,7 @@ class Status extends ActiveRecord
     public function getBlocked()
     {
         return $this->hasMany(
-            Blocked::class,
+            Blocked::className(),
             [self::STATUS_ID => self::STATUS_ID]
         );
     }
@@ -189,7 +192,7 @@ class Status extends ActiveRecord
     public function getLogs()
     {
         return $this->hasMany(
-            Logs::class,
+            Logs::className(),
             [self::STATUS_ID => self::STATUS_ID]
         );
     }

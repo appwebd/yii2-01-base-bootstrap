@@ -17,7 +17,7 @@ use yii\helpers\Html;
 
 /* @var yii\web\View $this */
 /* @var yii\bootstrap\ActiveForm $form */
-/* @var \app\models\forms\LoginForm $model */
+/* @var object $model \app\models\forms\LoginForm */
 
 $this->title = Yii::t('app', 'Login');
 $this->params[BREADCRUMBS][] = $this->title;

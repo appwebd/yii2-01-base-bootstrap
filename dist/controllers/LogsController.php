@@ -15,22 +15,18 @@
 
 namespace app\controllers;
 
-use app\components\UiComponent;
+use app\models\queries\Bitacora;
 use app\models\search\ActionSearch;
 use app\models\search\BlockedSearch;
 use app\models\search\ControllersSearch;
 use app\models\search\LogsSearch;
 use app\models\search\StatusSearch;
 use Yii;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 
 /**
  * LogsController class permit logs in bitacora table
  */
-class LogsController extends Controller
+class LogsController extends BaseController
 {
     const ACTIONS = 'actions';
     const BLOCKED = 'blocked';
@@ -42,8 +38,8 @@ class LogsController extends Controller
      * Before action instructions for to do before call actions
      *
      * @param object $action name of object invoked.
-     * @return mixed \yii\web\Response
-     * @throws BadRequestHttpException
+     * @return mixed
+     * @throws object \yii\web\BadRequestHttpException
      */
     public function beforeAction($action)
     {
@@ -51,8 +47,8 @@ class LogsController extends Controller
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
-
-        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
+        $bitacora = new Bitacora();
+        $bitacora->register(Yii::t('app', 'showing the view'), 'beforeAction', MSG_INFO);
         return parent::beforeAction($action);
     }
 
@@ -65,7 +61,7 @@ class LogsController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
+                STR_CLASS => \yii\filters\AccessControl::className(),
                 'only' => [
                     self::ACTIONS,
                     self::BLOCKED,
@@ -88,7 +84,7 @@ class LogsController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+                STR_CLASS => \yii\filters\VerbFilter::className(),
                 ACTIONS => [
                     self::ACTIONS => ['get'],
                     self::BLOCKED => ['get'],
@@ -110,7 +106,7 @@ class LogsController extends Controller
 
         $actionsSearchModel = new ActionSearch();
         $dataProvider = $actionsSearchModel->search(Yii::$app->request->queryParams);
-        $pageSize = UiComponent::pageSize();
+        $pageSize = $this->pageSize();
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
@@ -134,7 +130,7 @@ class LogsController extends Controller
         $searchModel = new BlockedSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = UiComponent::pageSize();
+        $pageSize = $this->pageSize();
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
@@ -157,7 +153,7 @@ class LogsController extends Controller
         $searchModel = new ControllersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = UiComponent::pageSize();
+        $pageSize = $this->pageSize();
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(
@@ -181,7 +177,7 @@ class LogsController extends Controller
         $logsSearchModel = new LogsSearch();
         $dataProvider = $logsSearchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = UiComponent::pageSize();
+        $pageSize = $this->pageSize();
         $dataProvider->pagination->pageSize = $pageSize;
         $request = Yii::$app->request->get('LogsSearch');
         if (isset($request[self::CONTROLLER_ID])) {
@@ -211,7 +207,7 @@ class LogsController extends Controller
         $searchModel = new StatusSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $pageSize = UiComponent::pageSize();
+        $pageSize = $this->pageSize();
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render(

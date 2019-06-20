@@ -12,8 +12,9 @@
  */
 
 use app\components\UiComponent;
-use app\controllers\BaseController;
+use \app\components\UiButtons;
 use app\models\Permission;
+use app\models\queries\Bitacora;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -64,15 +65,10 @@ try {
         ],
     ]);
 } catch (Exception $errorexception) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
-        ),
-        MSG_ERROR
-    );
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, 'app\views\permission\view::DetailView', MSG_ERROR);
 }
 
-echo UiComponent::buttonsViewBottom($model);
+$buttons = new UiButtons();
+$buttons->buttonsViewBottom($model);
 echo HTML_WEBPAGE_CLOSE;

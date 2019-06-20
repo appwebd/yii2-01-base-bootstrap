@@ -11,7 +11,7 @@
  * @version     1.0
  */
 
-use app\components\UiComponent;
+use app\components\UiButtons;
 use app\models\Profile;
 use yii\bootstrap\ActiveForm;
 
@@ -123,7 +123,8 @@ echo $form->field($model, 'active')->checkbox(
 
 echo HTML_DIV_CLOSEX2, '<br/>';
 echo '<div class=\'form-group\'>';
-echo UiComponent::buttonsCreate(10);
+$buttons = new UiButtons();
+$buttons->buttonsCreate(10);
 echo $form->errorSummary($model, array(STR_CLASS => "error-summary"));
 echo '</div>';
 ActiveForm::end();

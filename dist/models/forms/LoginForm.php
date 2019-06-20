@@ -22,12 +22,13 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
-    private $userPrivateLocalClass = false;
+
+    private $_user;
 
     /**
      * Removes email confirmation token and sets is_email_verified to true
      *
-     * @param bool $save whether to save the record. Default is `false`.
+     * @param int $userId Primary key
      * @return bool|null whether the save was successful or null if $save was false.
      */
     public static function removeTokenEmail($userId)
@@ -49,12 +50,13 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [[self::USERNAME, self::PASSWORD], 'required'],
+            [[self::USERNAME, self::PASSWORD], 'required'], // username and password are both required
+
             // rememberMe must be a boolean value
             [self::REMEMBER_ME, 'boolean'],
             // password is validated by validatePassword()
             [self::PASSWORD, 'validatePassword'],
+            [self::USERNAME, 'validateUser'],
         ];
     }
 
@@ -86,11 +88,11 @@ class LoginForm extends Model
      */
     public function getUser()
     {
-        if ($this->userPrivateLocalClass === false) {
-            $this->userPrivateLocalClass = User::findByUsername($this->username);
+        if ($this->_user  === null) {
+            $this->_user = User::findByUsername($this->username);
         }
 
-        return $this->userPrivateLocalClass;
+        return $this->_user;
     }
 
     /**
@@ -125,4 +127,20 @@ class LoginForm extends Model
             }
         }
     }
+
+    /**
+     * Validates the user account.
+     * This method serves as the inline validation for User account.
+     */
+    public function validateUser()
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+
+            if (!$user || !$this->getUser()) {
+                $this->addError('username', 'Incorrect username or password.');
+            }
+        }
+    }
 }
+

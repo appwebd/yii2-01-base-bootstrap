@@ -3,10 +3,12 @@
 namespace app\models\queries;
 
 use app\models\User;
+use Yii;
 use yii\db\ActiveQuery;
 
 class UserQuery extends ActiveQuery
 {
+    const USER_ID = 'user_id';
     /**
      * @return static the query with conditions for users that can login applied
      */
@@ -33,7 +35,7 @@ class UserQuery extends ActiveQuery
      */
     public function emailConfirmationToken($token)
     {
-        $expire = \Yii::$app->params['user.emailConfirmationTokenExpire'];
+        $expire = Yii::$app->params['user.emailConfirmationTokenExpire'];
         $parts = explode('_', $token);
         $timestamp = (int)end($parts);
         if ($timestamp + $expire < time()) {
@@ -49,7 +51,7 @@ class UserQuery extends ActiveQuery
      */
     public function passwordResetToken($token)
     {
-        $expire = \Yii::$app->params['user.passwordResetTokenExpire'];
+        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
         $timestamp = (int)end($parts);
         if ($timestamp + $expire < time()) {
@@ -67,4 +69,8 @@ class UserQuery extends ActiveQuery
     {
         return $this->andWhere(['username' => $username]);
     }
+
+
+
+
 }

@@ -20,8 +20,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-
-        ['css/site.min.css', 'media' => 'all', 'type' => 'text/css'],
+        ['css/style.min.css', 'media' => 'all', 'type' => 'text/css'],
     ];
     public $js = [
         ['js/custom.min.js', 'async' => true] // or defer

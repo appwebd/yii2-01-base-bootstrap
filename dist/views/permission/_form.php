@@ -11,7 +11,7 @@
  * @version     1.0
  */
 
-use app\components\UiComponent;
+use app\components\UiButtons;
 use app\models\Action;
 use app\models\Controllers;
 use app\models\Permission;
@@ -115,7 +115,10 @@ echo $form->field($model, Permission::ACTION_PERMISSION)->checkbox(
 );
 
 echo '<div class=\'form-group\'>';
-echo UiComponent::buttonsCreate(5);
+
+$button = new UiButtons();
+echo $button->ButtonsCreate(5);
+
 echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
 echo '</div>';
 ActiveForm::end();

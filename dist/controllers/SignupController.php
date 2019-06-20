@@ -4,10 +4,9 @@ namespace app\controllers;
 
 use app\models\forms\SignupForm;
 use Yii;
+use yii\web\Response;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\web\Controller;
-use yii\web\Response;
 
 /**
  * Class SingupController
@@ -20,7 +19,7 @@ use yii\web\Response;
  * @date        11/1/18 10:33 PM
  * @version     1.0
  */
-class SignupController extends Controller
+class SignupController extends BaseController
 {
 
     /**
@@ -30,7 +29,7 @@ class SignupController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
+                STR_CLASS => \yii\filters\AccessControl::className(),
                 'only' => [ACTION_INDEX],
                 'rules' => [
                     [
@@ -41,9 +40,9 @@ class SignupController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+                STR_CLASS => \yii\filters\VerbFilter::className(),
                 ACTIONS => [
-                    ACTION_INDEX => ['GET', 'POST'],
+                    ACTION_INDEX => ['get', 'post'],
                 ],
             ],
         ];
@@ -60,8 +59,6 @@ class SignupController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->singup() !== null) {
             return $this->render('signed-up');
         }
-
-        BaseController::bitacora(Yii::t('app', 'showing the view'), MSG_INFO);
         return $this->render(ACTION_INDEX, ['model' => $model]);
     }
 }

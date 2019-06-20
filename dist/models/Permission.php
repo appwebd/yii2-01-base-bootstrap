@@ -13,16 +13,15 @@
 
 namespace app\models;
 
-use app\controllers\BaseController;
-use Exception;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use app\models\queries\Bitacora;
 
 /**
  * Permission
- * Permission
+ * Permission: profiles vs permission
  *
  * @property integer action_id             Action
  * @property integer action_permission     Action permission
@@ -38,6 +37,7 @@ class Permission extends ActiveRecord
     const ACTION_PERMISSION = 'action_permission';
     const CONTROLLER_ID = 'controller_id';
     const CONTROLLER_NAME = 'controller_name';
+    const ICON = 'fa fa-circle';
     const PERMISSION_ID = 'permission_id';
     const PERMISSION_GRANT = true;
     const PERMISSION_DENY = false;
@@ -75,15 +75,9 @@ class Permission extends ActiveRecord
             if (isset($actionPermission[0])) {
                 return $actionPermission[0];
             }
-        } catch (Exception $errorException) {
-            BaseController::bitacora(
-                Yii::t(
-                    'app',
-                    ERROR_MODULE,
-                    [MODULE => 'getPermission', ERROR => $errorException]
-                ),
-                MSG_ERROR
-            );
+        } catch (\yii\db\Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register($exception, 'getPermission', MSG_ERROR);
         }
         return Permission::PERMISSION_DENY;
     }
@@ -146,7 +140,7 @@ class Permission extends ActiveRecord
     public function getAction()
     {
         return $this->hasOne(
-            Action::class,
+            Action::className(),
             [self::ACTION_ID => self::ACTION_ID]
         );
     }
@@ -157,7 +151,7 @@ class Permission extends ActiveRecord
     public function getControllers()
     {
         return $this->hasOne(
-            Controllers::class,
+            Controllers::className(),
             [self::CONTROLLER_ID => self::CONTROLLER_ID]
         );
     }
@@ -168,7 +162,7 @@ class Permission extends ActiveRecord
     public function getProfile()
     {
         return $this->hasOne(
-            Profile::class,
+            Profile::className(),
             [self::PROFILE_ID => self::PROFILE_ID]
         );
     }

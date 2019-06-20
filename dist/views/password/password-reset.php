@@ -12,6 +12,19 @@ use yii\web\View;
 $this->title = Yii::t('app', 'Password reset');
 $this->params[BREADCRUMBS][] = $this->title;
 
+$script = <<< JS
+function showPassword() {
+    let object = document.getElementById("passwd");
+    if (object.type === "password") {
+        object.type = "text";
+    } else {
+        object.type = "password";
+    }
+}
+JS;
+
+$this->registerJs($script, View::POS_HEAD);
+
 echo '
 <div class="container ">
     <div class="row">
@@ -56,7 +69,7 @@ echo $form->field($model, PasswordResetForm::PASSW0RD, [
     )
 ])->label(false);
 
-echo '<input type="checkbox" onclick="showPassword()">&nbsp;&nbsp;', Yii::t('app', 'show password');
+echo '<input type="checkbox" onclick="showPassword();">&nbsp;&nbsp;', Yii::t('app', 'show password');
 
 echo '<br/><br/><br/>';
 
@@ -77,15 +90,4 @@ echo '
 </div>
 </div>';
 
-$script = <<< JS
-function showPassword() {
-    var object = document.getElementById("passwd");
-    if (object.type === "password") {
-        object.type = "text";
-    } else {
-        object.type = "password";
-    }
-}
-JS;
 
-$this->registerJs($script, View::POS_HEAD);

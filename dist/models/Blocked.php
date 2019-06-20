@@ -37,11 +37,12 @@ class Blocked extends ActiveRecord
 
     const DATE = 'date';
     const ID = 'id';
+    const ICON = 'fas fa-ban';
     const IPV4_ADDRESS = 'ipv4_address';
     const IPV4_ADDRESS_INT = 'ipv4_address_int';
     const STATUS_ID = 'status_id';
     const STATUS_NAME = 'status_name';
-    const TITLE = 'Ipv4 Blocked';
+    const TITLE = 'Blocked';
     const STATUS_STATUS_NAME = 'status.status_name';
 
     /**
@@ -123,7 +124,7 @@ class Blocked extends ActiveRecord
      */
     public function getStatus()
     {
-        return $this->hasOne(Status::class, [self::STATUS_ID => self::STATUS_ID]);
+        return $this->hasOne(Status::className(), [self::STATUS_ID => self::STATUS_ID]);
     }
 
     /**

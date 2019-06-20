@@ -15,14 +15,14 @@ namespace app\controllers;
 
 use app\models\forms\PasswordResetForm;
 use app\models\forms\PasswordResetRequestForm;
+use app\models\queries\Bitacora;
 use Exception;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\web\Controller;
 use yii\web\Response;
 
-class PasswordController extends Controller
+class PasswordController extends BaseController
 {
     const ACTION_RESET = 'reset';
     const ACTION_NEW = 'new';
@@ -34,7 +34,7 @@ class PasswordController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
+                STR_CLASS => \yii\filters\AccessControl::className(),
                 'only' => [
                     ACTION_INDEX,                // Request password reset
                     self::ACTION_RESET,          // password reset
@@ -57,7 +57,7 @@ class PasswordController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+                STR_CLASS => \yii\filters\VerbFilter::className(),
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                     self::ACTION_RESET => ['get', 'post'],
@@ -84,6 +84,8 @@ class PasswordController extends Controller
     }
 
     /**
+     * Reset your password account
+     *
      * @param string $token . Token is a cryptographed string, which must contain password_reset_token and the
      *  date / time for its validity. The token is set '' like parameter only for don't show ways to corrupt this
      * web application.
@@ -91,17 +93,15 @@ class PasswordController extends Controller
      */
     public function actionReset($token = '')
     {
-        $tokendecode = BaseController::stringDecode($token);
+        $tokendecode= BaseController::stringDecode($token);
         $model = new PasswordResetRequestForm();
         try {
             if ($model->tokenIsValid($tokendecode)) {
                 $this->wrongToken($token);
             }
         } catch (Exception $exception) {
-            BaseController::bitacora(
-                Yii::t('app', 'Error, {module} {error}', ['module' => 'actionReset', 'error' => $exception]),
-                MSG_SECURITY_ISSUE
-            );
+            $bitacora = New Bitacora();
+            $bitacora->register($exception, 'actionReset', MSG_SECURITY_ISSUE);
         }
 
         $userId = $model->getUserid($tokendecode);
@@ -114,10 +114,9 @@ class PasswordController extends Controller
      */
     public function wrongToken($token)
     {
-        BaseController::bitacora(
-            Yii::t('app', 'Error, token password reset wrong {token}', ['token' => $token]),
-            MSG_SECURITY_ISSUE
-        );
+        $event = Yii::t('app', 'Error, token password reset wrong {token}', ['token' => $token]);
+        $bitacora = New Bitacora();
+        $bitacora->register($event, 'actionReset', MSG_SECURITY_ISSUE);
         return $this->redirect([ACTION_INDEX]);
     }
 

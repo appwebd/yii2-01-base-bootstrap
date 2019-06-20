@@ -18,6 +18,7 @@ use app\models\User;
 use Exception;
 use Yii;
 use yii\base\Model;
+use app\models\queries\Bitacora;
 
 /**
  * User
@@ -72,7 +73,8 @@ class PasswordResetForm extends Model
     {
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $userId = BaseController::stringDecode($modelForm->user_id);
+
+            $userId  = BaseController::stringEncode($modelForm->user_id);
             $model = User::findOne($userId);
             if ($model !== null) {
                 $model->setPassword($modelForm->passw0rd);
@@ -83,11 +85,10 @@ class PasswordResetForm extends Model
                 }
             }
 
-        } catch (Exception $errorexception) {
-            BaseController::bitacoraAndFlash(
-                Yii::t('app', 'Error, updating password {error}', ['error' => $errorexception]),
-                MSG_ERROR
-            );
+        } catch (Exception $exception) {
+            $event = Yii::t('app', 'Error, updating password {error}', ['error' => $exception]);
+            $bitacora = new Bitacora();
+            $bitacora->register($event, 'passwordUpdate', MSG_ERROR);
             $transaction->rollBack();
         }
 

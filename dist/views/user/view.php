@@ -11,9 +11,10 @@
  * @version     1.0
  */
 
+use app\components\UiButtons;
 use app\components\UiComponent;
-use app\controllers\BaseController;
 use app\models\Profile;
+use app\models\queries\Bitacora;
 use app\models\User;
 use yii\widgets\DetailView;
 
@@ -60,16 +61,10 @@ try {
             ],
         ],
     ]);
-} catch (Exception $errorexception) {
-    BaseController::bitacora(
-        Yii::t(
-            'app',
-            'Failed to show information, error: {error}',
-            ['error' => $errorexception]
-        ),
-        MSG_ERROR
-    );
+} catch (Exception $exception) {
+    $bitacora = new Bitacora();
+    $bitacora->register($exception, '@app\views\User\view::DetailView', MSG_ERROR);
 }
-
-echo UiComponent::buttonsViewBottom($model);
+$buttons = new UiButtons();
+$buttons->buttonsViewBottom($model);
 echo HTML_WEBPAGE_CLOSE;
