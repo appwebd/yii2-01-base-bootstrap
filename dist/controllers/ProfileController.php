@@ -72,47 +72,7 @@ class ProfileController extends BaseController
      */
     public function behaviors()
     {
-        return [
-            'access' => [
-                STR_CLASS => AccessControl::className(),
-                'only' => [
-                    ACTION_CREATE,
-                    ACTION_DELETE,
-                    ACTION_INDEX,
-                    ACTION_REMOVE,
-                    self::ACTION_TOGGLE_ACTIVE,
-                    ACTION_UPDATE,
-                    ACTION_VIEW
-                ],
-                'rules' => [
-                    [
-                        ACTIONS => [
-                            ACTION_CREATE,
-                            ACTION_DELETE,
-                            ACTION_INDEX,
-                            ACTION_REMOVE,
-                            self::ACTION_TOGGLE_ACTIVE,
-                            ACTION_UPDATE,
-                            ACTION_VIEW
-                        ],
-                        ALLOW => true,
-                        ROLES => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                STR_CLASS => VerbFilter::className(),
-                ACTIONS => [
-                    ACTION_CREATE => ['get', 'post'],
-                    ACTION_DELETE => ['post'],
-                    ACTION_INDEX => ['get'],
-                    ACTION_REMOVE => ['post'],
-                    self::ACTION_TOGGLE_ACTIVE => ['post'],
-                    ACTION_UPDATE => ['get', 'post'],
-                    ACTION_VIEW => ['get'],
-                ],
-            ],
-        ];
+        return $this->behaviorsCommon();
     }
 
     /**

@@ -1,7 +1,7 @@
 const { series, parallel } = require('gulp');
 const gulp        = require('gulp');
 const concat      = require('gulp-concat');  // Concatenate files
-const cssnano     = require('gulp-cssnano'); // minifier of css projaso
+const cssnano     = require('gulp-cssnano');
 const minify      = require('gulp-minify');
 const rename      = require('gulp-rename');
 const sourcemaps  = require('gulp-sourcemaps');
@@ -95,5 +95,4 @@ function javascript(cb) {
 }
 
 exports.build = series(clean, parallel(cssGenerate, cssLoginGenerate, javascript));
-//exports.default = series(clean, concatenation, parallel(cssGenerate, javascript));
 exports.default = series(clean, concatenation, parallel(cssGenerate, javascript));

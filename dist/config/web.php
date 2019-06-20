@@ -13,7 +13,7 @@ $config = [
     'bootstrap' => [
         'log',
         [
-            'class' => 'app\components\LanguageSelector',
+            STR_CLASS => 'app\components\LanguageSelector',
             'supportedLanguages' => ['en', 'es'],
         ],
     ],

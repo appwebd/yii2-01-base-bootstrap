@@ -63,7 +63,7 @@ function setRadioCheckedValue(oRadio, valItem) {
     var olength = oRadio.length;
     var i;
     for (i = 0; i < olength; i++) {
-        if(oRadio[i].value == valItem) {
+        if(oRadio[i].value === valItem) {
             oRadio[i].checked=true;
         }
     }
@@ -88,10 +88,9 @@ function AjaxUpdate(event) {
 
     event.preventDefault();
     var link = $(event.target),
-        callUrl = link.attr('href'),
-        ajaxRequest;
+        callUrl = link.attr('href');
 
-    ajaxRequest = $.ajax({
+    $.ajax({
         async: true,
         type: 'post',
         url: callUrl,
@@ -106,4 +105,4 @@ function AjaxUpdate(event) {
 
     $.pjax.reload('#pjax-container');
 
-};
+}
