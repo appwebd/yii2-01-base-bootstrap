@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 01, 2018 at 03:12 PM
--- Server version: 5.7.23-0ubuntu0.16.04.1
--- PHP Version: 7.2.9-1+ubuntu16.04.1+deb.sury.org+1
+-- Generation Time: Jun 19, 2019 at 11:23 PM
+-- Server version: 5.7.26
+-- PHP Version: 7.0.33-0+deb9u3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -45,7 +45,41 @@ CREATE TABLE `action` (
 INSERT INTO `action` (`action_id`, `controller_id`, `action_name`, `action_description`, `active`, `created_at`, `updated_at`) VALUES
 (1, 28, 'index', 'not verified', 1, '2018-10-01 15:12:16', '2018-10-01 15:12:16'),
 (2, 29, 'index', 'not verified', 1, '2018-10-01 15:12:17', '2018-10-01 15:12:17'),
-(3, 24, 'index', 'not verified', 1, '2018-10-01 15:12:25', '2018-10-01 15:12:25');
+(3, 24, 'index', 'not verified', 1, '2018-10-01 15:12:25', '2018-10-01 15:12:25'),
+(4, 23, 'index', 'not verified', 1, '2018-10-02 11:28:11', '2018-10-02 11:28:11'),
+(5, 23, 'create', 'not verified', 1, '2018-10-02 11:28:18', '2018-10-02 11:28:18'),
+(6, 23, 'actiondropdown', 'not verified', 1, '2018-10-02 11:28:25', '2018-10-02 11:28:25'),
+(7, 20, 'index', 'not verified', 1, '2018-10-02 11:28:48', '2018-10-02 11:28:48'),
+(8, 22, 'index', 'not verified', 1, '2018-10-02 11:28:50', '2018-10-02 11:28:50'),
+(9, 24, 'actions', 'not verified', 1, '2018-10-02 11:28:51', '2018-10-02 11:28:51'),
+(10, 24, 'blocked', 'not verified', 1, '2018-10-02 11:28:54', '2018-10-02 11:28:54'),
+(11, 24, 'controllers', 'not verified', 1, '2018-10-02 11:28:56', '2018-10-02 11:28:56'),
+(12, 24, 'status', 'not verified', 1, '2018-10-02 11:28:58', '2018-10-02 11:28:58'),
+(13, 23, 'view', 'not verified', 1, '2018-10-02 11:29:18', '2018-10-02 11:29:18'),
+(14, 23, 'update', 'not verified', 1, '2018-10-02 11:31:57', '2018-10-02 11:31:57'),
+(15, 22, 'create', 'not verified', 1, '2018-10-02 12:12:49', '2018-10-02 12:12:49'),
+(16, 29, 'logout', 'not verified', 1, '2018-10-02 12:13:56', '2018-10-02 12:13:56'),
+(17, 28, 'about', 'not verified', 1, '2018-10-30 11:43:00', '2018-10-30 11:43:00'),
+(18, 28, 'contact', 'not verified', 1, '2018-10-30 11:43:03', '2018-10-30 11:43:03'),
+(19, 28, 'captcha', 'not verified', 1, '2018-10-30 11:43:03', '2018-10-30 11:43:03'),
+(20, 28, 'error', 'not verified', 1, '2018-10-30 16:56:24', '2018-10-30 16:56:24'),
+(21, 30, 'index', 'not verified', 1, '2018-10-30 19:19:06', '2018-10-30 19:19:06'),
+(22, 43, 'reset', 'not verified', 1, '2018-10-31 12:06:40', '2018-10-31 12:06:40'),
+(23, 22, 'view', 'not verified', 1, '2018-11-01 15:45:20', '2018-11-01 15:45:20'),
+(24, 22, 'delete', 'not verified', 1, '2018-11-01 16:04:56', '2018-11-01 16:04:56'),
+(25, 22, 'remove', 'not verified', 1, '2018-11-01 16:05:11', '2018-11-01 16:05:11'),
+(26, 20, 'view', 'not verified', 1, '2018-11-02 20:27:33', '2018-11-02 20:27:33'),
+(27, 20, 'update', 'not verified', 1, '2018-11-02 20:27:42', '2018-11-02 20:27:42'),
+(28, 44, 'index', 'not verified', 1, '2018-11-19 21:56:14', '2018-11-19 21:56:14'),
+(29, 20, 'create', 'not verified', 1, '2018-11-30 22:18:02', '2018-11-30 22:18:02'),
+(30, 20, 'remove', 'not verified', 1, '2019-03-03 15:04:45', '2019-03-03 15:04:45'),
+(31, 20, 'delete', 'not verified', 1, '2019-03-03 15:57:11', '2019-03-03 15:57:11'),
+(32, 34, 'index', 'not verified', 1, '2019-03-03 16:49:11', '2019-03-03 16:49:11'),
+(33, 34, 'create', 'not verified', 1, '2019-03-03 16:49:20', '2019-03-03 16:49:20'),
+(34, 34, 'view', 'not verified', 1, '2019-03-09 20:03:13', '2019-03-09 20:03:13'),
+(35, 34, 'delete', 'not verified', 1, '2019-03-09 20:04:52', '2019-03-09 20:04:52'),
+(36, 22, 'update', 'not verified', 1, '2019-03-13 16:49:53', '2019-03-13 16:49:53'),
+(37, 34, 'update', 'not verified', 1, '2019-03-13 19:43:35', '2019-03-13 19:43:35');
 
 -- --------------------------------------------------------
 
@@ -62,27 +96,6 @@ CREATE TABLE `blocked` (
   `created_at` datetime NOT NULL COMMENT 'created at',
   `updated_at` datetime NOT NULL COMMENT 'updated at'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Ipv4 Blocked ';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `company`
---
-
-CREATE TABLE `company` (
-  `company_id` int(11) NOT NULL COMMENT 'Company',
-  `company_name` char(60) NOT NULL COMMENT 'Name',
-  `address` char(100) NOT NULL COMMENT 'Address',
-  `contact_person` char(80) NOT NULL COMMENT 'Contact person',
-  `contact_phone_1` char(20) DEFAULT NULL COMMENT 'Contact phone',
-  `contact_phone_2` char(20) DEFAULT NULL COMMENT 'Phone additional',
-  `contact_phone_3` char(20) DEFAULT NULL COMMENT 'Phone additional',
-  `contact_email` char(254) DEFAULT NULL COMMENT 'Contact email',
-  `webpage` char(254) DEFAULT NULL COMMENT 'URL Webpage',
-  `created_at` datetime NOT NULL COMMENT 'Created at',
-  `updated_at` datetime NOT NULL COMMENT 'Updated at',
-  `active` tinyint(1) NOT NULL COMMENT 'Active'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Company';
 
 -- --------------------------------------------------------
 
@@ -128,7 +141,9 @@ INSERT INTO `controllers` (`controller_id`, `controller_name`, `controller_descr
 (39, 'unit', 'not verified', 1, 0, 1, '2018-08-22 12:17:49', '2018-08-22 12:17:49'),
 (40, 'product', 'not verified', 1, 0, 1, '2018-08-24 14:32:48', '2018-08-24 14:32:48'),
 (41, 'contact', 'not verified', 1, 0, 1, '2018-09-03 14:51:40', '2018-09-03 14:51:40'),
-(42, 'account', 'not verified', 1, 0, 1, '2018-09-16 23:10:20', '2018-09-16 23:10:20');
+(42, 'account', 'not verified', 1, 0, 1, '2018-09-16 23:10:20', '2018-09-16 23:10:20'),
+(43, 'password', 'not verified', 1, 0, 1, '2018-10-31 12:06:40', '2018-10-31 12:06:40'),
+(44, 'signup', 'not verified', 1, 0, 1, '2018-11-19 21:56:14', '2018-11-19 21:56:14');
 
 -- --------------------------------------------------------
 
@@ -142,6 +157,7 @@ CREATE TABLE `logs` (
   `status_id` int(11) NOT NULL COMMENT 'Status',
   `controller_id` int(11) NOT NULL COMMENT 'Controller',
   `action_id` int(11) NOT NULL COMMENT 'Action',
+  `functionCode` char(60) COLLATE utf8_bin DEFAULT NULL,
   `event` char(80) CHARACTER SET utf8 NOT NULL COMMENT 'Activity / Event',
   `user_agent` char(250) CHARACTER SET utf8 NOT NULL COMMENT 'user agent browser',
   `ipv4_address` char(20) CHARACTER SET utf8 NOT NULL COMMENT 'ipv4_address',
@@ -149,14 +165,6 @@ CREATE TABLE `logs` (
   `confirmed` tinyint(1) NOT NULL COMMENT 'ipv4 address confirmed',
   `user_id` int(11) NOT NULL COMMENT 'User'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Logs (user bitacora)';
-
---
--- Dumping data for table `logs`
---
-
-INSERT INTO `logs` (`logs_id`, `date`, `status_id`, `controller_id`, `action_id`, `event`, `user_agent`, `ipv4_address`, `ipv4_address_int`, `confirmed`, `user_id`) VALUES
-(1, '2018-10-01 15:12:23', 10, 28, 1, 'Mostrando la vista', 'Mozilla/5.0 (X11; Linux x86_64; rv:63.0) Gecko/20100101 Firefox/63.0', '127.0.0.1', 2130706433, 0, 20),
-(2, '2018-10-01 15:12:25', 10, 24, 3, 'Mostrando la vista', 'Mozilla/5.0 (X11; Linux x86_64; rv:63.0) Gecko/20100101 Firefox/63.0', '127.0.0.1', 2130706433, 0, 20);
 
 -- --------------------------------------------------------
 
@@ -173,6 +181,17 @@ CREATE TABLE `permission` (
   `created_at` datetime NOT NULL COMMENT 'Created at',
   `updated_at` datetime NOT NULL COMMENT 'Updated at'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Permission';
+
+--
+-- Dumping data for table `permission`
+--
+
+INSERT INTO `permission` (`permission_id`, `profile_id`, `controller_id`, `action_id`, `action_permission`, `created_at`, `updated_at`) VALUES
+(1, 20, 23, 4, 1, '2018-10-02 11:29:17', '2019-03-13 21:20:51'),
+(2, 20, 23, 5, 1, '2018-10-02 11:30:49', '2019-03-13 16:49:11'),
+(3, 20, 23, 13, 1, '2018-10-02 11:31:11', '2019-03-13 16:49:38'),
+(4, 20, 23, 6, 1, '2018-10-02 11:31:28', '2018-10-02 11:33:02'),
+(5, 20, 23, 14, 1, '2018-10-02 11:33:16', '2018-10-02 11:33:16');
 
 -- --------------------------------------------------------
 
@@ -193,8 +212,8 @@ CREATE TABLE `profile` (
 --
 
 INSERT INTO `profile` (`profile_id`, `profile_name`, `created_at`, `updated_at`, `active`) VALUES
-(10, 'Invited', '2018-07-17 00:00:00', '2018-07-17 00:00:00', 1),
-(20, 'user', '2018-07-17 00:00:00', '2018-07-17 00:00:00', 1),
+(10, 'Invited', '2018-07-17 00:00:00', '2019-03-13 16:50:24', 1),
+(20, 'user', '2018-07-17 00:00:00', '2019-03-13 16:50:10', 1),
 (99, 'Administrator', '2018-07-18 00:00:00', '2018-07-18 00:00:00', 1);
 
 -- --------------------------------------------------------
@@ -208,13 +227,6 @@ CREATE TABLE `session` (
   `expire` int(11) DEFAULT NULL COMMENT 'date time expire session',
   `data` blob COMMENT 'data token'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Sessions of this web application';
-
---
--- Dumping data for table `session`
---
-
-INSERT INTO `session` (`id`, `expire`, `data`) VALUES
-('6a6v9315gt0a4kve2rvakgetot', 1538418985, 0x5f5f666c6173687c613a303a7b7d5f5f69647c693a32303b7061676553697a657c733a313a2235223b);
 
 -- --------------------------------------------------------
 
@@ -272,7 +284,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `password_reset_token_date`, `email_confirmation_token`, `firstName`, `lastName`, `email`, `email_is_verified`, `telephone`, `profile_id`, `created_at`, `updated_at`, `active`, `ipv4_address_last_login`) VALUES
-(20, 'admin', 'eHCuQ7yHQ13Xsxwy9djir0k5FCbuYKcc', '$2y$13$jL2vB0tP3RGc1r483ETKaea3IZfEbcME.pM8A.xFuAgOp2A3e9X3a', '', '2018-07-17 23:18:18', '5hpbjIKd5FARfDsIsiVI31Vi9huaad7H_1538056684', 'Administrador', 'administrador', 'pro@dev-master.local', 1, '', 99, '2018-07-17 23:18:18', '2018-10-01 15:11:59', 1, '127');
+(20, 'admin', 'eHCuQ7yHQ13Xsxwy9djir0k5FCbuYKcc', '$2y$13$jL2vB0tP3RGc1r483ETKaea3IZfEbcME.pM8A.xFuAgOp2A3e9X3a', '', '2018-07-17 23:18:18', '5hpbjIKd5FARfDsIsiVI31Vi9huaad7H_1538056684', 'Administrador', 'administrador', 'pro0@dev-master.local', 1, '', 99, '2018-07-17 23:18:18', '2018-10-30 19:35:53', 1, '127');
 
 --
 -- Indexes for dumped tables
@@ -290,12 +302,6 @@ ALTER TABLE `action`
 ALTER TABLE `blocked`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_blocked_status1_idx` (`status_id`);
-
---
--- Indexes for table `company`
---
-ALTER TABLE `company`
-  ADD PRIMARY KEY (`company_id`);
 
 --
 -- Indexes for table `controllers`
@@ -354,7 +360,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `action`
 --
 ALTER TABLE `action`
-  MODIFY `action_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Actions', AUTO_INCREMENT=4;
+  MODIFY `action_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Actions', AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `blocked`
@@ -363,34 +369,28 @@ ALTER TABLE `blocked`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id';
 
 --
--- AUTO_INCREMENT for table `company`
---
-ALTER TABLE `company`
-  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Company';
-
---
 -- AUTO_INCREMENT for table `controllers`
 --
 ALTER TABLE `controllers`
-  MODIFY `controller_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Controller', AUTO_INCREMENT=43;
+  MODIFY `controller_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Controller', AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `logs_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Logs', AUTO_INCREMENT=3;
+  MODIFY `logs_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Logs';
 
 --
 -- AUTO_INCREMENT for table `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Permission';
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Permission', AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Profile', AUTO_INCREMENT=110;
+  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Profile', AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `status`
@@ -402,7 +402,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'User', AUTO_INCREMENT=51;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'User', AUTO_INCREMENT=42;
 
 --
 -- Constraints for dumped tables
