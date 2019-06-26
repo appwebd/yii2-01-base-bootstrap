@@ -26,7 +26,8 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::headerAdmin(
+$uiComponent = new UiComponent();
+$uiComponent->headerAdmin(
     'list-alt',
     $this->title,
     Yii::t(

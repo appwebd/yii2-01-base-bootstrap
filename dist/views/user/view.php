@@ -1,14 +1,16 @@
 <?php
 /**
- * View of table User
+ * User View
+ * PHP version 7.2.0
  *
- * @package     View of User
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        @DATETIME
- * @version     1.0
+ * @category  View
+ * @package   User
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      6/18/18 10:34 AM
  */
 
 use app\components\UiButtons;
@@ -27,7 +29,8 @@ $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'user',
     $this->title,
     Yii::t('app', 'This view permit view detailed information of User')

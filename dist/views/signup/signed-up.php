@@ -26,7 +26,8 @@ echo '
         <div class="col-sm-6 box">
 
             <div class=" ">';
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'user',
     Yii::t(
         'app',

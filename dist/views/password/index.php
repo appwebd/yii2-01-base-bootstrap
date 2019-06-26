@@ -20,7 +20,8 @@ echo '
 
             <div class="webpage ">';
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'user',
     $this->title,
     Yii::t(

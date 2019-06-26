@@ -5,8 +5,8 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 /* @var yii\web\View $this */
-/* @var yii\bootstrap\ActiveForm $form */
-/* @var \app\models\forms\PasswordResetForm $model */
+/* @var object $form yii\bootstrap\ActiveForm */
+/* @var object $model \app\models\forms\PasswordResetForm */
 
 $this->title = Yii::t('app', 'Reset password');
 $this->params[BREADCRUMBS][] = $this->title;
@@ -19,7 +19,8 @@ echo '
 
             <div class="webpage ">';
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'user',
     $this->title,
     Yii::t(

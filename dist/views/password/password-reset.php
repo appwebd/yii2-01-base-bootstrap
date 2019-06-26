@@ -33,7 +33,8 @@ echo '
 
             <div class="webpage ">';
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'lock',
     $this->title,
     Yii::t(

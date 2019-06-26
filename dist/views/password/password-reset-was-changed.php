@@ -15,10 +15,18 @@ echo '
         <div class="col-sm-3 "> &nbsp; </div>
         <div class="col-sm-6 box">';
 
-echo UiComponent::header('lock', Yii::t('app', 'Password'), Yii::t(
+$uiComponent = new UiComponent();
+$uiComponent->header(
+    'lock',
+    Yii::t(
+        'app',
+        'Password'
+    ),
+    Yii::t(
     'app',
     'The password used at this platform was updated successfully'
-));
+    )
+);
 echo '<div class="success"><h4>',
 Yii::t('app', 'Password was updated'),
 '<br/><br/><br/></h4></div>';

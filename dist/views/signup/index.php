@@ -32,7 +32,8 @@ echo '
 
             <div class="webpage ">';
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'user',
     $this->title,
     Yii::t(
@@ -90,7 +91,7 @@ echo $form->field($model, SignupForm::USERNAME, [
 ])->textInput([PLACEHOLDER => Yii::t('app', ' User account')])->label(false);
 
 
-echo $form->field($model, SignupForm::PASSWORD, [
+echo $form->field($model, SignupForm::PASSW0RD, [
     INPUT_OPTIONS => [AUTOFOCUS => AUTOFOCUS, TABINDEX => '3'],
     INPUT_TEMPLATE => '<div class="input-group">
                                             <span class="input-group-addon">
@@ -98,7 +99,7 @@ echo $form->field($model, SignupForm::PASSWORD, [
                                             </span>
                                             {input}
                                         </div>',
-])->passwordInput(['autocomplete' => SignupForm::NEW_PASSWORD,
+])->passwordInput(['autocomplete' => SignupForm::PASSW0RD,
     PLACEHOLDER => Yii::t('app', ' Password')])->label(false);
 
 

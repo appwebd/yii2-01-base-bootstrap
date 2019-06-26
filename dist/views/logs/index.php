@@ -31,7 +31,8 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::headerAdmin(
+$uiComponent = new UiComponent();
+$uiComponent->headerAdmin(
     'record',
     $this->title,
     Yii::t('app', 'This view is the event log of the web application.'),

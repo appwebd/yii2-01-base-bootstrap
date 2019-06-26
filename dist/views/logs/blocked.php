@@ -26,7 +26,8 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::headerAdmin(
+$uiComponent = new UiComponent();
+$uiComponent->headerAdmin(
     'remove-circle',
     $this->title,
     Yii::t(

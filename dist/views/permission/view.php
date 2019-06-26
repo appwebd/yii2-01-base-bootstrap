@@ -25,7 +25,8 @@ $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'ok-circle',
     $this->title,
     Yii::t('app', 'This view permit view detailed information of Permission')

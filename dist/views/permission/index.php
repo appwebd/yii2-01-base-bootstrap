@@ -36,7 +36,8 @@ echo HTML_WEBPAGE_OPEN;
 
 echo Html::beginForm(['permission/index'], 'post');
 
-echo UiComponent::headerAdmin(
+$uiComponent = new UiComponent();
+$uiComponent->headerAdmin(
     'ok-circle',
     $this->title,
     Yii::t('app', 'This view permit Create, update or delete information related of permission'),
@@ -104,7 +105,7 @@ try {
                 'contentOptions' => [STR_CLASS => 'GridView'],
                 HEADER => UiComponent::pageSizeDropDownList($pageSize),
                 'headerOptions' => ['style' => 'color:#337ab7'],
-                STR_CLASS => yii\grid\ActionColumn::className(),
+                'class' => yii\grid\ActionColumn::className(),
                 TEMPLATE => Common::getProfilePermissionString('111'),
             ]
         ]

@@ -25,7 +25,8 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::headerAdmin(
+$uiComponent = new UiComponent();
+$uiComponent->headerAdmin(
     'eye-open',
     $this->title,
     Yii::t('app', 'This view recollect all the controllers that exists in this web application'),

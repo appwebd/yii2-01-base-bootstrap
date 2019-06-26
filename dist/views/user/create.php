@@ -24,7 +24,8 @@ $this->params[BREADCRUMBS][] = Yii::t('app', 'Create');
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'user',
     $this->title,
     Yii::t(
@@ -33,6 +34,5 @@ echo UiComponent::header(
     )
 );
 
-echo $this->render('_form', ['model' => $model,]);
-
+echo $this->renderFile('@app/views/user/_form.php', ['model'=>$model]);
 echo HTML_WEBPAGE_CLOSE;

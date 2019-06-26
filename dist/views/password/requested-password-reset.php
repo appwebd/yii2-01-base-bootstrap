@@ -15,7 +15,8 @@ echo '
         <div class="col-sm-3 "> &nbsp; </div>
         <div class="col-sm-6 box">';
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'user',
     Yii::t('app', 'Request password reset'),
     Yii::t('app', 'Requested password reset')

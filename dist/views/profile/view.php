@@ -25,7 +25,8 @@ $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'globe',
     $this->title,
     Yii::t('app', 'This view permit view detailed information of Profiles')
@@ -49,7 +50,7 @@ try {
             ],
         ],
     ]);
-} catch (Exception $errorexception) {
+} catch (Exception $exception) {
     $bitacora = new Bitacora();
     $bitacora->register($exception, 'app\views\profile\DetailView::GridView', MSG_ERROR);
 }

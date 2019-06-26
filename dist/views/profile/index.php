@@ -31,7 +31,9 @@ $this->params[BREADCRUMBS][] = $this->title;
 echo HTML_WEBPAGE_OPEN;
 
 echo Html::beginForm(['profile/index'], 'post');
-echo UiComponent::headerAdmin(
+
+$uiComponent = new UiComponent();
+$uiComponent->headerAdmin(
     'user',
     $this->title,
     Yii::t('app', 'This view permit Create a new User, update or delete information related of user'),
@@ -68,7 +70,7 @@ try {
             ]
         ]
     ]);
-} catch (Exception $errorexception) {
+} catch (Exception $exception) {
     $bitacora = new Bitacora();
     $bitacora->register($exception, 'app\views\profile\index::GridView', MSG_ERROR);
 }

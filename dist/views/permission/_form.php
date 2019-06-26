@@ -117,7 +117,7 @@ echo $form->field($model, Permission::ACTION_PERMISSION)->checkbox(
 echo '<div class=\'form-group\'>';
 
 $button = new UiButtons();
-echo $button->ButtonsCreate(5);
+$button->ButtonsCreate(5);
 
 echo $form->errorSummary($model, array(STR_CLASS => "alert alert-danger"));
 echo '</div>';

@@ -23,8 +23,8 @@ echo '
         <div class="col-sm-6 box">
 
             <div class="webpage">';
-
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'envelope',
     $this->title,
     ''

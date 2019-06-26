@@ -23,7 +23,8 @@ $this->params[BREADCRUMBS][] = Yii::t('app', 'Update');
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::header(
+$uiComponent = new UiComponent();
+$uiComponent->header(
     'globe',
     $this->title,
     Yii::t(
@@ -32,6 +33,6 @@ echo UiComponent::header(
     )
 );
 
-echo $this->render('_form', ['model' => $model,]);
+echo $this->renderfile('@app\views\profile\_form', ['model' => $model,]);
 
 echo HTML_WEBPAGE_CLOSE;

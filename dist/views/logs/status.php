@@ -25,7 +25,8 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 echo HTML_WEBPAGE_OPEN;
 
-echo UiComponent::headerAdmin(
+$uiComponent = new UiComponent();
+$uiComponent->headerAdmin(
     'road',
     $this->title,
     Yii::t('app', 'This view exists for to do more easy the stadistica process in the web application'),
