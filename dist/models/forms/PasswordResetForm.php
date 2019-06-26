@@ -1,14 +1,16 @@
 <?php
 /**
- * Users
+ * Password reset form
+ * PHP version 7.2.0
  *
- * @package     Model of Users
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        2018-06-16 16:49:58
- * @version     1.0
+ * @category  Models
+ * @package   User
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      6/18/18 10:34 AM
  */
 
 namespace app\models\forms;
@@ -65,7 +67,10 @@ class PasswordResetForm extends Model
     }
 
     /**
-     * @param @app\models\forms\PasswordResetForm $modelForm
+     * Update password
+     *
+     * @param object $modelForm @app\models\forms\PasswordResetForm
+     *
      * @return bool
      * @throws Exception
      */
@@ -73,7 +78,7 @@ class PasswordResetForm extends Model
     {
         $transaction = Yii::$app->db->beginTransaction();
         try {
-
+            $modelForm->load(Yii::$app->request->post());
             $userId  = BaseController::stringEncode($modelForm->user_id);
             $model = User::findOne($userId);
             if ($model !== null) {
@@ -86,7 +91,11 @@ class PasswordResetForm extends Model
             }
 
         } catch (Exception $exception) {
-            $event = Yii::t('app', 'Error, updating password {error}', ['error' => $exception]);
+            $event = Yii::t(
+                'app',
+                'Error, updating password {error}',
+                ['error' => $exception]
+            );
             $bitacora = new Bitacora();
             $bitacora->register($event, 'passwordUpdate', MSG_ERROR);
             $transaction->rollBack();

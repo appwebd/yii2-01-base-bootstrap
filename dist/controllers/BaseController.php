@@ -2,44 +2,43 @@
 
 namespace app\controllers;
 
-use app\components\DeleteRecord;
 use app\models\queries\Bitacora;
 use app\models\queries\Common;
 use Exception;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 
 /**
- * Class BaseController
+ * Base controller
+ * PHP version 7.2.0
  *
- * @package     Ui
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        11/1/18 8:13 PM
- * @version     1.0
+ * @category  Controller
+ * @package   Base
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   Release: <package_id>
+ * @link      https://appwebd.github.io
+ * @date      6/18/18 10:34 AM
  */
 class BaseController extends Controller
 {
     const ACTION_TOGGLE_ACTIVE = 'toggle';
     const ENCRIPTED_METHOD = 'aes-256-cbc';
-    const DATE_FORMAT = 'php:Y-m-d';
-    const DATETIME_FORMAT = 'php:Y-m-d H:i:s';
     const SHA256 = 'sha256';
     const SECRET_KEY = 'money20343';
     const SECRET_IV = '2034312280';
     const PARAM_STR_KEY = 'passwordKey';
     const STR_PER_PAGE = 'per-page';
     const STR_PAGESIZE = 'pageSize';
-    const TIME_FORMAT = 'php:H:i:s';
 
     public static function getPasswordParam()
     {
 
         $return = Yii::$app->params['passwordKey'];
         if (!isset($return)) {
-
             $session = Yii::$app->session;
             if (isset($session[self::PARAM_STR_KEY])) {
                 $return = $session[self::PARAM_STR_KEY];
@@ -58,13 +57,83 @@ class BaseController extends Controller
     }
 
     /**
+     * @return array|mixed
+     */
+    public static function pageSize()
+    {
+
+        $session = Yii::$app->session;
+        $page_size = Yii::$app->request->get(self::STR_PER_PAGE);
+
+        if (!isset($page_size)) {
+            $page_size = Yii::$app->request->post(self::STR_PER_PAGE);
+            if (isset($page_size)) {
+                $page_size = Yii::$app->request->post(self::STR_PER_PAGE);
+            } else {
+                if (isset($session[self::STR_PAGESIZE])) {
+                    $page_size = $session[self::STR_PAGESIZE];
+                } else {
+                    $page_size = Yii::$app->params['pageSizeDefault'];
+                    $session->set(self::STR_PAGESIZE, $page_size);
+                }
+            }
+        }
+
+        $session->set(self::STR_PAGESIZE, $page_size);
+        return $page_size;
+    }
+
+    /**
+     * Encode a string
+     *
+     * @param string $plaintext plain text (text to encode)
+     * @return string
+     */
+    public static function stringEncode($plaintext)
+    {
+
+        $encryptmethod = self::ENCRIPTED_METHOD;
+        $secretkey = self::SECRET_KEY;
+        $secretiv = self::SECRET_IV;
+
+        // hash
+        $key_value = hash(self::SHA256, $secretkey);
+
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+        $ivencripted = substr(hash(self::SHA256, $secretiv), 0, 16);
+        $output = openssl_encrypt($plaintext, $encryptmethod, $key_value, 0, $ivencripted);
+
+        return base64_encode($output);
+    }
+
+    /**
+     * Decode a string
+     * @param string $ciphertext text to decode
+     * @return string decoded
+     */
+    public static function stringDecode($ciphertext)
+    {
+
+        $encryptmethod = self::ENCRIPTED_METHOD;
+        $secretkey = self::SECRET_KEY;
+        $secretiv = self::SECRET_IV;
+
+        // hash
+        $key_value = hash(self::SHA256, $secretkey);
+
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+        $ivencripted = substr(hash(self::SHA256, $secretiv), 0, 16);
+        return openssl_decrypt(base64_decode($ciphertext), $encryptmethod, $key_value, 0, $ivencripted);
+    }
+
+    /**
      * @return array
      */
     public function behaviorsCommon()
     {
         return [
             'access' => [
-                STR_CLASS => \yii\filters\AccessControl::className(),
+                STR_CLASS => AccessControl::className(),
                 'only' => [
                     ACTION_CREATE,
                     ACTION_DELETE,
@@ -91,7 +160,7 @@ class BaseController extends Controller
                 ],
             ],
             'verbs' => [
-                STR_CLASS => \yii\filters\VerbFilter::className(),
+                STR_CLASS => VerbFilter::className(),
                 ACTIONS => [
                     ACTION_CREATE => ['get', 'post'],
                     ACTION_DELETE => ['post'],
@@ -121,38 +190,15 @@ class BaseController extends Controller
                     please do not repeat this requirement. All site traffic is being monitored'
             );
             $bitacora = new Bitacora();
-            $bitacora->registerAndFlash($event, 'checkBadAccess', MSG_SECURITY_ISSUE);
+            $bitacora->registerAndFlash(
+                $event,
+                'checkBadAccess',
+                MSG_SECURITY_ISSUE
+            );
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * @return array|mixed
-     */
-    public static function pageSize()
-    {
-
-        $session = Yii::$app->session;
-        $pageSize = Yii::$app->request->get(self::STR_PER_PAGE);
-
-        if (!isset($pageSize)) {
-            $pageSize = Yii::$app->request->post(self::STR_PER_PAGE);
-            if (isset($pageSize)) {
-                $pageSize = Yii::$app->request->post(self::STR_PER_PAGE);
-            } else {
-                if (isset($session[self::STR_PAGESIZE])) {
-                    $pageSize = $session[self::STR_PAGESIZE];
-                } else {
-                    $pageSize = Yii::$app->params['pageSizeDefault'];
-                    $session->set(self::STR_PAGESIZE, $pageSize);
-                }
-            }
-        }
-
-        $session->set(self::STR_PAGESIZE, $pageSize);
-        return $pageSize;
     }
 
     /**
@@ -164,56 +210,13 @@ class BaseController extends Controller
     public function saveReport($status)
     {
         if ($status) {
-            $key = SUCCESS;
+            $key_value = SUCCESS;
             $value = 'Record saved successfully';
         } else {
-            $key = ERROR;
+            $key_value = ERROR;
             $value = 'Error saving record';
         }
         $value = Yii::t('app', $value);
-        Yii::$app->session->setFlash($key, $value );
+        Yii::$app->session->setFlash($key_value, $value);
     }
-    /**
-     * Encode a string
-     *
-     * @param string $plaintext plain text (text to encode)
-     * @return string
-     */
-    public static function stringEncode($plaintext)
-    {
-
-        $encryptmethod = self::ENCRIPTED_METHOD;
-        $secretkey = self::SECRET_KEY;
-        $secretiv = self::SECRET_IV;
-
-        // hash
-        $keyValue = hash(self::SHA256, $secretkey);
-
-        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $ivencripted = substr(hash(self::SHA256, $secretiv), 0, 16);
-        $output = openssl_encrypt($plaintext, $encryptmethod, $keyValue, 0, $ivencripted);
-
-        return base64_encode($output);
-    }
-
-    /**
-     * Decode a string
-     * @param string $ciphertext text to decode
-     * @return string decoded
-     */
-    public static function stringDecode($ciphertext)
-    {
-
-        $encryptmethod = self::ENCRIPTED_METHOD;
-        $secretkey = self::SECRET_KEY;
-        $secretiv = self::SECRET_IV;
-
-        // hash
-        $keyValue = hash(self::SHA256, $secretkey);
-
-        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        $ivencripted = substr(hash(self::SHA256, $secretiv), 0, 16);
-        return openssl_decrypt(base64_decode($ciphertext), $encryptmethod, $keyValue, 0, $ivencripted);
-    }
-
 }

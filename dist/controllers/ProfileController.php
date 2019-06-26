@@ -21,8 +21,6 @@ use app\models\queries\Common;
 use app\models\search\ProfileSearch;
 use Exception;
 use Yii;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -222,7 +220,7 @@ class ProfileController extends BaseController
         $result = Yii::$app->request->post('selection');
         $deleteRecord = new DeleteRecord();
 
-        if (!$deleteRecord->isOkPermission(ACTION_DELETE) || !$deleteRecord->isOkSeleccionItems($result)) {
+        if (!$deleteRecord->isOkPermission(ACTION_DELETE) || !$deleteRecord->isOkSelection($result)) {
             return $this->redirect([ACTION_INDEX]);
         }
 

@@ -1,7 +1,20 @@
 <?php
+/**
+ * Console
+ * PHP version 7.2.0
+ *
+ * @category  Console
+ * @package   Config
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      6/18/18 10:34 AM
+ */
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$database = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic-console',
@@ -25,7 +38,7 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        'db' => $database,
     ],
     'params' => $params,
     /*

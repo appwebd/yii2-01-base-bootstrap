@@ -74,9 +74,10 @@ class PasswordController extends BaseController
     public function actionIndex()
     {
         $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) &&
-            Yii::$app->request->isPost &&
-            $model->sendEmail($model->email)) {
+        if (Yii::$app->request->isPost
+            && $model->load(Yii::$app->request->post())
+            && $model->sendEmail($model->email)
+        ) {
             return $this->render('requested-password-reset');
         }
 
@@ -86,9 +87,12 @@ class PasswordController extends BaseController
     /**
      * Reset your password account
      *
-     * @param string $token . Token is a cryptographed string, which must contain password_reset_token and the
-     *  date / time for its validity. The token is set '' like parameter only for don't show ways to corrupt this
-     * web application.
+     * @param string $token Token is a cryptographed string,
+     *                      which must contain password_reset_token and
+     *                      the date / time for its validity. The token
+     *                      is set '' like parameter only for don't
+     *                      show ways to corrupt this web application.
+     *
      * @return Response
      */
     public function actionReset($token = '')
@@ -101,7 +105,11 @@ class PasswordController extends BaseController
             }
         } catch (Exception $exception) {
             $bitacora = New Bitacora();
-            $bitacora->register($exception, 'actionReset', MSG_SECURITY_ISSUE);
+            $bitacora->register(
+                $exception,
+                'app\controllers\PasswordController::actionReset',
+                MSG_SECURITY_ISSUE
+            );
         }
 
         $userId = $model->getUserid($tokendecode);
@@ -109,28 +117,36 @@ class PasswordController extends BaseController
     }
 
     /**
-     * @param $token string encoded with token for change password
+     * Register a wrong token
+     *
+     * @param string $token encoded with token for change password
+     *
      * @return Response
      */
     public function wrongToken($token)
     {
-        $event = Yii::t('app', 'Error, token password reset wrong {token}', ['token' => $token]);
+        $event = Yii::t(
+            'app',
+            'Error, token password reset wrong {token}',
+            ['token' => $token]
+        );
         $bitacora = New Bitacora();
         $bitacora->register($event, 'actionReset', MSG_SECURITY_ISSUE);
         return $this->redirect([ACTION_INDEX]);
     }
 
     /**
-     * @param $userId integer primary key of table user
+     * Reset user password
+     *
+     * @param int $userId primary key of table user
+     *
      * @return mixed
      * @throws Exception
      */
     public function actionResetpassword($userId)
     {
         $model = new PasswordResetForm();
-        if ($model->load(Yii::$app->request->post()) &&
-            Yii::$app->request->isPost &&
-            $model->passwordUpdate($model)) {
+        if (Yii::$app->request->isPost && $model->passwordUpdate($model)) {
             return $this->render('password-reset-was-changed');
         }
 

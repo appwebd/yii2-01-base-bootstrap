@@ -61,34 +61,49 @@ class PasswordResetRequestForm extends Model
      */
     public function sendEmail($email)
     {
+
         if (!$this->validate()) {
             return false;
         }
 
-        /** @var User $user */
         $model = User::find()
-            ->andWhere([
-                'active' => User::STATUS_ACTIVE,
-                'email_is_verified' => User::EMAIL_IS_VERIFIES_VALUE,
-                'email' => $email
-            ])->one();
+            ->andWhere(
+                [
+                    'active' => User::STATUS_ACTIVE,
+                    'email_is_verified' => User::EMAIL_IS_VERIFIES_VALUE,
+                    'email' => $email
+                ]
+            )->one();
 
-        if ($model !== null && $model->generatePasswordResetToken(true) &&
-            Mail::sendEmail($model, 'reset password', 'user/password-reset-token')) {
+        if ($model !== null && $model->generatePasswordResetToken(true)
+            && Mail::sendEmail(
+                $model,
+                'reset password',
+                'user/password-reset-token'
+            )
+        ) {
             return true;
         }
 
-        $this->addError(self::EMAIL, Yii::t('app', 'We can not reset the password for this user'));
+        $this->addError(
+            self::EMAIL,
+            Yii::t(
+                'app',
+                'We can not reset the password for this user'
+            )
+        );
         return false;
     }
 
     /**
-     * @param $tokendecode string format of generateToken
+     * Check token validity
+     *
+     * @param string $tokendecode format of generateToken
+     *
      * @return bool
      */
     public function tokenIsValid($tokendecode)
     {
-
 
         $valid = true;
         if ($tokendecode === false || !isset($tokendecode{1})) {
@@ -97,17 +112,18 @@ class PasswordResetRequestForm extends Model
 
         $tokenarray = explode('|', $tokendecode);
 
-        if (count($tokenarray) <> 3) {
+        if (count($tokenarray) !== 3) {
             $valid = false;
         }
 
         // We need to verity date time validity.
-        if (Common::getDateDiffNow($tokenarray[1]) > PasswordResetRequestForm::RANGE_MINUTES_TOKEN) {
+        $time1 = Common::getDateDiffNow($tokenarray[1]);
+        if ($time1>PasswordResetRequestForm::RANGE_MINUTES_TOKEN) {
             $valid = false;
         }
 
         $model = User::findOne(['user_id' => $tokenarray[2]]);
-        if ($model == null) {
+        if ($model === null) {
             $valid = false;
         } else {
             if ($model->password_reset_token !== $tokenarray[0]) {
@@ -123,8 +139,11 @@ class PasswordResetRequestForm extends Model
     }
 
     /**
-     * @param $tokendecode string token decoded
-     * @return integer primary key user_id of table user
+     * Get primary key of table User
+     *
+     * @param string $tokendecode token decoded
+     *
+     * @return int primary key user_id of table user
      */
     public function getUserid($tokendecode)
     {

@@ -77,7 +77,7 @@ class UserController extends BaseController
             $model->generateAuthKey();
             $model->ipv4_address_last_login = Yii::$app->getRequest()->getUserIP();
 
-            $model->generateEmailConfirmationToken(true);
+            $model->genEmailConfToke(true);
             $this->saveRecord($model);
         }
 
@@ -94,8 +94,8 @@ class UserController extends BaseController
             $status = Common::transaction($model, 'save');
             $this->saveReport($status);
             if ($status) {
-                $primaryKey = BaseController::stringEncode($model->user_id);
-                return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
+                $primary_key = BaseController::stringEncode($model->user_id);
+                return $this->redirect([ACTION_VIEW, 'id' => $primary_key]);
             }
         } catch (Exception $exception) {
             $bitacora = New Bitacora();
@@ -140,16 +140,16 @@ class UserController extends BaseController
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param string $primaryKey primary key of table user (encrypted value)
+     * @param string $primary_key primary key of table user (encrypted value)
      *
      * @return object User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    private function findModel($primaryKey)
+    private function findModel($primary_key)
     {
 
-        $primaryKey = BaseController::stringDecode($primaryKey);
-        $model = User::findOne($primaryKey);
+        $primary_key = BaseController::stringDecode($primary_key);
+        $model = User::findOne($primary_key);
         if ($model !== null) {
             return $model;
         }
@@ -157,7 +157,7 @@ class UserController extends BaseController
         $event = Yii::t(
             'app',
             'The requested page does not exist {id}',
-            ['id' => $primaryKey]
+            ['id' => $primary_key]
         );
 
         $bitacora = New Bitacora();
@@ -221,7 +221,7 @@ class UserController extends BaseController
         $result = Yii::$app->request->post('selection');
         $deleteRecord = new DeleteRecord();
 
-        if (!$deleteRecord->isOkPermission(ACTION_DELETE) || !$deleteRecord->isOkSeleccionItems($result)) {
+        if (!$deleteRecord->isOkPermission(ACTION_DELETE) || !$deleteRecord->isOkSelection($result)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
@@ -231,11 +231,11 @@ class UserController extends BaseController
 
         for ($counter = 0; $counter < $nroSelections; $counter++) {
             try {
-                $primaryKey = $result[$counter];
-                $model = User::findOne($primaryKey);
-                $fkCheck = $this->fkCheck($primaryKey);
-                $item = $deleteRecord->remove($model, $fkCheck);
-                $status[$item] = $status[$item] . $primaryKey . ',';
+                $primary_key = $result[$counter];
+                $model = User::findOne($primary_key);
+                $fk_check = $this->fkCheck($primary_key);
+                $item = $deleteRecord->remove($model, $fk_check);
+                $status[$item] = $status[$item] . $primary_key . ',';
             } catch (Exception $exception) {
                 $bitacora = New Bitacora();
                 $bitacora->registerAndFlash($exception, 'actionRemove', MSG_ERROR);

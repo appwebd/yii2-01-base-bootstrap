@@ -55,15 +55,13 @@ class Action extends ActiveRecord
      * @param string $actionDesc A description of action
      * @param boolean $active Indicates records active
      * @return int
-     * @throws \yii\db\Exception
      */
     public static function addAction(
         $controllerId,
         $actionName,
         $actionDesc,
         $active
-    )
-    {
+    ) {
         $model = new Action();
         $model->controller_id = $controllerId;
         $model->action_name = $actionName;
@@ -93,29 +91,39 @@ class Action extends ActiveRecord
      */
     public static function getAction($actionName, $controllerId)
     {
-        return static::findOne([self::ACTION_NAME => $actionName, self::CONTROLLER_ID => $controllerId]);
+        return static::findOne(
+            [
+                self::ACTION_NAME => $actionName,
+                self::CONTROLLER_ID => $controllerId
+            ]
+        );
     }
 
     /**
      * get column action_id of table action given action_name
      *
      * @param string $actionName column action_name of table actions
+     *
      * @return int column of action_id
-     * @throws Exception
      */
     public static function getActionId($actionName)
     {
         try {
-            $actionId = ((new Query())->select('action_id')
+            $action_id = ((new Query())
+                ->select('action_id')
                 ->from(Action::TABLE)
                 ->where(["action_name" => $actionName])
                 ->limit(1)->createCommand())->queryColumn();
-            if (isset($actionId[0])) {
-                return $actionId[0];
+            if (isset($action_id[0])) {
+                return $action_id[0];
             }
         } catch (Exception $exception) {
             $bitacora = new Bitacora();
-            $bitacora->register($exception, 'app\models\Action::getActionId', MSG_ERROR);
+            $bitacora->register(
+                $exception,
+                'app\models\Action::getActionId',
+                MSG_ERROR
+            );
         }
         return null;
     }
@@ -134,13 +142,17 @@ class Action extends ActiveRecord
     /**
      * Get array from Actions
      *
-     * @param $actionId integer primary key of table action
+     * @param int $action_id primary key of table action
      *
      * @return array
      */
-    public static function getActionListById($actionId)
+    public static function getActionListById($action_id)
     {
-        $droptions = Action::find()->where([self::CONTROLLER_ID => $actionId])->asArray()->all();
+        $droptions = Action::find()->where(
+            [
+                self::CONTROLLER_ID => $action_id
+            ]
+        )->asArray()->all();
         return ArrayHelper::map($droptions, self::ACTION_ID, self::ACTION_NAME);
     }
 
@@ -163,8 +175,8 @@ class Action extends ActiveRecord
                 self::ACTION_NAME], 'trim'],
             [[self::ACTION_DESCRIPTION,
                 self::ACTION_NAME], function ($attribute) {
-                $this->$attribute = HtmlPurifier::process($this->$attribute);
-            }
+                    $this->$attribute = HtmlPurifier::process($this->$attribute);
+                }
             ],
         ];
     }
@@ -193,7 +205,10 @@ class Action extends ActiveRecord
                 //'class' => 'yii\behaviors\TimestampBehavior',
                 'class' => TimestampBehavior::className(),
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_INSERT => [
+                        'created_at',
+                        'updated_at'
+                    ],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
                 'value' => new Expression('now()'),
@@ -206,7 +221,12 @@ class Action extends ActiveRecord
      */
     public function getControllers()
     {
-        return $this->hasOne(Controllers::className(), [self::CONTROLLER_ID => self::CONTROLLER_ID]);
+        return $this->hasOne(
+            Controllers::className(),
+            [
+                self::CONTROLLER_ID => self::CONTROLLER_ID
+            ]
+        );
     }
 
     /**
@@ -214,7 +234,12 @@ class Action extends ActiveRecord
      */
     public function getLogs()
     {
-        return $this->hasMany(Logs::className(), [self::ACTION_ID => self::ACTION_ID]);
+        return $this->hasMany(
+            Logs::className(),
+            [
+                self::ACTION_ID => self::ACTION_ID
+            ]
+        );
     }
 
     /**

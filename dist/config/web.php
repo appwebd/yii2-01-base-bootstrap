@@ -4,6 +4,7 @@ $bundles = require __DIR__ . '/bundles.php';
 $db = require __DIR__ . '/db.php';
 $params = require __DIR__ . '/params.php';
 
+
 $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -62,7 +63,7 @@ $config = [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
                     ],
-                    'on missingTranslation' => ['app\components\TranslationEventHandler', 'handleMissingTranslation']
+                    'on missingTranslation' => ['app\components\TranslationEvent', 'MissingTrans']
                 ],
             ],
         ],
@@ -118,6 +119,9 @@ $config = [
             'cookieValidationKey' => '-ep1N8LQ66XkS34oQIEgZAogO466l7HX',
             'enableCsrfValidation' => true,
             'enableCookieValidation' => true,
+            'csrfCookie' => [
+                'httpOnly' => true,
+            ],
         ],
         'session' => [
             STR_CLASS => 'yii\web\DbSession',
@@ -137,9 +141,12 @@ $config = [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
             'loginUrl' => ['/login/index'],
+            'identityCookie' => [
+                'name' => '_identity-backend',
+                'httpOnly' => true,
+            ],
         ],
     ],
-
     'defaultRoute' => 'site/index',
     'id' => 'basic',
     'name' => 'Base',

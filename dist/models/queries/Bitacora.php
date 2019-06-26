@@ -30,7 +30,7 @@ class Bitacora extends Logs
     /**
      * Save in table logs all events and activities of this web application
      *
-     * @param string $event events or activities
+     * @param string|array $event events or activities
      * @param string $functionCode Name of function in source code
      * @param integer $statusId status_id related to table status
      * @return void
@@ -40,61 +40,100 @@ class Bitacora extends Logs
         $model = new Logs();
         $model->status_id = $statusId;
         $model->functionCode = $functionCode;
-        $model->event = $event;
-        $model->user_id = UserMethods::getIdentityUserId();
+
+        if (is_array($event)) {
+            $error = print_r($event, true);
+        } else {
+            $error  = $event;
+        }
+        $model->event = substr($error, 0, 250);
+
+        $usero = new UserMethods();
+        $model->user_id = $usero->getUserId();
         $model->controller_id = $this->getControllerId(Yii::$app->controller->id); // controller name
         $model->action_id = $this->getActionId(Yii::$app->controller->action->id, $model->controller_id); // Action name
 
         if ($model->controller_id == 0 || $model->action_id == 0) {
-            $message = Yii::t('app', 'Could not save new log information: {error}', ['error' => print_r($model->errors, true)]);
+            $message = Yii::t(
+                'app',
+                'Could not save new log information: {error}',
+                [
+                    'error' => print_r($model->errors, true)
+                ]
+            );
             Yii::$app->session->setFlash(ERROR, $message);
         } else {
-            $model->user_agent = Yii::$app->request->userAgent;
-            $model->ipv4_address = Yii::$app->getRequest()->getUserIP();
+            $model->user_agent = substr(Yii::$app->request->userAgent, 0, 250);
+            $model->ipv4_address = substr(
+                Yii::$app->getRequest()->getUserIP(),
+                0,
+                20
+            );
             $model->ipv4_address_int = ip2long($model->ipv4_address);
             $model->confirmed = 0;
-            $model->save();
+            try {
+                if ($model->validate()) {
+                    $model->save();
+                }
+            } catch (Exception $exception) {
+                $message = Yii::t(
+                    'app',
+                    'Could not save new log information: {error}',
+                    [
+                        'error' => print_r($model->errors, true)
+                    ]
+                );
+                Yii::$app->session->setFlash(ERROR, $message);
+            }
         }
     }
 
     /**
      * Get controller_id using controllerName to search
      *
-     * @param string $controllerName Name of controller
+     * @param string $controller_name Name of controller
+     *
      * @return int Controller ID
      */
-    function getControllerId($controllerName)
+    public function getControllerId($controller_name)
     {
-        $modelControllers = Controllers::getControllers($controllerName);
-        if ($modelControllers) {
-            $controllerId = $modelControllers->controller_id;
+        $model_controller = Controllers::getControllers($controller_name);
+        if ($model_controller) {
+            $controller_id = $model_controller->controller_id;
         } else {
-            Controllers::addControllers($controllerName, 'not verified', 1, 0, 1);
-            $modelControllers = Controllers::getControllers($controllerName);
-            if ($modelControllers) {
-                $controllerId = $modelControllers->controller_id;
+            Controllers::addControllers($controller_name, 'not verified', 1, 0, 1);
+            $model_controller = Controllers::getControllers($controller_name);
+            if ($model_controller) {
+                $controller_id = $model_controller->controller_id;
             } else {
                 $message = Yii::t(
                     'app',
                     'Error creating controlller name: {controller_name}',
-                    ['controllerName' => $controllerName]
+                    ['controllerName' => $controller_name]
                 );
                 Yii::$app->session->setFlash(ERROR, $message);
-                $controllerId = 0;
+                $controller_id = 0;
             }
         }
-        return $controllerId;
+        return $controller_id;
     }
 
-    function getActionId($actionName, $controllerId)
+    /**
+     * Get action_id of table action
+     *
+     * @param string $action_name Name of action
+     * @param int $controller_id controller_id primary key of table controller
+     *
+     * @return int
+     */
+    public function getActionId($action_name, $controller_id)
     {
-
-        $modelAction = Action::getAction($actionName, $controllerId);
-        if ($modelAction) {
-            $actionId = $modelAction->action_id;
+        $model_action = Action::getAction($action_name, $controller_id);
+        if ($model_action) {
+            $action_id = $model_action->action_id;
         } else {
             try {
-                Action::addAction($controllerId, $actionName, 'not verified', 1);
+                Action::addAction($controller_id, $action_name, 'not verified', 1);
             } catch (Exception $exception) {
                 $message = Yii::t(
                     'app',
@@ -106,19 +145,19 @@ class Bitacora extends Logs
                 );
                 Yii::$app->session->setFlash(ERROR, $message);
             }
-            $modelAction = Action::getAction($actionName, $controllerId);
-            if ($modelAction) {
-                $actionId = $modelAction->action_id;
+            $model_action = Action::getAction($action_name, $controller_id);
+            if ($model_action) {
+                $action_id = $model_action->action_id;
             } else {
                 $mesage = Yii::t(
                     'app',
                     'Error creating action name: {action_name}',
-                    ['action_name' => $actionName]
+                    ['action_name' => $action_name]
                 );
                 Yii::$app->session->setFlash(ERROR, $mesage);
-                $actionId = 0;
+                $action_id = 0;
             }
         }
-        return $actionId;
+        return $action_id;
     }
 }

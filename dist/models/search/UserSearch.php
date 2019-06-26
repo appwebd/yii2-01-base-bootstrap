@@ -23,22 +23,6 @@ use yii\helpers\ArrayHelper;
  */
 class UserSearch extends User
 {
-    const STR_LABEL = 'label';
-    const ACTIVE = 'active';
-    const AUTH_KEY = 'auth_key';
-    const EMAIL = 'email';
-    const EMAIL_CONFIRMATION_TOKEN = 'email_confirmation_token';
-    const EMAIL_IS_VERIFIED = 'email_is_verified';
-    const FIRSTNAME = 'firstName';
-    const IPV4_ADDRESS_LAST_LOGIN = 'ipv4_address_last_login';
-    const LASTNAME = 'lastName';
-    const PASSWORD_HASH = 'password_hash';
-    const PASSWORD_RESET_TOKEN = 'password_reset_token';
-    const PASSWORD_RESET_TOKEN_DATE = 'password_reset_token_date';
-    const PROFILE_ID = 'profile_id';
-    const TELEPHONE = 'telephone';
-    const USERNAME = 'username';
-    const USER_ID = 'user_id';
 
     /**
      * Get array from Sub categories

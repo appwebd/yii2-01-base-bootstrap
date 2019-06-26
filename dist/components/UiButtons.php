@@ -67,7 +67,7 @@ class UiButtons extends Component
      *
      * @return string
      */
-    public function getUrlButtonAction($icon, $url, $key, $title)
+    public static function getUrlButtonAction($icon, $url, $key, $title)
     {
         $url = Yii::$app->controller->id . $url;
         return Html::a(
@@ -88,7 +88,7 @@ class UiButtons extends Component
      *
      * @return array
      */
-    public  function buttonsActionColumn()
+    public static function buttonsActionColumn()
     {
 
         return [

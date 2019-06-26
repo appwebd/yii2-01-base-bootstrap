@@ -17,7 +17,7 @@ use yii\web\NotFoundHttpException;
 class LoginForm extends Model
 {
     const USERNAME = 'username';
-    const PASSWORD = 'password';
+    const PASSW0RD = 'password';
     const REMEMBER_ME = 'rememberMe';
     public $username;
     public $password;
@@ -29,6 +29,7 @@ class LoginForm extends Model
      * Removes email confirmation token and sets is_email_verified to true
      *
      * @param int $userId Primary key
+     *
      * @return bool|null whether the save was successful or null if $save was false.
      */
     public static function removeTokenEmail($userId)
@@ -50,12 +51,12 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [[self::USERNAME, self::PASSWORD], 'required'], // username and password are both required
+            [[self::USERNAME, self::PASSW0RD], 'required'], // username and password are both required
 
             // rememberMe must be a boolean value
             [self::REMEMBER_ME, 'boolean'],
             // password is validated by validatePassword()
-            [self::PASSWORD, 'validatePassword'],
+            [self::PASSW0RD, 'validatePassword'],
             [self::USERNAME, 'validateUser'],
         ];
     }
@@ -64,7 +65,7 @@ class LoginForm extends Model
     {
         return [
             self::USERNAME => Yii::t('app', 'Username'),
-            self::PASSWORD => Yii::t('app', 'Password'),
+            self::PASSW0RD => Yii::t('app', 'Password'),
             self::REMEMBER_ME => Yii::t('app', 'Remember me'),
         ];
     }
@@ -84,9 +85,9 @@ class LoginForm extends Model
     /**
      * Finds user by [[username]]
      *
-     * @return User|null
+     * @return Yii\web\IdentityInterface
      */
-    public function getUser()
+    final public function getUser()
     {
         if ($this->_user  === null) {
             $this->_user = User::findByUsername($this->username);
@@ -116,6 +117,7 @@ class LoginForm extends Model
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
+     *
      */
     public function validatePassword()
     {

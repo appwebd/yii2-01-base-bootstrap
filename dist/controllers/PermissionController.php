@@ -43,7 +43,6 @@ class PermissionController extends BaseController
      */
     public function beforeAction($action)
     {
-
         if (BaseController::checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
@@ -154,7 +153,7 @@ class PermissionController extends BaseController
      */
     public function actionDelete($id)
     {
-        $deleteRecord = New DeleteRecord();
+        $deleteRecord = new DeleteRecord();
         if (!$deleteRecord->isOkPermission(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -165,7 +164,7 @@ class PermissionController extends BaseController
             $status = Common::transaction($model, ACTION_DELETE);
             $deleteRecord->report($status);
         } catch (Exception $exception) {
-            $bitacora = New Bitacora();
+            $bitacora = new Bitacora();
             $bitacora->registerAndFlash($exception, 'actionDelete', MSG_ERROR);
         }
         return $this->redirect([ACTION_INDEX]);
@@ -231,20 +230,19 @@ class PermissionController extends BaseController
      */
     public function actionIndex()
     {
-
         $sm_permission = new PermissionSearch();
         $dp_permission = $sm_permission->search(
             Yii::$app->request->queryParams
         );
 
-        $pageSize = $this->pageSize();
-        $dp_permission->pagination->pageSize = $pageSize;
+        $page_size = $this->pageSize();
+        $dp_permission->pagination->pageSize = $page_size;
 
         return $this->render(
             ACTION_INDEX,
             [
                 'dataProvider' => $dp_permission,
-                PAGE_SIZE => $pageSize,
+                PAGE_SIZE => $page_size,
                 'searchModel' => $sm_permission,
                 'controller_id' => $sm_permission->controller_id
             ]
@@ -258,28 +256,28 @@ class PermissionController extends BaseController
      */
     public function actionRemove()
     {
-        $deleteRecord = New DeleteRecord();
+        $delete_record = new DeleteRecord();
         $result = Yii::$app->request->post('selection');
 
-        if (!$deleteRecord->isOkPermission(ACTION_DELETE) || !$deleteRecord->isOkSeleccionItems($result)) {
+        if (!$delete_record->isOkPermission(ACTION_DELETE) || !$delete_record->isOkSelection($result)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
-        $nroSelections = sizeof($result);
+        $nro_selections = sizeof($result);
         $status = [];
-        for ($counter = 0; $counter < $nroSelections; $counter++) {
+        for ($counter = 0; $counter < $nro_selections; $counter++) {
             try {
-                $primaryKey = $result[$counter];
-                $model = Permission::findOne($primaryKey);
-                $item = $deleteRecord->remove($model, 0);
-                $status[$item] = $status[$item] . $primaryKey . ',';
+                $primary_key = $result[$counter];
+                $model = Permission::findOne($primary_key);
+                $item = $delete_record->remove($model, 0);
+                $status[$item] = $status[$item] . $primary_key . ',';
             } catch (Exception $exception) {
-                $bitacora = New Bitacora();
+                $bitacora = new Bitacora();
                 $bitacora->registerAndFlash($exception, 'actionRemove', MSG_ERROR);
             }
         }
 
-        $deleteRecord->summaryDisplay($status);
+        $delete_record->summaryDisplay($status);
         return $this->redirect([ACTION_INDEX]);
     }
 
@@ -312,9 +310,10 @@ class PermissionController extends BaseController
     public function actionView($id)
     {
         $model = $this->findModel($id);
+
         $event = Yii::t('app', 'view record {id}', ['id' => $model->permission_id]);
-        $bitacora = New Bitacora();
-        $bitacora->registerAndFlash($event, 'actionView', MSG_INFO);
+        $bitacora = new Bitacora();
+        $bitacora->register($event, 'actionView', MSG_INFO);
 
 
         return $this->render(ACTION_VIEW, [MODEL => $model]);

@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ALL */
+
 /**
  * Logs (user bitacora)
  *
@@ -14,11 +15,11 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\HtmlPurifier;
-
 
 /**
  * Logs
@@ -45,7 +46,7 @@ class Logs extends ActiveRecord
     const CONTROLLER_ID = 'controller_id';
     const DATE = 'date';
     const EVENT = 'event';
-    const ICON = 'fas fa-sign-out-alt';
+    const ICON = 'clone outline';
     const IPV4_ADDRESS = 'ipv4_address';
     const IPV4_ADDRESS_INT = 'ipv4_address_int';
     const LOGS_ID = 'logs_id';
@@ -81,8 +82,12 @@ class Logs extends ActiveRecord
                 self::USER_AGENT,
                 self::USER_ID], 'required'],
             [[self::ACTION_ID], 'in', RANGE => array_keys(Action::getActionList())],
-            [[self::CONTROLLER_ID], 'in', RANGE => array_keys(Controllers::getControllersList())],
-            [self::EVENT, STRING, LENGTH => [1, 80]],
+            [[
+                self::CONTROLLER_ID],
+                'in',
+                RANGE => array_keys(Controllers::getControllersList())
+            ],
+            [self::EVENT, STRING, LENGTH => [1, 250]],
             [self::IPV4_ADDRESS, STRING, LENGTH => [1, 20]],
             [[self::USER_AGENT, self::FUNCTION_CODE], STRING, LENGTH => [1, 250]],
             [[self::ACTION_ID,
@@ -99,8 +104,8 @@ class Logs extends ActiveRecord
             [[self::EVENT,
                 self::IPV4_ADDRESS,
                 self::USER_AGENT], function ($attribute) {
-                $this->$attribute = HtmlPurifier::process($this->$attribute);
-            }
+                    $this->$attribute = HtmlPurifier::process($this->$attribute);
+                }
             ],
         ];
     }

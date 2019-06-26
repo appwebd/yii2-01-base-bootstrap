@@ -17,12 +17,10 @@ use app\models\queries\Bitacora;
 use app\models\queries\UserQuery;
 use Yii;
 use yii\base\Exception;
-use yii\base\Security;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\HtmlPurifier;
-use yii\helpers\Url;
 use yii\web\IdentityInterface;
 
 /**
@@ -47,7 +45,6 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-
     const ACTIVE = 'active';
     const AUTH_KEY = 'auth_key';
     const EMAIL = 'email';
@@ -57,9 +54,9 @@ class User extends ActiveRecord implements IdentityInterface
     const FIRSTNAME = 'firstName';
     const IPV4_ADDRESS_LAST_LOGIN = 'ipv4_address_last_login';
     const LASTNAME = 'lastName';
-    const PASSWORD_HASH = 'password_hash';
-    const PASSWORD_RESET_TOKEN = 'password_reset_token';
-    const PASSWORD_RESET_TOKEN_DATE = 'password_reset_token_date';
+    const PASSW0RD_HASH = 'password_hash';
+    const PASSW0RD_RESET_TOKEN = 'password_reset_token';
+    const PASSW0RD_RESET_TOKEN_DATE = 'password_reset_token_date';
     const PROFILE_USER = 20;
     const PROFILE_VISIT = 0;
     const PROFILE_ID = 'profile_id';
@@ -72,7 +69,7 @@ class User extends ActiveRecord implements IdentityInterface
     const USERNAME = 'username';
     const USER_ID = 'user_id';
     const USER_ID_VISIT = 1;
-    const ICON = 'fas fa-user';
+    const ICON = ' user';
     /**
      * @var string|null the current password value from form input
      */
@@ -87,7 +84,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return new UserQuery(get_called_class());
     }
-
 
 
     /**
@@ -115,7 +111,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
 
-
     /**
      * Finds user by username
      *
@@ -136,7 +131,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
 
-
     /**
      * @return array the validation rules.
      */
@@ -149,7 +143,7 @@ class User extends ActiveRecord implements IdentityInterface
                 self::EMAIL_IS_VERIFIED,
                 self::FIRSTNAME,
                 self::LASTNAME,
-                self::PASSWORD_HASH,
+                self::PASSW0RD_HASH,
                 self::PROFILE_ID,
                 self::USERNAME], 'required'],
 
@@ -160,8 +154,8 @@ class User extends ActiveRecord implements IdentityInterface
             [self::EMAIL_CONFIRMATION_TOKEN, 'unique'],
             [self::FIRSTNAME, STRING, LENGTH => [1, 80]],
             [self::LASTNAME, STRING, LENGTH => [1, 80]],
-            [self::PASSWORD_HASH, STRING, LENGTH => [1, 255]],
-            [self::PASSWORD_RESET_TOKEN, STRING, 'max' => 255],
+            [self::PASSW0RD_HASH, STRING, LENGTH => [1, 255]],
+            [self::PASSW0RD_RESET_TOKEN, STRING, 'max' => 255],
             [[self::PROFILE_ID], 'in', 'range' => array_keys(Profile::getProfileList())],
             [self::TELEPHONE, STRING, 'max' => 15],
             [[self::USERNAME, self::IPV4_ADDRESS_LAST_LOGIN], STRING, LENGTH => [1, 20]],
@@ -174,20 +168,20 @@ class User extends ActiveRecord implements IdentityInterface
                 self::EMAIL,
                 self::FIRSTNAME,
                 self::LASTNAME,
-                self::PASSWORD_HASH,
-                self::PASSWORD_RESET_TOKEN,
+                self::PASSW0RD_HASH,
+                self::PASSW0RD_RESET_TOKEN,
                 self::TELEPHONE,
                 self::USERNAME], 'trim'],
             [[self::AUTH_KEY,
                 self::EMAIL,
                 self::FIRSTNAME,
                 self::LASTNAME,
-                self::PASSWORD_HASH,
-                self::PASSWORD_RESET_TOKEN,
+                self::PASSW0RD_HASH,
+                self::PASSW0RD_RESET_TOKEN,
                 self::TELEPHONE,
                 self::USERNAME], function ($attribute) {
-                $this->$attribute = HtmlPurifier::process($this->$attribute);
-            }
+                    $this->$attribute = HtmlPurifier::process($this->$attribute);
+                }
             ],
         ];
     }
@@ -206,9 +200,9 @@ class User extends ActiveRecord implements IdentityInterface
             self::FIRSTNAME => Yii::t('app', 'First name'),
             self::IPV4_ADDRESS_LAST_LOGIN => Yii::t('app', 'Last ipv4 address used'),
             self::LASTNAME => Yii::t('app', 'Last name'),
-            self::PASSWORD_HASH => Yii::t('app', 'password'),
-            self::PASSWORD_RESET_TOKEN => Yii::t('app', 'password reset token'),
-            self::PASSWORD_RESET_TOKEN_DATE => Yii::t('app', 'password reset token date creation'),
+            self::PASSW0RD_HASH => Yii::t('app', 'password'),
+            self::PASSW0RD_RESET_TOKEN => Yii::t('app', 'password reset token'),
+            self::PASSW0RD_RESET_TOKEN_DATE => Yii::t('app', 'password reset token date creation'),
             self::PROFILE_ID => Yii::t('app', 'Profile'),
             self::TELEPHONE => Yii::t('app', 'Phone number'),
             self::USERNAME => Yii::t('app', 'User account'),
@@ -224,12 +218,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function behaviors()
     {
-
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at', 'password_reset_token_date'],
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at', self::PASSW0RD_RESET_TOKEN_DATE],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
                 'value' => new Expression('NOW()'),
@@ -275,13 +268,15 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates new password reset token
+     *
      * @param bool $save whether to save the record. Default is `false`.
+     *
      * @return bool|null whether the save was successful or null if $save was false.
      */
-    public function generatePasswordResetToken($save)
+    public function genPassResetToke($save)
     {
         try {
-            $security  = new yii\base\Security();
+            $security = new yii\base\Security();
             $this->auth_key = $security->generateRandomString();
             $this->password_reset_token = $security->generateRandomString() . '_' . time();
         } catch (Exception $exception) {
@@ -301,10 +296,12 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates new email confirmation token
+     *
      * @param bool $save whether to save the record. Default is `false`.
+     *
      * @return bool|null whether the save was successful or null if $save was false.
      */
-    public function generateEmailConfirmationToken($save)
+    public function genEmailConfToke($save)
     {
         try {
             $security = new yii\base\Security();
@@ -366,6 +363,7 @@ class User extends ActiveRecord implements IdentityInterface
      * Validates password
      *
      * @param string $password password to validate
+     *
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password)
@@ -373,5 +371,4 @@ class User extends ActiveRecord implements IdentityInterface
         $security = new yii\base\Security();
         return $security->validatePassword($password, $this->password_hash);
     }
-
 }

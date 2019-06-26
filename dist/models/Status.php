@@ -1,14 +1,16 @@
 <?php
 /**
  * Informative status of events in all the platform
+ * PHP version 7.2.0
  *
- * @package     Model of Status
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        2018-07-30 20:29:24
- * @version     1.0
+ * @category  Models
+ * @package   Logs
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      6/18/18 10:34 AM
  */
 
 namespace app\models;
@@ -39,8 +41,9 @@ class Status extends ActiveRecord
     const STATUS_NAME = 'status_name';
     const TITLE = 'Status';
 
-
     /**
+     * Get table name
+     *
      * @return string the name of the table associated with this ActiveRecord class.
      */
     public static function tableName()
@@ -51,30 +54,29 @@ class Status extends ActiveRecord
     /**
      * Get status description for a status_id
      *
-     * @param int $statusID
+     * @param int $statusID Primary key of table Status
+     *
      * @return string description od StatusId
      */
     public static function getStatusName($statusID)
     {
         switch ($statusID) {
-            case 10:
-                $return = INFO;
-                break;
-            case 20:
-                $return = SUCCESS;
-                break;
-            case 30:
-                $return = WARNING;
-                break;
-            case 40:
-                $return = ERROR;
-                break;
-            case 50:
-                $return = 'security issue';
-                break;
-            default:
-                $return = INFO;
-                break;
+        default:
+        case 10:
+            $return = INFO;
+            break;
+        case 20:
+            $return = SUCCESS;
+            break;
+        case 30:
+            $return = WARNING;
+            break;
+        case 40:
+            $return = ERROR;
+            break;
+        case 50:
+            $return = 'security issue';
+            break;
         }
 
         return $return;
@@ -83,31 +85,29 @@ class Status extends ActiveRecord
     /**
      * Get status description for a status_id
      *
-     * @param int $statusID number of badge status 
-     * 
+     * @param int $statusID number of badge status
+     *
      * @return string
      */
     public static function getStatusBadge($statusID)
     {
         switch ($statusID) {
-            case 10:
-                $return = INFO;
-                break;
-            case 20:
-                $return = SUCCESS;
-                break;
-            case 30:
-                $return = WARNING;
-                break;
-            case 40:
-                $return = ERROR;
-                break;
-            case 50:
-                $return = ERROR;
-                break;
-            default:
-                $return = INFO;
-                break;
+        default:
+        case 10:
+            $return = INFO;
+            break;
+        case 20:
+            $return = SUCCESS;
+            break;
+        case 30:
+            $return = WARNING;
+            break;
+        case 40:
+            $return = ERROR;
+            break;
+        case 50:
+            $return = ERROR;
+            break;
         }
 
         return $return;
@@ -115,6 +115,7 @@ class Status extends ActiveRecord
 
     /**
      * Get array from Informative status of events in all the platform
+     *
      * @return array
      */
     public static function getStatusList()
@@ -130,6 +131,8 @@ class Status extends ActiveRecord
     }
 
     /**
+     * Rules definition of property table
+     *
      * @return array the validation rules.
      */
     public function rules()
@@ -147,6 +150,8 @@ class Status extends ActiveRecord
     }
 
     /**
+     * Attribute labels
+     *
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels()
@@ -159,7 +164,9 @@ class Status extends ActiveRecord
     }
 
     /**
-     * behaviors
+     * Behaviors
+     *
+     * @return array
      */
     public function behaviors()
     {
@@ -167,7 +174,10 @@ class Status extends ActiveRecord
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_INSERT => [
+                        'created_at',
+                        'updated_at'
+                    ],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
                 'value' => new Expression('NOW()'),
@@ -176,23 +186,27 @@ class Status extends ActiveRecord
     }
 
     /**
+     * Relation with Blocked
+     *
      * @return ActiveQuery
      */
     public function getBlocked()
     {
         return $this->hasMany(
-            Blocked::className(),
+            Blocked::class,
             [self::STATUS_ID => self::STATUS_ID]
         );
     }
 
     /**
+     * Relation with Logs
+     *
      * @return ActiveQuery
      */
     public function getLogs()
     {
         return $this->hasMany(
-            Logs::className(),
+            Logs::class,
             [self::STATUS_ID => self::STATUS_ID]
         );
     }

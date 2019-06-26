@@ -50,7 +50,14 @@ class LogsController extends BaseController
             return $this->redirect(['/']);
         }
         $bitacora = new Bitacora();
-        $bitacora->register(Yii::t('app', 'showing the view'), 'beforeAction', MSG_INFO);
+        $bitacora->register(
+            Yii::t(
+                'app',
+                'showing the view'
+            ),
+            'beforeAction',
+            MSG_INFO
+        );
         return parent::beforeAction($action);
     }
 

@@ -16,6 +16,7 @@ namespace app\models\queries;
 use app\models\Action;
 use app\models\Controllers;
 use app\models\Permission;
+use app\models\User;
 use Closure;
 use yii;
 use yii\db\ActiveRecord;
@@ -28,10 +29,7 @@ class Common extends ActiveRecord
     const PERMIT_ACCESS = 1;
     const PROFILE_ID_ADMINISTRATOR = 99;
     const PROFILE_ID_VISIT = 0;
-    const DONT_REMOVE = 1;
     const ROWS_ZERO = 0;
-    const ROWS_ONE = 1;
-    const USER_ID_VISIT = 0;
 
     /**
      * Get database name current conextion
@@ -52,12 +50,12 @@ class Common extends ActiveRecord
     {
 
         try {
-            $now = Common::getNow();
+            $nowdt = Common::getNow();
 
             $return = 10000; // default any value greather than zero
-            $differenceMinutes = (strtotime($now) - strtotime($dateInitial)) / 60; // answer in minutes
-            if (isset($differenceMinutes)) {
-                $return = $differenceMinutes;
+            $diff_minutes = (strtotime($nowdt) - strtotime($dateInitial)) / 60; // answer in minutes
+            if (isset($diff_minutes)) {
+                $return = $diff_minutes;
             }
             return $return;
         } catch (Exception $exception) {
@@ -126,7 +124,6 @@ class Common extends ActiveRecord
     {
 
         $count = (new Query())->select('COUNT(*)')->from($table)->limit(1);
-
         $return = Common::ROWS_ZERO;
         if (isset($count)) {
             $return = $count->count();
@@ -160,24 +157,24 @@ class Common extends ActiveRecord
     /**
      * Get formatted token template of widget gridView
      *
-     * @param string $showButtons what buttons should show in the view
+     * @param string $show_buttons what buttons should show in the view
      *
      * @return string
      */
-    public static function getProfilePermissionString($showButtons = '111')
+    public static function getProfilePermissionString($show_buttons = '111')
     {
-        $aButton = str_split($showButtons, 1);
+        $a_button = str_split($show_buttons, 1);
 
         $template = '';
-        if ($aButton[0] && Common::getProfilePermission('view')) {
+        if ($a_button[0] && Common::getProfilePermission('view')) {
             $template .= '{view} ';
         }
 
-        if ($aButton[1] && Common::getProfilePermission('update')) {
+        if ($a_button[1] && Common::getProfilePermission('update')) {
             $template .= ' {update} ';
         }
 
-        if ($aButton[2] && Common::getProfilePermission('delete')) {
+        if ($a_button[2] && Common::getProfilePermission('delete')) {
             $template .= ' {delete}';
         }
         return $template;
@@ -189,31 +186,31 @@ class Common extends ActiveRecord
      * @param string $actionName Name of action
      *
      * @return int grant or deny access
+     * @throws yii/db/Exception
      */
     public static function getProfilePermission($actionName)
     {
         try {
-
-            $userId = Yii::$app->user->getId();
-            $profileId = UserMethods::getProfileUser($userId);
-            if (!$profileId) {
-                $profileId = Common::PROFILE_ID_VISIT;
+            $usero = new UserMethods();
+            $user_id = $usero->getUserId();
+            $profile_id = $usero->getProfileUser($user_id);
+            if (!$profile_id) {
+                $profile_id = Common::PROFILE_ID_VISIT;
             }
 
-            $actionPermission = Common::DENY_ACCESS;
+            $actionpermission = Common::DENY_ACCESS;
 
-            if ($profileId == Common::PROFILE_ID_ADMINISTRATOR) {
+            if ($profile_id == Common::PROFILE_ID_ADMINISTRATOR) {
                 return Common::PERMIT_ACCESS;
             }
 
-            $controllerName = Yii::$app->controller->id;  // controller name
-            $controllerId = Controllers::getControllerId($controllerName);
-            $actionId = Action::getActionId($actionName);
+            $controller_name = Yii::$app->controller->id;  // controller name
+            $controller_id = Controllers::getControllerId($controller_name);
+            $action_id = Action::getActionId($actionName);
 
-            if (isset($controllerId) && isset($actionId)) {
-                $actionPermission = Permission::getPermission($actionId, $controllerId, $profileId);
+            if (isset($controller_id) && isset($action_id)) {
+                $actionpermission = Permission::getPermission($action_id, $controller_id, $profile_id);
             }
-
         } catch (Exception $exception) {
             $bitacora = new Bitacora();
             $bitacora->register(
@@ -221,11 +218,10 @@ class Common extends ActiveRecord
                 'app\models\queries\Common::getProfilePermission',
                 MSG_ERROR
             );
-            $actionPermission = Common::DENY_ACCESS;
+            $actionpermission = Common::DENY_ACCESS;
         }
 
-        return $actionPermission;
-
+        return $actionpermission;
     }
 
     /**
@@ -240,31 +236,42 @@ class Common extends ActiveRecord
 
     /**
      * Get information for dropdown list
-     * @param mixed $model Object defined in app\models to get information
-     * @param $parentModelId string column related model
-     * @param $valueId integer id to search in model
-     * @param $key integer column to get column code
-     * @param $value string column to get column description
-     * @param $orderBy String Order by column
-     * @param string $selected Selected column
+     *
+     * @param mixed  $model         Object defined in app\models to get information
+     * @param string $parentModelId column related model
+     * @param int    $valueId       id to search in model
+     * @param int    $ookey         column to get column code
+     * @param string $value         column to get column description
+     * @param string $orderBy       Order by column
+     * @param string $selected      Selected column
+     *
      * @return string String
      */
-    public static function relatedDropdownList($model, $parentModelId, $valueId, $key, $value, $orderBy, $selected = '')
-    {
-        $rows = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
+    public static function relatedDropdownList(
+        $model,
+        $parentModelId,
+        $valueId,
+        $ookey,
+        $value,
+        $orderBy,
+        $selected = ''
+    ) {
+        $rowso = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
 
         $dropdown = '<select>';
         $dropdown .= HTML_OPTION . Yii::t('app', 'Please select one option') . HTML_OPTION_CLOSE;
 
-        if (count($rows) > 0) {
-            foreach ($rows as $row) {
-                if ($selected == $row->$key) {
-                    $dropdown .= '<option value="' . $row->$key . '" selected>' . $row->$value . HTML_OPTION_CLOSE;
+        if (count($rowso) > 0) {
+            foreach ($rowso as $column) {
+                if ($selected == $column->$ookey) {
+                    $dropdown .= '<option value="' . $column->$ookey . '" selected>' .
+                        $column->$value
+                        . HTML_OPTION_CLOSE;
                 } else {
-                    $dropdown .= '<option value="' . $row->$key . '">' . $row->$value . HTML_OPTION_CLOSE;
+                    $dropdown .= '<option value="' . $column->$ookey . '">'
+                        . $column->$value
+                        . HTML_OPTION_CLOSE;
                 }
-
-
             }
         } else {
             $dropdown .= HTML_OPTION . Yii::t('app', 'No results found') . HTML_OPTION_CLOSE;
@@ -276,22 +283,22 @@ class Common extends ActiveRecord
     /**
      * Toggle some value of table tabl_tablas
      *
-     * @param string $tableName
-     * @param string $columnName toggle
-     * @param string $pkName primary key of table $tableName
-     * @param int $pkValue
+     * @param string $table_name  Name of table
+     * @param string $column_name toggle Column to do toggle
+     * @param string $pk_name     primary key of table $tableName
+     * @param int    $pk_value    value
      *
      * @return bool
      * @throws \Exception
      */
-    public static function toggleColumn($tableName, $columnName, $pkName, $pkValue)
+    public static function toggleColumn($table_name, $column_name, $pk_name, $pk_value)
     {
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $sqlcode = 'UPDATE ' . $tableName .
-                ' SET ' . $columnName . '= not(' . $columnName . ')                        
+            $sqlcode = 'UPDATE ' . $table_name .
+                ' SET ' . $column_name . '= not(' . $column_name . ')                        
                          WHERE
-                        ' . $pkName . ' = ' . $pkValue;
+                        ' . $pk_name . ' = ' . $pk_value;
 
             Yii::$app->db->createCommand($sqlcode)->execute();
             $transaction->commit();
@@ -302,7 +309,6 @@ class Common extends ActiveRecord
                 MSG_SUCCESS
             );
             return true;
-
         } catch (Exception $exception) {
             $transaction->rollBack();
             $bitacora = new Bitacora();
@@ -316,7 +322,7 @@ class Common extends ActiveRecord
     }
 
     /**
-     * Execute   the database transactions
+     * Execute the database transactions
      *
      * @param object $model mixed class defined in @app\models\
      * @param string $method the method associated with the model (save, delete)
