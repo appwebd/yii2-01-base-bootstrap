@@ -108,8 +108,10 @@ class BaseController extends Controller
 
     /**
      * Decode a string
+     *
      * @param string $ciphertext text to decode
-     * @return string decoded
+     *
+     * @return int|string decoded
      */
     public static function stringDecode($ciphertext)
     {

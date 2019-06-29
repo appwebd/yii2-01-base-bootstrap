@@ -16,10 +16,11 @@ use app\models\Permission;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Permission */
+/* @var string $titleView Title View */
 
 $this->title = Yii::t('app', Permission::TITLE);
 $this->params[BREADCRUMBS][] = ['label' => $this->title, 'url' => ['index']];
-$this->params[BREADCRUMBS][] = Yii::t('app', 'Create');
+$this->params[BREADCRUMBS][] = Yii::t('app', $titleView);
 
 echo HTML_WEBPAGE_OPEN;
 
@@ -33,5 +34,5 @@ $uiComponent->header(
     )
 );
 
-echo $this->renderFile('@app\views\permission\_form', ['model' => $model,]);
+echo $this->renderFile('@app/views/permission/_form.php', ['model' => $model,]);
 echo HTML_WEBPAGE_CLOSE;

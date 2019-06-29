@@ -1,16 +1,16 @@
 <?php
 /**
  * Permission
+ * PHP version 7.0
  *
  * @category  Controller
  * @package   Permission
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 Patricio Rojas Ortiz
  * @license   Private license
- * @release   1.0
+ * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      2018-08-09 14:26:44
- * @php       version 7.2
  */
 
 namespace app\controllers;
@@ -38,16 +38,24 @@ class PermissionController extends BaseController
      * Before action instructions for to do before call actions
      *
      * @param object $action action
+     *
      * @return mixed \yii\web\Response
      * @throws BadRequestHttpException
      */
     public function beforeAction($action)
     {
-        if (BaseController::checkBadAccess($action->id)) {
+        if ($this->checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
         $bitacora = new Bitacora();
-        $bitacora->register(Yii::t('app', 'showing the view'), 'beforeAction', MSG_INFO);
+        $bitacora->register(
+            Yii::t(
+                'app',
+                'showing the view'
+            ),
+            'beforeAction',
+            MSG_INFO
+        );
         return parent::beforeAction($action);
     }
 
@@ -112,21 +120,22 @@ class PermissionController extends BaseController
         $model = new Permission();
 
         if ($model->load(Yii::$app->request->post())) {
-            $this->saveRecord($model, 'permission_id');
+            $this->_saveRecord($model, 'permission_id');
         }
 
-        return $this->render(ACTION_CREATE, [MODEL => $model]);
+        return $this->render(ACTION_CREATE, [MODEL => $model, 'titleView' => 'Create']);
     }
 
     /**
      * Save record
      *
-     * @param object $model
+     * @param object $model    app\models\Permission
      * @param string $columnPk Primary Key column name
-     * @return bool|Response
+     *
+     * @return    bool|Response
      * @Exception
      */
-    private function saveRecord($model, $columnPk)
+    private function _saveRecord($model, $columnPk)
     {
         try {
             $status = Common::transaction($model, 'save');
@@ -136,7 +145,11 @@ class PermissionController extends BaseController
                 return $this->redirect([ACTION_VIEW, 'id' => $primaryKey]);
             }
         } catch (Exception $exception) {
-            $event = Yii::t('app', 'Error saving record: {error}', ['error' => $exception]);
+            $event = Yii::t(
+                'app',
+                'Error saving record: {error}',
+                ['error' => $exception]
+            );
             $bitacora = new Bitacora();
             $bitacora->registerAndFlash($event, 'saveRecord', MSG_ERROR);
         }
@@ -147,7 +160,8 @@ class PermissionController extends BaseController
      * Deletes an existing row of Permission model. If deletion is successful,
      * the browser will be redirected to the 'index' page.
      *
-     * @param integer $id
+     * @param integer $id Primary key of table Permission
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -165,7 +179,11 @@ class PermissionController extends BaseController
             $deleteRecord->report($status);
         } catch (Exception $exception) {
             $bitacora = new Bitacora();
-            $bitacora->registerAndFlash($exception, 'actionDelete', MSG_ERROR);
+            $bitacora->registerAndFlash(
+                $exception,
+                'actionDelete',
+                MSG_ERROR
+            );
         }
         return $this->redirect([ACTION_INDEX]);
     }
@@ -174,14 +192,14 @@ class PermissionController extends BaseController
      * Finds the Permission model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param integer $permissionId primary key of table permission
+     * @param int|string $permissionId primary key of table permission
      *
      * @return object Permission the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($permissionId)
     {
-        $permissionId = BaseController::stringDecode($permissionId);
+        $permissionId = self::stringDecode($permissionId);
         if (($model = Permission::findOne($permissionId)) !== null) {
             return $model;
         }
@@ -226,6 +244,7 @@ class PermissionController extends BaseController
 
     /**
      * Lists all Permission models.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -235,7 +254,7 @@ class PermissionController extends BaseController
             Yii::$app->request->queryParams
         );
 
-        $page_size = $this->pageSize();
+        $page_size = self::pageSize();
         $dp_permission->pagination->pageSize = $page_size;
 
         return $this->render(
@@ -259,7 +278,9 @@ class PermissionController extends BaseController
         $delete_record = new DeleteRecord();
         $result = Yii::$app->request->post('selection');
 
-        if (!$delete_record->isOkPermission(ACTION_DELETE) || !$delete_record->isOkSelection($result)) {
+        if (!$delete_record->isOkPermission(ACTION_DELETE)
+            || !$delete_record->isOkSelection($result)
+        ) {
             return $this->redirect([ACTION_INDEX]);
         }
 
@@ -270,10 +291,14 @@ class PermissionController extends BaseController
                 $primary_key = $result[$counter];
                 $model = Permission::findOne($primary_key);
                 $item = $delete_record->remove($model, 0);
-                $status[$item] = $status[$item] . $primary_key . ',';
+                $status[$item] .= $primary_key . ',';
             } catch (Exception $exception) {
                 $bitacora = new Bitacora();
-                $bitacora->registerAndFlash($exception, 'actionRemove', MSG_ERROR);
+                $bitacora->registerAndFlash(
+                    $exception,
+                    'actionRemove',
+                    MSG_ERROR
+                );
             }
         }
 
@@ -294,16 +319,23 @@ class PermissionController extends BaseController
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
-            $this->saveRecord($model, 'permission_id');
+            $this->_saveRecord($model, 'permission_id');
         }
 
-        return $this->render(ACTION_UPDATE, [MODEL => $model]);
+        return $this->render(
+            ACTION_CREATE,
+            [
+                MODEL => $model,
+                'titleView' => 'Update'
+            ]
+        );
     }
 
     /**
      * Displays a single Permission model.
      *
-     * @param integer $id
+     * @param integer $id Primary key of table Permission
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -314,7 +346,6 @@ class PermissionController extends BaseController
         $event = Yii::t('app', 'view record {id}', ['id' => $model->permission_id]);
         $bitacora = new Bitacora();
         $bitacora->register($event, 'actionView', MSG_INFO);
-
 
         return $this->render(ACTION_VIEW, [MODEL => $model]);
     }

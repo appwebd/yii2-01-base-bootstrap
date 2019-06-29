@@ -1,4 +1,17 @@
 <?php
+/**
+ * Class User
+ * PHP version 7.0.0
+ *
+ * @category  Controller
+ * @package   User
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      6/18/18 10:34 AM
+ */
 
 namespace app\controllers;
 
@@ -15,16 +28,16 @@ use yii\web\Response;
 
 /**
  * Class UserController
+ * PHP Version 7.0
  *
  * @category  Controller
  * @package   User
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 Patricio Rojas Ortiz
  * @license   Private license
- * @release   1.0
+ * @release   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      11/1/18 10:12 PM
- * @php       version 7.2
  */
 class UserController extends BaseController
 {
@@ -45,7 +58,14 @@ class UserController extends BaseController
         }
 
         $bitacora = New Bitacora();
-        $bitacora->register(Yii::t('app', 'showing the view'), 'beforeAction', MSG_INFO);
+        $bitacora->register(
+            Yii::t(
+                'app',
+                'showing the view'
+            ),
+            'beforeAction',
+            MSG_INFO
+        );
         return parent::beforeAction($action);
     }
 
@@ -78,28 +98,37 @@ class UserController extends BaseController
             $model->ipv4_address_last_login = Yii::$app->getRequest()->getUserIP();
 
             $model->genEmailConfToke(true);
-            $this->saveRecord($model);
+            $this->_saveRecord($model);
         }
 
-        return $this->render(ACTION_CREATE, [MODEL => $model]);
+        return $this->render(
+            ACTION_CREATE,
+            [
+                MODEL => $model,
+                'titleView' => 'Create'
+            ]
+        );
     }
 
     /**
-     * @param object $model
+     * Save User record
+     *
+     * @param object $model app\models\User
+     *
      * @return bool|Response
      */
-    private function saveRecord($model)
+    private function _saveRecord($model)
     {
         try {
             $status = Common::transaction($model, 'save');
             $this->saveReport($status);
             if ($status) {
-                $primary_key = BaseController::stringEncode($model->user_id);
-                return $this->redirect([ACTION_VIEW, 'id' => $primary_key]);
+                $privateKey = BaseController::stringEncode($model->user_id);
+                return $this->redirect([ACTION_VIEW, 'id' => $privateKey]);
             }
         } catch (Exception $exception) {
             $bitacora = New Bitacora();
-            $bitacora->registerAndFlash($exception, 'saveRecord', MSG_ERROR);
+            $bitacora->registerAndFlash($exception, '_saveRecord', MSG_ERROR);
         }
         return false;
     }
@@ -121,7 +150,7 @@ class UserController extends BaseController
         }
 
         $model = $this->findModel($id);
-        if ($this->fkCheck($model->user_id) > 0) {
+        if ($this->_fkCheck($model->user_id) > 0) {
             $deleteRecord->report(2);
             return $this->redirect([ACTION_INDEX]);
         }
@@ -140,16 +169,16 @@ class UserController extends BaseController
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
-     * @param string $primary_key primary key of table user (encrypted value)
+     * @param string $privateKey primary key of table user (encrypted value)
      *
      * @return object User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    private function findModel($primary_key)
+    private function findModel($privateKey)
     {
 
-        $primary_key = BaseController::stringDecode($primary_key);
-        $model = User::findOne($primary_key);
+        $privateKey = BaseController::stringDecode($privateKey);
+        $model = User::findOne($privateKey);
         if ($model !== null) {
             return $model;
         }
@@ -157,7 +186,7 @@ class UserController extends BaseController
         $event = Yii::t(
             'app',
             'The requested page does not exist {id}',
-            ['id' => $primary_key]
+            ['id' => $privateKey]
         );
 
         $bitacora = New Bitacora();
@@ -178,7 +207,7 @@ class UserController extends BaseController
      *
      * @return integer numbers of rows in other tables (integrity referential)
      */
-    private function fkCheck($userId)
+    private function _fkCheck($userId)
     {
         return Common::getNroRowsForeignkey(
             'logs',
@@ -196,9 +225,11 @@ class UserController extends BaseController
     {
 
         $searchmodel_user = new UserSearch();
-        $dataprovide_user = $searchmodel_user->search(Yii::$app->request->queryParams);
+        $dataprovide_user = $searchmodel_user->search(
+            Yii::$app->request->queryParams
+        );
 
-        $page_size = $this->pageSize();
+        $page_size = self::pageSize();
         $dataprovide_user->pagination->pageSize = $page_size;
 
         return $this->render(
@@ -221,24 +252,31 @@ class UserController extends BaseController
         $result = Yii::$app->request->post('selection');
         $deleteRecord = new DeleteRecord();
 
-        if (!$deleteRecord->isOkPermission(ACTION_DELETE) || !$deleteRecord->isOkSelection($result)) {
+        if (!$deleteRecord->isOkPermission(ACTION_DELETE)
+            || !$deleteRecord->isOkSelection($result)
+        ) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $nroSelections = sizeof($result);
         $status = [];
-        // 0: OK was deleted,  1: KO Error deleting record,  2: Used in the system,  3: Not found record in the system
+        // 0: OK was deleted,      1: KO Error deleting record,
+        // 2: Used in the system,  3: Not found record in the system
 
         for ($counter = 0; $counter < $nroSelections; $counter++) {
             try {
-                $primary_key = $result[$counter];
-                $model = User::findOne($primary_key);
-                $fk_check = $this->fkCheck($primary_key);
+                $privateKey = $result[$counter];
+                $model = User::findOne($privateKey);
+                $fk_check = $this->_fkCheck($privateKey);
                 $item = $deleteRecord->remove($model, $fk_check);
-                $status[$item] = $status[$item] . $primary_key . ',';
+                $status[$item] .= $privateKey . ',';
             } catch (Exception $exception) {
                 $bitacora = New Bitacora();
-                $bitacora->registerAndFlash($exception, 'actionRemove', MSG_ERROR);
+                $bitacora->registerAndFlash(
+                    $exception,
+                    'actionRemove',
+                    MSG_ERROR
+                );
             }
         }
 
@@ -260,10 +298,16 @@ class UserController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $this->saveRecord($model);
+            $this->_saveRecord($model);
         }
 
-        return $this->render(ACTION_UPDATE, [MODEL => $model]);
+        return $this->render(
+            ACTION_CREATE,
+            [
+                MODEL => $model,
+                'titleView' => 'Update'
+            ]
+        );
     }
 
     /**
