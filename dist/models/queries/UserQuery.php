@@ -8,16 +8,18 @@ use yii\db\ActiveQuery;
 
 class UserQuery extends ActiveQuery
 {
-    const USER_ID = 'user_id';
+
     /**
      * @return static the query with conditions for users that can login applied
      */
     public function canLogin()
     {
-        return $this->andWhere([
-            'active' => User::STATUS_ACTIVE,
-            'email_is_verified' => 1,
-        ]);
+        return $this->andWhere(
+            [
+                ACTIVE => User::STATUS_ACTIVE,
+                'email_is_verified' => 1,
+            ]
+        );
     }
 
     /**

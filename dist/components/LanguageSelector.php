@@ -7,7 +7,7 @@
  * @package   LanguageSelector
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2018-2019 Patricio Rojas
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      2018-10-19 14:15:15 pm
@@ -24,12 +24,14 @@ use yii\base\BootstrapInterface;
  * @package   LanguageSelector
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2018-2019 Patricio Rojas
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   Release: <release_id>
  * @link      https://appwebd.github.io
  */
 class LanguageSelector implements BootstrapInterface
 {
+
+
     /**
      * Language supported in this web application
      *
@@ -48,7 +50,6 @@ class LanguageSelector implements BootstrapInterface
     {
 
         $preflang = $app->request->getPreferredLanguage($this->supportedLang);
-
         $app->language = $preflang;
     }
 }

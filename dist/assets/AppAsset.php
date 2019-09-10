@@ -1,8 +1,11 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * PHP Version 7.2.0
+ *
+ * @copyright 2008 Copyright (c) Yii Software LLC
+ * @license   BSD 3-clause Clear license
+ * @link      http://www.yiiframework.com/
+ * @license   http://www.yiiframework.com/license/
  */
 
 namespace app\assets;

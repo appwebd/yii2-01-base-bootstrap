@@ -1,4 +1,15 @@
 <?php
+/**
+ * Class SiteController
+ * PHP version 7.2
+ *
+ * @category  Controllers
+ * @package   Site
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   BSD 3-clause Clear license
+ * @link      https://appwebd.github.io
+ */
 
 namespace app\controllers;
 
@@ -14,13 +25,12 @@ use yii\web\Response;
 /**
  * Class SiteController
  *
- * @package     Ui
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        11/1/18 10:31 PM
- * @version     1.0
+ * @category  Controllers
+ * @package   Site
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   BSD 3-clause Clear license
+ * @link      https://appwebd.github.io
  */
 class SiteController extends BaseController
 {
@@ -145,11 +155,13 @@ class SiteController extends BaseController
     public function actionError()
     {
         $exception = Yii::$app->errorHandler->exception;
+        $view = 'error';
+        $variable = 'exception';
         if ($exception instanceof NotFoundHttpException) {
-            return $this->render('404', ['message' => $exception]);
-        } else {
-            return $this->render(ERROR, ['exception' => $exception]);
+            $view = '404';
+            $variable = 'message';
         }
+        return $this->render($view, [$variable => $exception]);
     }
 
     /**
@@ -173,6 +185,6 @@ class SiteController extends BaseController
             return $this->redirect(Yii::$app->homeUrl);
         }
         Yii::$app->response->statusCode = 503;
-        return $this->render('maintenance');
+        return $this->render('maintenanc');
     }
 }

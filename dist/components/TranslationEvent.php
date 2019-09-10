@@ -7,12 +7,11 @@
  * @package   TranslationEventHandler
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 (c) Copyright - Web Application development
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      7/1/18 11:37 AM
  */
-
 
 namespace app\components;
 
@@ -25,12 +24,14 @@ use yii\i18n\MissingTranslationEvent;
  * @package   TranslationEventHandler
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 (c) Copyright - Web Application development
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   Release: <release_id>
  * @link      https://appwebd.github.io
  */
 class TranslationEvent
 {
+
+
     /**
      * Show a message for every word not translated
      *

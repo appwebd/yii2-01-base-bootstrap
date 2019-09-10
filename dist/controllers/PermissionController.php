@@ -7,7 +7,7 @@
  * @package   Permission
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 Patricio Rojas Ortiz
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      2018-08-09 14:26:44
@@ -68,7 +68,7 @@ class PermissionController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => AccessControl::className(),
+                STR_CLASS => AccessControl::class,
                 'only' => [
                     self::ACTION_DROPDOWN,
                     ACTION_CREATE,
@@ -95,7 +95,7 @@ class PermissionController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => VerbFilter::className(),
+                STR_CLASS => VerbFilter::class,
                 ACTIONS => [
                     self::ACTION_DROPDOWN => ['get'],
                     ACTION_CREATE => ['get', 'post'],
@@ -138,7 +138,8 @@ class PermissionController extends BaseController
     private function _saveRecord($model, $columnPk)
     {
         try {
-            $status = Common::transaction($model, 'save');
+            $common = new Common();
+            $status = $common->transaction($model, 'save');
             $this->saveReport($status);
             if ($status) {
                 $primaryKey = BaseController::stringDecode($model->$columnPk);
@@ -151,7 +152,11 @@ class PermissionController extends BaseController
                 ['error' => $exception]
             );
             $bitacora = new Bitacora();
-            $bitacora->registerAndFlash($event, 'saveRecord', MSG_ERROR);
+            $bitacora->registerAndFlash(
+                $event,
+                'saveRecord',
+                MSG_ERROR
+            );
         }
         return false;
     }
@@ -175,7 +180,8 @@ class PermissionController extends BaseController
         $model = $this->findModel($id);
 
         try {
-            $status = Common::transaction($model, ACTION_DELETE);
+            $common = new Common();
+            $status = $common->transaction($model, ACTION_DELETE);
             $deleteRecord->report($status);
         } catch (Exception $exception) {
             $bitacora = new Bitacora();
@@ -232,7 +238,7 @@ class PermissionController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             echo Common::relatedDropdownList(
-                Action::className(),
+                Action::class,
                 self::CONTROLLER_ID,
                 $id,
                 'action_id',
@@ -254,14 +260,14 @@ class PermissionController extends BaseController
             Yii::$app->request->queryParams
         );
 
-        $page_size = self::pageSize();
-        $dp_permission->pagination->pageSize = $page_size;
+        $pageSize = $this->pageSize();
+        $dp_permission->pagination->pageSize = $pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
                 'dataProvider' => $dp_permission,
-                PAGE_SIZE => $page_size,
+                PAGE_SIZE => $pageSize,
                 'searchModel' => $sm_permission,
                 'controller_id' => $sm_permission->controller_id
             ]

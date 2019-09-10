@@ -2,13 +2,13 @@
 /**
  * Login process
  *
- * @package     Controller of Login (using table user)
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        2018-06-16 23:03:06
- * @version     1.0
+ * @package   Controller of Login (using table user)
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   BSD 3-clause Clear license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      2018-06-16 23:03:06
  */
 
 namespace app\controllers;
@@ -21,7 +21,14 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Response;
-
+/**
+ * Class Password
+ *
+ * @package   Password
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @license   BSD 3-clause Clear license
+ * @link      https://appwebd.github.io
+ */
 class PasswordController extends BaseController
 {
     const ACTION_RESET = 'reset';
@@ -34,7 +41,7 @@ class PasswordController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => AccessControl::className(),
+                STR_CLASS => AccessControl::class,
                 'only' => [
                     ACTION_INDEX,                // Request password reset
                     self::ACTION_RESET,          // password reset
@@ -57,7 +64,7 @@ class PasswordController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => VerbFilter::className(),
+                STR_CLASS => VerbFilter::class,
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                     self::ACTION_RESET => ['get', 'post'],

@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * Class LoginController
+ * PHP Version 7.0.0
+ *
+ * @category  Controller
+ * @package   Login
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   BSD 3-clause Clear license
+ * @version   Release: <package_id>
+ * @link      https://appwebd.github.io
+ * @date      11/1/18 10:07 PM
+ */
 namespace app\controllers;
 
 use app\models\forms\LoginForm;
@@ -10,14 +22,16 @@ use yii\filters\VerbFilter;
 
 /**
  * Class LoginController
+ * PHP Version 7.0.0
  *
- * @package     login
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        11/1/18 10:07 PM
- * @version     1.0
+ * @category  Controller
+ * @package   Login
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   Release: <package_id>
+ * @link      https://appwebd.github.io
+ * @date      11/1/18 10:07 PM
  */
 class LoginController extends BaseController
 {
@@ -30,7 +44,7 @@ class LoginController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => AccessControl::className(),
+                STR_CLASS => AccessControl::class,
                 'only' => [ACTION_INDEX, self::LOGOUT],
                 'rules' => [
                     [
@@ -46,7 +60,7 @@ class LoginController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => VerbFilter::className(),
+                STR_CLASS => VerbFilter::class,
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                     self::LOGOUT => ['post'],

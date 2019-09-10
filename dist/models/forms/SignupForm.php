@@ -55,9 +55,10 @@ class SignupForm extends Model
     const FIRST_NAME = 'firstName';
     const ICON = 'fas fa-user';
     const LAST_NAME = 'lastName';
-    const STRING = 'string';
+    const STRING =STRING;
     const USERNAME = 'username';
     const PASSW0RD = 'password';
+    const NEW_PASSW0RD = 'password';
     const USER_ACTIVE = 1;
     const PROFILE_USER = 20;
     const EMAIL_IS_VERIFIED_FALSE = 0;
@@ -108,7 +109,7 @@ class SignupForm extends Model
                 self::FIRST_NAME,
                 self::LAST_NAME,
                 self::USERNAME,
-                self::PASSW0RD], 'required'],
+                self::PASSW0RD],REQUIRED],
             [[
                 self::EMAIL,
                 self::FIRST_NAME,
@@ -161,7 +162,7 @@ class SignupForm extends Model
 
         if ($user->validate() && $user->save()) {
             Yii::info("OK your account was saved.", __METHOD__);
-            $subject = Yii::t('app', 'Signup email of confirmation');
+            $subject = Yii::t( 'app', 'Signup email of confirmation');
             if (!Mail::sendEmail($user, $subject, 'user/confirm-email')) { // app/mail/user/confirm-email-html.php
                 Yii::$app->session->setFlash(
                     ERROR,

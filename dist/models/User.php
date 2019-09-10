@@ -1,14 +1,15 @@
 <?php
 /**
  * Users
+ * PHP Version 7.4.0
  *
- * @package     Model of Users
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        2018-06-16 16:49:58
- * @version     1.0
+ * @package   Users
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      2018-06-16 16:49:58
  */
 
 namespace app\models;
@@ -41,8 +42,8 @@ use yii\web\IdentityInterface;
  * @property string telephone                   Phone number 12 digits
  * @property integer user_id                     User
  * @property string username                    User account
- *
  */
+
 class User extends ActiveRecord implements IdentityInterface
 {
     const ACTIVE = 'active';
@@ -70,6 +71,7 @@ class User extends ActiveRecord implements IdentityInterface
     const USER_ID = 'user_id';
     const USER_ID_VISIT = 1;
     const ICON = ' user';
+
     /**
      * @var string|null the current password value from form input
      */
@@ -320,6 +322,14 @@ class User extends ActiveRecord implements IdentityInterface
         return false;
     }
 
+    /**
+     * Get the user_id of table user
+     * @return int user_id primary key of table user
+     */
+    public static function getIdentityUserId()
+    {
+        return Yii::$app->user->isGuest ? User::USER_ID_VISIT : Yii::$app->user->identity->getId();
+    }
 
     /**
      * Generates password hash from password and sets it to the model

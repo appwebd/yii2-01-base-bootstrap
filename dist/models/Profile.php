@@ -41,6 +41,7 @@ class Profile extends ActiveRecord
     const CREATED_AT = 'created_at';
     const UPDATE_AT = 'updated_at';
     const ICON = 'fas fa-globe';
+
     /**
      * @return array the validation rules.
      */

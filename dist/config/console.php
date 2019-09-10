@@ -7,7 +7,7 @@
  * @package   Config
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 (C) Copyright - Web Application development
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      6/18/18 10:34 AM

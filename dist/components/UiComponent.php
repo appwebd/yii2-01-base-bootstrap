@@ -1,12 +1,14 @@
 <?php
 /**
  * Class UiComponent
+ * PHP Version 7.3
  *
+ * @category  Component
  * @package   Ui
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 (C) Copyright - Web Application development
- * @license   Private license
- * @version   Release: <package_version>
+ * @license   BSD 3-clause Clear license
+ * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      6/28/18 2:33 PM
  */
@@ -23,10 +25,11 @@ use yii\helpers\Html;
 /**
  * Class UiComponent
  *
+ * @category  Component
  * @package   Ui
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 (C) Copyright - Web Application development
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   Release: <package_version>
  * @link      https://appwebd.github.io
  * @date      11/1/18 11:01 AM
@@ -43,8 +46,11 @@ class UiComponent extends Component
     const STR_PER_PAGE = 'per-page';
 
     /**
-     * @param  $statusId
-     * @param  $status
+     * Show a badge Status in the CSS framework of the platform
+     *
+     * @param int    $statusId Type of badge
+     * @param string $status   Message
+     *
      * @return string
      */
     public static function badgetStatus($statusId, $status)

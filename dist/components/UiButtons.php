@@ -1,7 +1,19 @@
 <?php
+/**
+ * UiButtons buttons interface
+ * PHP Version 7.0.0
+ *
+ * @category  Components
+ * @package   UiButtons
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019  Copyright - Web Application development
+ * @license   BSD 3-clause Clear license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      11/1/18 10:07 PM
+ */
 
 namespace app\components;
-
 
 use app\controllers\BaseController;
 use app\models\queries\Bitacora;
@@ -14,10 +26,10 @@ use yii\helpers\Html;
 /**
  * Class UiButtons
  *
- * @package  Components
+ * @category Components
+ * @package  UiButtons
  * @author   Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @category Category
- * @license  Private license
+ * @license  BSD 3-clause Clear license
  * @link     https://appwebd.github.io
  */
 class UiButtons extends Component
@@ -28,7 +40,7 @@ class UiButtons extends Component
                                </span>&nbsp;';
     const BUTTON_ICON_CREATE = '<span class="glyphicon glyphicon-plus">
                                </span>&nbsp;';
-    const BUTTON_ICON_REFRESH = '<span class="glyphicon glyphicon-refresh"> 
+    const BUTTON_ICON_REFRESH = '<span class="glyphicon glyphicon-refresh">
                                 </span>&nbsp;';
     const BUTTON_ICON_UPDATE = '<span class="glyphicon glyphicon-pencil">
                                 </span>&nbsp;';
@@ -94,12 +106,19 @@ class UiButtons extends Component
         return [
             ACTION_VIEW => function ($url, $model, $key) {
                 return UiButtons::getUrlButtonAction(
-                    self::ACTION_VIEW_ICON, '/view', $key, 'Show more details'
+                    self::ACTION_VIEW_ICON,
+                    '/view',
+                    $key,
+                    'Show more details'
                 );
             },
+
             ACTION_UPDATE => function ($url, $model, $key) {
                 return UiButtons::getUrlButtonAction(
-                    self::ACTION_UPDATE_ICON, '/update', $key,'Update'
+                    self::ACTION_UPDATE_ICON,
+                    '/update',
+                    $key,
+                    'Update'
                 );
             },
             ACTION_DELETE => function ($url, $model, $key) {
@@ -115,7 +134,7 @@ class UiButtons extends Component
                         TITLE => Yii::t('app', 'Delete record'),
                         self::STR_CLASS_DATA_PJAX => '0',
                         'data-confirm' => Yii::t(
-                            'yii',
+                            'app',
                             'Are you sure you want to delete?'
                         ),
                         'data-method' => 'post',
@@ -132,7 +151,7 @@ class UiButtons extends Component
      *
      * @return void
      */
-    public  function buttonsViewBottom(&$model)
+    public function buttonsViewBottom(&$model)
     {
         $primaryKey = $model->getId();
         $primaryKey = BaseController::stringEncode($primaryKey);

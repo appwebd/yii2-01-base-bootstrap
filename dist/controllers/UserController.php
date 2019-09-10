@@ -7,7 +7,7 @@
  * @package   User
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 (C) Copyright - Web Application development
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      6/18/18 10:34 AM
@@ -33,11 +33,7 @@ use yii\web\Response;
  * @category  Controller
  * @package   User
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright 2019 Patricio Rojas Ortiz
  * @license   Private license
- * @release   GIT: <git_id>
- * @link      https://appwebd.github.io
- * @date      11/1/18 10:12 PM
  */
 class UserController extends BaseController
 {
@@ -63,7 +59,7 @@ class UserController extends BaseController
                 'app',
                 'showing the view'
             ),
-            'beforeAction',
+            'app\controller\UserController::beforeAction',
             MSG_INFO
         );
         return parent::beforeAction($action);
@@ -120,7 +116,8 @@ class UserController extends BaseController
     private function _saveRecord($model)
     {
         try {
-            $status = Common::transaction($model, 'save');
+            $common = new Common();
+            $status = $common->transaction($model, STR_SAVE);
             $this->saveReport($status);
             if ($status) {
                 $privateKey = BaseController::stringEncode($model->user_id);
@@ -156,7 +153,8 @@ class UserController extends BaseController
         }
 
         try {
-            $status = Common::transaction($model, ACTION_DELETE);
+            $common = new Common();
+            $status = $common->transaction($model, ACTION_DELETE);
             $deleteRecord->report($status);
         } catch (Exception $exception) {
             $bitacora = New Bitacora();
@@ -209,7 +207,8 @@ class UserController extends BaseController
      */
     private function _fkCheck($userId)
     {
-        return Common::getNroRowsForeignkey(
+        $common = new Common();
+        return $common->getNroRowsForeignkey(
             'logs',
             self::USER_ID,
             $userId
@@ -229,15 +228,15 @@ class UserController extends BaseController
             Yii::$app->request->queryParams
         );
 
-        $page_size = self::pageSize();
-        $dataprovide_user->pagination->pageSize = $page_size;
+        $pageSize = $this->pageSize();
+        $dataprovide_user->pagination->pageSize = $pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
                 'searchModelUser' => $searchmodel_user,
                 'dataProviderUser' => $dataprovide_user,
-                'pageSize' => $page_size
+                'pageSize' => $pageSize
             ]
         );
     }

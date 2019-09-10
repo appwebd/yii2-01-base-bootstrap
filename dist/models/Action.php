@@ -67,12 +67,8 @@ class Action extends ActiveRecord
         $model->action_name = $actionName;
         $model->action_description = $actionDesc;
         $model->active = $active;
-
-        if (Common::transaction($model, 'save')) {
-            return true;
-        }
-
-        return false;
+        $common = new Common();
+        return $common->transaction($model, STR_SAVE);
     }
 
     /**

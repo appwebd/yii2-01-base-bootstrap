@@ -1,4 +1,17 @@
 <?php
+/**
+ * Main application settings
+ * PHP Version 7.2.0
+ *
+ * @category  Config
+ * @package   Web
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019  Copyright - Web Application development
+ * @license   BSD 3-clause Clear license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      11/1/18 10:07 PM
+ */
 
 $bundles = require __DIR__ . '/bundles.php';
 $db = require __DIR__ . '/db.php';
@@ -11,7 +24,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'basePath' => dirname(__DIR__),
-    'bootstrap' => [
+    BOOTSTRAP => [
         'log',
         [
             STR_CLASS => 'app\components\LanguageSelector',
@@ -19,8 +32,9 @@ $config = [
         ],
     ],
     //'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
-// https://www.yiiframework.com/doc/api/2.0/yii-filters-hostcontrol
-// the following configuration is only preferred like last resource (is preferable web server configuration instead)
+    // https://www.yiiframework.com/doc/api/2.0/yii-filters-hostcontrol
+    // the following configuration is only preferred like last resource
+    // (is preferable web server configuration instead)
     /*
         'as hostControl' => [
             'class' => 'yii\filters\HostControl',
@@ -63,7 +77,10 @@ $config = [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
                     ],
-                    'on missingTranslation' => ['app\components\TranslationEvent', 'MissingTrans']
+                    'on missingTranslation' =>
+                    [
+                        'app\components\TranslationEvent', 'MissingTrans'
+                    ]
                 ],
             ],
         ],
@@ -76,7 +93,7 @@ $config = [
                     'levels' => ['error', 'warning', 'info'],
                     'logFile' => '@runtime/logs/app.log',
                     'except' => [
-                      'yii\web\HttpException:404',
+                        'yii\web\HttpException:404',
                     ],
                 ],
                 /*
@@ -88,7 +105,7 @@ $config = [
                         'yii\db\*',
                     ],
                     'except' => [
-                      'yii\web\HttpException:404',
+                        'yii\web\HttpException:404',
                     ],
                 ],
                 'email' => [
@@ -96,7 +113,10 @@ $config = [
                     'except' => ['yii\web\HttpException:404'],
                     'levels' => ['error', 'warning'],
                     //'categories' => ['yii\db\*'],
-                    'message' => ['from' => 'pro@localhost', 'to' => 'pro@localhost'],
+                    'message' => [
+                        'from' => 'pro@localhost',
+                        'to' => 'pro@localhost'
+                    ],
                     'subject' => 'Database errors at example.com',
                 ],*/
             ],
@@ -110,12 +130,11 @@ $config = [
                 'username' => 'pro@dev-master.local',
                 'password' => 'password', // your password
                 'port' => '25',
-//                'encryption' => 'tls',
+                //  'encryption' => 'tls',
             ],
         ],
 
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '-ep1N8LQ66XkS34oQIEgZAogO466l7HX',
             'enableCsrfValidation' => true,
             'enableCookieValidation' => true,
@@ -159,17 +178,19 @@ $config = [
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
+    $config[BOOTSTRAP][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
+        // uncomment the following to add your IP if you are not connecting
+        // from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
-    $config['bootstrap'][] = 'gii';
+    $config[BOOTSTRAP][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
+        // uncomment the following to add your IP if you are not connecting
+        // from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }

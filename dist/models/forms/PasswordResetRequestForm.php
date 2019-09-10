@@ -25,9 +25,14 @@ class PasswordResetRequestForm extends Model
     public $email;
 
     /**
-     * @param $passwordresettoken String password reset token saved in model User
-     * @param $userId integer primary key of table User
-     * @return string  String encoded with infomation password Reset Token | datetime | User_id
+     * Generate token for password reset
+     *
+     * @param string $passwordresettoken String password reset token saved
+     *                                   in model User
+     * @param int    $userId             Primary key of table User
+     *
+     * @return string String encoded with infomation password Reset
+     *         Token | datetime | User_id
      */
     public static function generateToken($passwordresettoken, $userId)
     {
@@ -43,12 +48,12 @@ class PasswordResetRequestForm extends Model
     {
         return [
             [self::EMAIL, FILTER, FILTER => 'trim'],
-            [self::EMAIL, 'required'],
+            [self::EMAIL,REQUIRED],
             [self::EMAIL, self::EMAIL],
             [self::EMAIL, 'exist',
                 'targetClass' => '\app\models\User',
-                FILTER => ['active' => User::STATUS_ACTIVE],
-                'message' => Yii::t('app', 'There is no user with such email.')
+                FILTER => [ ACTIVE => User::STATUS_ACTIVE],
+                'message' => Yii::t( 'app', 'There is no user with such email.')
             ],
         ];
     }
@@ -69,7 +74,7 @@ class PasswordResetRequestForm extends Model
         $model = User::find()
             ->andWhere(
                 [
-                    'active' => User::STATUS_ACTIVE,
+                   ACTIVE => User::STATUS_ACTIVE,
                     'email_is_verified' => User::EMAIL_IS_VERIFIES_VALUE,
                     'email' => $email
                 ]

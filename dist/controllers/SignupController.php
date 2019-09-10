@@ -1,4 +1,15 @@
 <?php
+/**
+ * Signup Class
+ * PHP version 7.2
+ *
+ * @category  Controllers
+ * @package   Signup
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   BSD 3-clause Clear license
+ * @link      https://appwebd.github.io
+ */
 
 namespace app\controllers;
 
@@ -11,13 +22,10 @@ use yii\web\Response;
 /**
  * Class SingupController
  *
- * @package     Signup
- * @author      Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @copyright   (C) Copyright - Web Application development
- * @license     Private license
- * @link        https://appwebd.github.io
- * @date        11/1/18 10:33 PM
- * @version     1.0
+ * @package   Signup
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @license   BSD 3-clause Clear license
+ * @link      https://appwebd.github.io
  */
 class SignupController extends BaseController
 {
@@ -29,7 +37,7 @@ class SignupController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => AccessControl::className(),
+                STR_CLASS => AccessControl::class,
                 'only' => [ACTION_INDEX],
                 'rules' => [
                     [
@@ -40,7 +48,7 @@ class SignupController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => VerbFilter::className(),
+                STR_CLASS => VerbFilter::class,
                 ACTIONS => [
                     ACTION_INDEX => ['get', 'post'],
                 ],

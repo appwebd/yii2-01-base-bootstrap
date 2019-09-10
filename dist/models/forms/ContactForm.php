@@ -1,4 +1,16 @@
 <?php
+/**
+ * Contact Form
+ * PHP Version 7.4.0
+ *
+ * @package   Contact
+ * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
+ * @copyright 2019 (C) Copyright - Web Application development
+ * @license   Private license
+ * @version   GIT: <git_id>
+ * @link      https://appwebd.github.io
+ * @date      2018-06-16 16:49:58
+ */
 
 namespace app\models\forms;
 
@@ -28,7 +40,7 @@ class ContactForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [[self::NAME, self::EMAIL, self::SUBJECT, self::BODY, self::VERIFY_CODE], 'required'],
+            [[self::NAME, self::EMAIL, self::SUBJECT, self::BODY, self::VERIFY_CODE],REQUIRED],
             // email has to be a valid email address
             [self::EMAIL, self::EMAIL],
             // verifyCode needs to be entered correctly
@@ -44,11 +56,11 @@ class ContactForm extends Model
         $translate = new Yii\i18n\I18N();
 
         return [
-            self::NAME => $translate->translate('app', 'Name', [], Yii::$app->language),
-            self::EMAIL => $translate->translate('app', 'Email', [], Yii::$app->language),
-            self::SUBJECT => $translate->translate('app', 'Subject', [], Yii::$app->language),
-            self::BODY => $translate->translate('app', 'Message', [], Yii::$app->language),
-            self::VERIFY_CODE => $translate->translate('app', 'Verification Code', [], Yii::$app->language),
+            self::NAME => $translate->translate( 'app', 'Name', [], Yii::$app->language),
+            self::EMAIL => $translate->translate( 'app', 'Email', [], Yii::$app->language),
+            self::SUBJECT => $translate->translate( 'app', 'Subject', [], Yii::$app->language),
+            self::BODY => $translate->translate( 'app', 'Message', [], Yii::$app->language),
+            self::VERIFY_CODE => $translate->translate( 'app', 'Verification Code', [], Yii::$app->language),
         ];
     }
 

@@ -34,15 +34,15 @@ class LoginForm extends Model
      */
     public static function removeTokenEmail($userId)
     {
+        $status = false;
         $model = User::findIdentity($userId);
         if ($model !== null) {
             $model->email_confirmation_token = null;
             $model->email_is_verified = 1;
-            if (Common::transaction($model, 'save')) {
-                return true;
-            }
+            $common = new Common();
+            $status = $common->transaction($model, ACTION_DELETE);
         }
-        return false;
+        return $status;
     }
 
     /**
@@ -51,7 +51,7 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [[self::USERNAME, self::PASSW0RD], 'required'], // username and password are both required
+            [[self::USERNAME, self::PASSW0RD],REQUIRED], // username and password are both required
 
             // rememberMe must be a boolean value
             [self::REMEMBER_ME, 'boolean'],
@@ -64,9 +64,9 @@ class LoginForm extends Model
     public function attributeLabels()
     {
         return [
-            self::USERNAME => Yii::t('app', 'Username'),
-            self::PASSW0RD => Yii::t('app', 'Password'),
-            self::REMEMBER_ME => Yii::t('app', 'Remember me'),
+            self::USERNAME => Yii::t( 'app', 'Username'),
+            self::PASSW0RD => Yii::t( 'app', 'Password'),
+            self::REMEMBER_ME => Yii::t( 'app', 'Remember me'),
         ];
     }
 
@@ -145,4 +145,3 @@ class LoginForm extends Model
         }
     }
 }
-

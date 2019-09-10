@@ -30,6 +30,8 @@ use Yii;
  * @version   Release: <package_id>
  * @link      https://appwebd.github.io
  * @date      2019-06-24
+ *
+ * @property int $userId
  */
 class UserMethods extends User
 {
@@ -46,7 +48,7 @@ class UserMethods extends User
         if ($model !== null) {
             $return = $model->username;
         } else {
-            $return = Yii::t('app', 'Unkown');
+            $return = Yii::t( 'app', 'Unkown');
         }
         return $return;
     }

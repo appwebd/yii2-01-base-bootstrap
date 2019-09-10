@@ -71,12 +71,9 @@ class Controllers extends ActiveRecord
         $model->menu_boolean_private = $menuBooleanPrivate;
         $model->menu_boolean_visible = $menuBooleanVisible;
         $model->active = $active;
+        $common = new Common();
+        return $common->transaction($model, STR_SAVE);
 
-        if (Common::transaction($model, 'save')) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

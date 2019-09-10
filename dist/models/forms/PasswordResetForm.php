@@ -47,7 +47,7 @@ class PasswordResetForm extends Model
         return [
             [[
                 self::PASSW0RD
-            ], 'required'],
+            ],REQUIRED],
 
             [[self::PASSW0RD], STRING, LENGTH => [8, 255]],
             [[self::USER_ID], STRING],
@@ -60,8 +60,8 @@ class PasswordResetForm extends Model
     public function attributeLabels()
     {
         return [
-            self::PASSW0RD => Yii::t('app', 'password'),
-            self::USER_ID => Yii::t('app', 'user'),
+            self::PASSW0RD => Yii::t( 'app', 'password'),
+            self::USER_ID => Yii::t( 'app', 'user'),
 
         ];
     }
@@ -91,14 +91,14 @@ class PasswordResetForm extends Model
             }
 
         } catch (Exception $exception) {
+            $transaction->rollBack();
             $event = Yii::t(
                 'app',
                 'Error, updating password {error}',
-                ['error' => $exception]
+                [ ERROR => $exception]
             );
             $bitacora = new Bitacora();
             $bitacora->register($event, 'passwordUpdate', MSG_ERROR);
-            $transaction->rollBack();
         }
 
         return false;

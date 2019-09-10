@@ -6,8 +6,8 @@
  * @package   Profile
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 Patricio Rojas Ortiz
- * @license   Private license
- * @release   1.0
+ * @license   BSD 3-clause Clear license
+ * @version   GIT: <git_id>
  * @link      https://appwebd.github.io
  * @date      2018-08-09 14:26:44
  */
@@ -32,7 +32,7 @@ use yii\web\Response;
  * @package   Profile
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 Patricio Rojas Ortiz
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @release   1.0
  * @link      https://appwebd.github.io
  * @date      11/1/18 4:25 PM
@@ -113,7 +113,8 @@ class ProfileController extends BaseController
     private function _saveRecord($model)
     {
         try {
-            $status = Common::transaction($model, 'save');
+            $common = new Common();
+            $status = $common->transaction($model, 'save');
             $this->saveReport($status);
             if ($status) {
                 $primaryKey = BaseController::stringEncode($model->profile_id);
@@ -153,7 +154,8 @@ class ProfileController extends BaseController
         }
 
         try {
-            $status = Common::transaction($model, ACTION_DELETE);
+            $common = new Common();
+            $status = $common->transaction($model, ACTION_DELETE);
             $deleteRecord->report($status);
         } catch (Exception $exception) {
             $bitacora = New Bitacora();
@@ -206,13 +208,14 @@ class ProfileController extends BaseController
      */
     private function _fkCheck($profileId)
     {
-        $nro_regs = Common::getNroRowsForeignkey(
+        $common = new Common();
+        $nro_regs = $common->getNroRowsForeignkey(
             'permission',
             self::PROFILE_ID,
             $profileId
         );
 
-        return $nro_regs + Common::getNroRowsForeignkey(
+        return $nro_regs + $common->getNroRowsForeignkey(
             'user',
             self::PROFILE_ID,
             $profileId
@@ -230,15 +233,15 @@ class ProfileController extends BaseController
         $sm_profile = new ProfileSearch();
         $dp_profile = $sm_profile->search(Yii::$app->request->queryParams);
 
-        $page_size = self::pageSize();
-        $dp_profile->pagination->pageSize = $page_size;
+        $pageSize = $this->pageSize();
+        $dp_profile->pagination->pageSize = $pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
                 'searchModelProfile' => $sm_profile,
                 'dataProviderProfile' => $dp_profile,
-                'pageSize' => $page_size
+                'pageSize' => $pageSize
             ]
         );
     }
@@ -274,7 +277,11 @@ class ProfileController extends BaseController
                 $status[$item] .= $primaryKey . ',';
             } catch (Exception $exception) {
                 $bitacora = New Bitacora();
-                $bitacora->registerAndFlash($exception, 'actionRemove', MSG_ERROR);
+                $bitacora->registerAndFlash(
+                    $exception,
+                    'actionRemove',
+                    MSG_ERROR
+                );
             }
         }
 

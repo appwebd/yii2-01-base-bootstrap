@@ -6,7 +6,7 @@
  * @package   Logs
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2018-2019 Patricio Rojas Ortiz
- * @license   Private license
+ * @license   BSD 3-clause Clear license
  * @link      https://appwebd.github.io
  * @date      2018-07-30 15:34:07
  * @version   SVN: $Id$
@@ -46,7 +46,7 @@ class LogsController extends BaseController
     public function beforeAction($action)
     {
 
-        if (BaseController::checkBadAccess($action->id)) {
+        if ($this->checkBadAccess($action->id)) {
             return $this->redirect(['/']);
         }
         $bitacora = new Bitacora();
@@ -70,7 +70,7 @@ class LogsController extends BaseController
     {
         return [
             'access' => [
-                STR_CLASS => AccessControl::className(),
+                STR_CLASS => AccessControl::class,
                 'only' => [
                     self::ACTIONS,
                     self::BLOCKED,
@@ -93,7 +93,7 @@ class LogsController extends BaseController
                 ],
             ],
             'verbs' => [
-                STR_CLASS => VerbFilter::className(),
+                STR_CLASS => VerbFilter::class,
                 ACTIONS => [
                     self::ACTIONS => ['get'],
                     self::BLOCKED => ['get'],

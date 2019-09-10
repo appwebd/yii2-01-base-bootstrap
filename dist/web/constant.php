@@ -9,11 +9,11 @@ defined('DISABLE_CACHE') || define('DISABLE_CACHE', true);
 
 
 // BEGIN GLOBAL CONSTANTS of this web application --------------------------------------------------
-//
+
 defined('ACTION_CREATE') || define('ACTION_CREATE', 'create');
 defined('ACTION_DELETE') || define('ACTION_DELETE', 'delete');
-defined('ACTION_INDEX')  || define('ACTION_INDEX', 'index');
-defined('ACTION_LOGOUT')   || define('ACTION_LOGOUT', 'logout');
+defined('ACTION_INDEX') || define('ACTION_INDEX', 'index');
+defined('ACTION_LOGOUT') || define('ACTION_LOGOUT', 'logout');
 defined('ACTION_REMOVE') || define('ACTION_REMOVE', 'remove');
 
 defined('ACTION_VIEW_ICON') || define('ACTION_VIEW_ICON', 'glyphicon glyphicon-eye-open');
@@ -29,6 +29,7 @@ defined('ATTRIBUTE') || define('ATTRIBUTE', 'attribute');
 defined('ATTRIBUTES') || define('ATTRIBUTES', 'attributes');
 defined('AUTOCOMPLETE') || define('AUTOCOMPLETE', 'autocomplete');
 defined('AUTOFOCUS') || define('AUTOFOCUS', 'autofocus');
+defined('BOOTSTRAP') || define('BOOTSTRAP', 'bootstrap');
 defined('BREADCRUMBS') || define('BREADCRUMBS', 'breadcrumbs');
 defined('BREAK_LINE') || define('BREAK_LINE', '<br>');
 defined('BUTTONS') || define('BUTTONS', 'buttons');
@@ -41,9 +42,11 @@ defined('DATA_PROVIDER')  || define('DATA_PROVIDER', 'dataProvider');
 defined('DETAILVIEW_CLASS') || define('DETAILVIEW_CLASS', 'table maxwidth table-striped ');
 defined('DATEFORMAT')   || define('DATEFORMAT', 'dd-MM-yyyy');
 defined('DATETIMEFORMAT')   || define('DATETIMEFORMAT', 'DD-MM-YYYY HH:mm');
+defined('DANGER')   || define('DANGER', 'danger');
 defined('ERROR')   || define('ERROR', 'error');
-defined('ERROR_SUMMARY')   || define('ERROR_SUMMARY', 'error-summary');
+
 defined('ERROR_MODULE') || define('ERROR_MODULE', 'Failed to {module}, error: {error}');
+defined('ERROR_SUMMARY')   || define('ERROR_SUMMARY', 'error-summary');
 defined('FILTER') || define('FILTER', 'filter');
 defined('FILTER_OPTIONS') || define('FILTER_OPTIONS', 'filterOptions');
 defined('FILTER_INPUT_OPTIONS') || define('FILTER_INPUT_OPTIONS', 'filterInputOptions');
@@ -68,8 +71,10 @@ defined('HTML_SPACEX2') || define('HTML_SPACEX2', '&nbsp; &nbsp;');
 defined('HTML_WEBPAGE_CLOSE') || define('HTML_WEBPAGE_CLOSE', '</div></div></div>');
 defined('HTML_WEBPAGE_CLOSE_OPEN_COL_SM_4') || define('HTML_WEBPAGE_CLOSE_OPEN_COL_SM_4', '</div><div class="col-sm-4">');
 defined('HTML_WEBPAGE_OPEN_COL_SM_8') || define('HTML_WEBPAGE_OPEN_COL_SM_8', '<div class="webpage"><div class="row"><div class="col-sm-8 box">');
-defined('HTML_WEBPAGE_OPEN')  || define('HTML_WEBPAGE_OPEN','<div class=" box">');
+defined('HTML_WEBPAGE_OPEN')  || define('HTML_WEBPAGE_OPEN', '<div class=" box">');
 defined('ID') || define('ID', 'id');
+defined('ICON_LEFT') || define('ICON_LEFT', 'icon-left');
+defined('ICON_RIGHT') || define('ICON_RIGHT', 'icon-right');
 defined('INFO') || define('INFO', 'info');
 defined('INPUT') || define('INPUT', 'input');
 defined('INPUT_OPTIONS') || define('INPUT_OPTIONS', 'inputOptions');
@@ -107,6 +112,7 @@ defined('STICKY_OPEN') || define('STICKY_OPEN', '<div class="stickyWrapper"><div
 defined('STICKY_SIDEBAR') || define('STICKY_SIDEBAR', '</div><div class="stickySidebar">');
 defined('STICKY_CLOSE') || define('STICKY_CLOSE', '</div> </div>');
 
+defined('STR_FA_CHECK') || define('STR_FA_CHECK', 'fa-check');
 defined('STR_CLASS') || define('STR_CLASS', 'class');
 defined('STR_DEFAULT') || define('STR_DEFAULT', 'default');
 defined('STRING') || define('STRING', 'string');
@@ -123,4 +129,3 @@ defined('VISIBLE') || define('VISIBLE', 'visible');
 defined('WARNING') || define('WARNING', 'warning');
 defined('WIDTH5PX') || define('WIDTH5PX', 'width5px');
 defined('WIDTH20') || define('WIDTH20', 'width20');
-
