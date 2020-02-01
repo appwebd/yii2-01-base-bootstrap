@@ -48,7 +48,7 @@ class UserMethods extends User
         if ($model !== null) {
             $return = $model->username;
         } else {
-            $return = Yii::t( 'app', 'Unkown');
+            $return = Yii::t('app', 'Unkown');
         }
         return $return;
     }
