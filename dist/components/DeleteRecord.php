@@ -35,6 +35,45 @@ use yii\base\Component;
  */
 class DeleteRecord extends Component
 {
+    /**
+     * Delete records in one table given the primary key
+     *
+     * @param string $table      table name
+     * @param string $columnName Column name
+     * @param int    $primaryKey primary key
+     *
+     * @return bool
+     */
+    public function deleteRecord($table, $columnName, $primaryKey)
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $sqlcode = "DELETE FROM $table WHERE $columnName = $primaryKey";
+            if (Yii::$app->db->createCommand($sqlcode)->execute()) {
+                $transaction->commit();
+
+                $bitacora = new Bitacora();
+                $bitacora->register(
+                    "table: $table delete record $primaryKey",
+                    'DeleteRecord::deleteRecord',
+                    MSG_SUCCESS
+                );
+                return true;
+            }
+
+            $transaction->rollBack();
+        } catch (Exception $exception) {
+            $bitacora = new Bitacora();
+            $bitacora->register(
+                $exception,
+                'DeleteRecord::deleteRecord',
+                MSG_ERROR
+            );
+            $transaction->rollBack();
+        }
+
+        return false;
+    }
 
     /**
      * Verify permissions to delete records
@@ -117,24 +156,24 @@ class DeleteRecord extends Component
     public function report($status)
     {
         switch ($status) {
-        default:
-        case 0:
-            $msgText = 'There was an error removing the record';
-            $msgStatus = ERROR;
-            break;
-        case 1:
-            $msgText = 'Record has been deleted';
-            $msgStatus = SUCCESS;
-            break;
-        case 2:
-            $msgText = 'Record could not be deleted
-            because it is being used in the system';
-            $msgStatus = ERROR;
-            break;
-        case 3:
-            $msgText = 'Not found record in the system';
-            $msgStatus = SUCCESS;
-            break;
+            default:
+            case 0:
+                $msgText = 'There was an error removing the record';
+                $msgStatus = ERROR;
+                break;
+            case 1:
+                $msgText = 'Record has been deleted';
+                $msgStatus = SUCCESS;
+                break;
+            case 2:
+                $msgText = 'Record could not be deleted
+                because it is being used in the system';
+                $msgStatus = ERROR;
+                break;
+            case 3:
+                $msgText = 'Not found record in the system';
+                $msgStatus = SUCCESS;
+                break;
         }
 
         $msgText = Yii::t('app', $msgText);
