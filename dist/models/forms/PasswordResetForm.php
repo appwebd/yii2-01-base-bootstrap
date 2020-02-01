@@ -60,8 +60,8 @@ class PasswordResetForm extends Model
     public function attributeLabels()
     {
         return [
-            self::PASSW0RD => Yii::t( 'app', 'password'),
-            self::USER_ID => Yii::t( 'app', 'user'),
+            self::PASSW0RD => Yii::t('app', 'password'),
+            self::USER_ID => Yii::t('app', 'user'),
 
         ];
     }
