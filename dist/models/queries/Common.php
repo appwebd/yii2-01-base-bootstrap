@@ -46,7 +46,10 @@ class Common extends ActiveRecord
     }
 
     /**
-     * @param $dateInitial string in format YYYY-mm-dd H:i:s
+     * Get the difference of two dates (one delivered and the other is now ())
+     *
+     * @param string $dateInitial in format YYYY-mm-dd H:i:s
+     *
      * @return string Get date time
      */
     public static function getDateDiffNow($dateInitial)
@@ -89,10 +92,10 @@ class Common extends ActiveRecord
     /**
      * Get column description of table
      *
-     * @param string $table name of table
+     * @param string $table  name of table
      * @param string $column name of column
-     * @param string $field name of column
-     * @param string $value value of column to compare
+     * @param string $field  name of column to compare with value
+     * @param string $value  value of column to compare
      *
      * @return string description value
      */
@@ -110,7 +113,11 @@ class Common extends ActiveRecord
             }
         } catch (Exception $exception) {
             $bitacora = new Bitacora();
-            $bitacora->register($exception, 'app\models\queries\Common::getDescription', MSG_ERROR);
+            $bitacora->register(
+                $exception,
+                'app\models\queries\Common::getDescription',
+                MSG_ERROR
+            );
         }
 
         return $return;
@@ -169,15 +176,15 @@ class Common extends ActiveRecord
         $aButton = str_split($showButtons, 1);
 
         $template = '';
-        if ($aButton[0] && Common::getProfilePermission( ACTION_VIEW)) {
+        if ($aButton[0] && Common::getProfilePermission(ACTION_VIEW)) {
             $template .= '{view} ';
         }
 
-        if ($aButton[1] && Common::getProfilePermission( ACTION_UPDATE)) {
+        if ($aButton[1] && Common::getProfilePermission(ACTION_UPDATE)) {
             $template .= ' {update} ';
         }
 
-        if ($aButton[2] && Common::getProfilePermission( ACTION_DELETE)) {
+        if ($aButton[2] && Common::getProfilePermission(ACTION_DELETE)) {
             $template .= ' {delete}';
         }
         return $template;
@@ -251,7 +258,7 @@ class Common extends ActiveRecord
     public static function isActive()
     {
         return function ($model) {
-            return ($model->active == 1) ? Yii::t( 'app', 'Yes') : 'No';
+            return ($model->active == 1) ? Yii::t('app', 'Yes') : 'No';
         };
     }
 
@@ -280,7 +287,7 @@ class Common extends ActiveRecord
         $rowso = $model::find()->where([$parentModelId => $valueId])->orderBy([$orderBy => SORT_ASC])->all();
 
         $dropdown = '<select>';
-        $dropdown .= HTML_OPTION . Yii::t( 'app', 'Please select one option') . HTML_OPTION_CLOSE;
+        $dropdown .= HTML_OPTION . Yii::t('app', 'Please select one option') . HTML_OPTION_CLOSE;
 
         if (count($rowso) > 0) {
             foreach ($rowso as $column) {
@@ -295,7 +302,7 @@ class Common extends ActiveRecord
                 }
             }
         } else {
-            $dropdown .= HTML_OPTION . Yii::t( 'app', 'No results found') . HTML_OPTION_CLOSE;
+            $dropdown .= HTML_OPTION . Yii::t('app', 'No results found') . HTML_OPTION_CLOSE;
         }
 
         return $dropdown . '</select>';
@@ -304,26 +311,26 @@ class Common extends ActiveRecord
     /**
      * Toggle some value of table tabl_tablas
      *
-     * @param string $table_name  Name of table
-     * @param string $column_name toggle Column to do toggle
-     * @param string $pk_name     primary key of table $tableName
-     * @param int    $pk_value    value
+     * @param string $tableName  Name of table
+     * @param string $columnName toggle Column to do toggle
+     * @param string $pkName     primary key of table $tableName
+     * @param int    $pkValue    value
      *
      * @return bool
      * @throws \Exception
      */
     public static function toggleColumn(
-        $table_name,
-        $column_name,
-        $pk_name,
-        $pk_value
+        $tableName,
+        $columnName,
+        $pkName,
+        $pkValue
     ) {
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $sqlcode = 'UPDATE ' . $table_name .
-                ' SET ' . $column_name . '= not(' . $column_name . ')
+            $sqlcode = 'UPDATE ' . $tableName .
+                ' SET ' . $columnName . '= not(' . $columnName . ')
                 WHERE
-                        ' . $pk_name . ' = ' . $pk_value;
+                        ' . $pkName . ' = ' . $pkValue;
 
             Yii::$app->db->createCommand($sqlcode)->execute();
             $msg = Yii::t(
@@ -374,13 +381,13 @@ class Common extends ActiveRecord
             }
             $transaction->rollBack();
         } catch (Exception $exception) {
+            $transaction->rollBack();
             $bitacora = new Bitacora();
             $bitacora->register(
                 $exception,
                 'app\models\queries\Common::transaction::' . $method,
                 MSG_ERROR
             );
-            $transaction->rollBack();
         }
 
         return false;
