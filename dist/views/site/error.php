@@ -24,8 +24,12 @@ $this->params[BREADCRUMBS][] = $this->title;
 
 $error = nl2br(Html::encode($message . ' url: ' . Yii::$app->request->url));
 
-$bitacora = new Bitacora();
-$bitacora->register($error, 'app\views\site\error', MSG_ERROR);
+try {
+    $bitacora = new Bitacora();
+    $bitacora->register($error, 'app\views\site\error', MSG_ERROR);
+} catch (\Yii\db\Exception $exception) {
+    $message .= Yii::t('app', 'Could not register error in database');
+}
 
 ?>
 
