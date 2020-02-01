@@ -104,7 +104,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Find Identity
      *
-     * @param $userId
+     * @param int $userId Primary key of table user
      * @return User
      */
     public static function findIdentity($userId)
@@ -112,6 +112,14 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne([self::USER_ID => $userId, self::ACTIVE => self::STATUS_ACTIVE]);
     }
 
+    /**
+     * Get the user_id of table user
+     * @return int user_id primary key of table user
+     */
+    public static function getIdentityUserId()
+    {
+        return Yii::$app->user->isGuest ? User::USER_ID_VISIT : Yii::$app->user->identity->getId();
+    }
 
     /**
      * Finds user by username
@@ -322,14 +330,6 @@ class User extends ActiveRecord implements IdentityInterface
         return false;
     }
 
-    /**
-     * Get the user_id of table user
-     * @return int user_id primary key of table user
-     */
-    public static function getIdentityUserId()
-    {
-        return Yii::$app->user->isGuest ? User::USER_ID_VISIT : Yii::$app->user->identity->getId();
-    }
 
     /**
      * Generates password hash from password and sets it to the model
