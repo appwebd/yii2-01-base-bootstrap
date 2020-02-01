@@ -3,7 +3,7 @@
  * Class BaseController
  * PHP Version 7.2
  *
- * @category  Controllers
+ * @category  Controller
  * @package   Ui
  * @author    Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
  * @copyright 2019 (C) Copyright - Web Application development
@@ -32,9 +32,9 @@ use yii\web\Response;
  * Class BaseController
  *
  * @category Controllers
- * @package  Ui
+ * @package  BaseController
  * @author   Patricio Rojas Ortiz <patricio-rojaso@outlook.com>
- * @license   BSD 3-clause Clear license
+ * @license  BSD 3-clause Clear license
  * @link     https://appwebd.github.io
  */
 class BaseController extends Controller
@@ -149,12 +149,41 @@ class BaseController extends Controller
             );
             $bitacora->register(
                 $event,
-                'app/controllers/BaseController::getDirectoryUpload',
+                'getDirectoryUpload',
                 MSG_ERROR
             );
         }
 
         return $uploadDirectory;
+    }
+
+    /**
+     * Get a $_POST variable or get/set a session variable
+     *
+     * @param string $name        Name
+     * @param bool   $boolSession Get or set variable session for remember
+     *                            saved value
+     * @param string $defautValue Default value
+     *
+     * @return string
+     */
+    public static function getPostVar($name, $boolSession, $defautValue = 0)
+    {
+        $request = Yii::$app->request->post($name);
+        if (isset($request)) {
+            $return = $request;
+            if ($boolSession) {
+                Yii::$app->session->set($name . '_selected', (int)$request);
+            }
+        } else {
+            if ($boolSession) {
+                $return = Yii::$app->session->get($name . '_selected', $defautValue);
+            }
+        }
+        if (!isset($return) || empty($return)) {
+            $return = $defautValue;
+        }
+        return $return;
     }
 
     /**
@@ -321,7 +350,8 @@ class BaseController extends Controller
     /**
      * Generate a random string (default length 20 chars)
      *
-     * @param  int $length length chars to generate string
+     * @param int $length length chars to generate string
+     *
      * @return string random string
      */
     public static function randomString($length = 20)
@@ -388,6 +418,13 @@ class BaseController extends Controller
      */
     public static function stringEncode($plaintext)
     {
+        if (is_array($plaintext)) {
+            $newPlainText = '';
+            foreach ($plaintext as $value) {
+                $newPlainText .=  $value. '|';
+            }
+            $plaintext = $newPlainText;
+        }
 
         $encryptmethod = self::ENCRIPTED_METHOD;
         $secretkey = self::SECRET_KEY;
