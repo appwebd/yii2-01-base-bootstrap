@@ -162,7 +162,7 @@ class SignupForm extends Model
 
         if ($user->validate() && $user->save()) {
             Yii::info("OK your account was saved.", __METHOD__);
-            $subject = Yii::t( 'app', 'Signup email of confirmation');
+            $subject = Yii::t('app', 'Signup email of confirmation');
             if (!Mail::sendEmail($user, $subject, 'user/confirm-email')) { // app/mail/user/confirm-email-html.php
                 Yii::$app->session->setFlash(
                     ERROR,
