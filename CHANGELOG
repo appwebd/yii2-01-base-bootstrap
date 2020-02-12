@@ -1,0 +1,287 @@
+4be37f8 Tue Feb 11 21:35:56 2020 -0300 fixed supportedLang variable.
+4aad5ac Sat Feb 1 20:57:16 2020 -0300 Code cleanup, rearrange code, optimization of import
+bcdae9c Sat Feb 1 20:57:05 2020 -0300 Code cleanup, rearrange code, optimization of import
+47e2d9e Sat Feb 1 20:56:51 2020 -0300 Code cleanup, rearrange code, optimization of import
+cdb4842 Sat Feb 1 20:56:40 2020 -0300 Code cleanup, rearrange code, optimization of import
+2062357 Sat Feb 1 20:56:27 2020 -0300 Was added register any error to database.
+046429a Sat Feb 1 20:55:30 2020 -0300 Was added getPostVar function
+63579cc Sat Feb 1 20:55:04 2020 -0300 Was added deleteRecord function
+f0b54b1 Sat Feb 1 20:54:43 2020 -0300 Code cleanup, rearrange code, optimization of import
+e8f8536 Sat Feb 1 20:54:19 2020 -0300 Code cleanup, rearrange code, optimization of import
+8f20543 Sat Feb 1 20:54:08 2020 -0300 Code cleanup, rearrange code, optimization of import
+18934d6 Sat Feb 1 20:53:48 2020 -0300 Code cleanup, rearrange code, optimization of import
+a934cf5 Sat Feb 1 20:53:23 2020 -0300 register error in database
+67d0225 Sat Feb 1 20:52:41 2020 -0300 Was added a control of error database  connection
+012ce30 Mon Sep 9 21:03:31 2019 -0300 Code cleanup, rearrange code, optimization of import
+3c2bb8f Sat Jun 29 16:43:01 2019 -0400 was removed duplicated blocks
+6219e99 Tue Jun 25 23:01:00 2019 -0400 was removed static calls
+06d2039 Tue Jun 25 22:58:39 2019 -0400 was removed static calls
+a64cf17 Tue Jun 25 22:58:06 2019 -0400 was removed static calls
+ecc3826 Tue Jun 25 22:56:44 2019 -0400 remove blank lines
+ee6e6a1 Wed Jun 19 23:51:46 2019 -0400 Code cleanup, rearrange code, optimization of import
+4fc9eaa Wed Jun 19 23:05:02 2019 -0400 Code cleanup, rearrange code, optimization of import
+85b2235 Wed Jun 19 23:04:29 2019 -0400 file was deleted (not used in the web application)
+6bd9ff7 Wed Jun 19 22:31:40 2019 -0400 Code cleanup, rearrange code, optimization of import
+1943b6a Wed Jun 19 22:31:01 2019 -0400 New column in logs table added functionCode.
+c1d6838 Wed Jun 19 21:27:46 2019 -0400 Code cleanup, rearrange code, optimization of import
+3e63f90 Wed Jun 19 20:28:46 2019 -0400 README.md renamed
+b34d542 Wed Jun 19 20:26:26 2019 -0400 cleaning of code  with climatecode recommendations (class only 250 lines, 20 methods per class, etc.)
+64fdbee Wed Jun 19 20:23:48 2019 -0400 updated gulp components
+8c9ccca Wed Jun 19 20:22:29 2019 -0400 rearrange code
+5076bb3 Wed Jun 19 20:21:45 2019 -0400 Updated sonarqube, packages.json, composer.json
+6d77df4 Wed Jun 19 20:20:29 2019 -0400 company objects was deleted
+ca28d7f Wed Jun 19 20:05:57 2019 -0400 New structure of directories
+6a668c0 Thu Apr 11 16:44:01 2019 -0400 was removed some classes of file css/site.css
+415eb47 Thu Apr 11 16:29:43 2019 -0400 Code cleanup, rearrange code, optimization of import
+1290853 Thu Apr 11 16:18:03 2019 -0400 Code cleanup, rearrange code, optimization of import
+5bea25e Thu Apr 11 16:17:28 2019 -0400 Code cleanup, rearrange code, optimization of import and was added try-catch
+348ef5b Thu Apr 11 16:17:09 2019 -0400 Code cleanup, rearrange code, optimization of import
+197b040 Thu Apr 11 16:16:59 2019 -0400 Code cleanup, rearrange code, optimization of import
+ccb581f Thu Apr 11 16:16:40 2019 -0400 was added more constants.
+979f19a Tue Mar 19 16:07:33 2019 -0300 rearrange code
+1817325 Tue Mar 19 16:07:22 2019 -0300 Code cleanup, rearrange code, optimization of import
+a2ff89f Tue Mar 19 16:07:03 2019 -0300 Code cleanup, rearrange code, optimization of import
+5f8f783 Tue Mar 19 16:06:34 2019 -0300 Code cleanup, rearrange code, optimization of import
+943c938 Tue Mar 19 16:06:15 2019 -0300 Code cleanup, rearrange code, optimization of import
+16c6ad9 Tue Mar 19 16:02:41 2019 -0300 Wrong text success in constant transaction_module was removed
+a70def1 Fri Mar 15 23:12:13 2019 -0300 was removed constant from /app/web/constant.php and created again in app/component/Uicomponent.
+89eb93a Fri Mar 15 23:12:01 2019 -0300 was removed constant from /app/web/constant.php and created again in app/component/Uicomponent.
+7f80f16 Fri Mar 15 23:10:17 2019 -0300 removed import: is never used.
+109638f Fri Mar 15 23:09:58 2019 -0300 removed import: is never used.
+6f64378 Fri Mar 15 23:09:38 2019 -0300 removed import: is never used.
+fa2e0f4 Fri Mar 15 23:09:24 2019 -0300 removed import: is never used.
+84f4247 Fri Mar 15 11:22:55 2019 -0300 Titles standarization
+6ad3da7 Fri Mar 15 11:22:40 2019 -0300 was removed duplicated code.
+d8ea077 Fri Mar 15 11:21:52 2019 -0300 was added a space blank in the  view title
+540a8d2 Thu Mar 14 10:17:40 2019 -0300 Improvement in documentation of code
+ba4f34d Thu Mar 14 10:16:52 2019 -0300 was added class CSS3 (style) of DetailView component Yii2 for custom viewer.
+455138b Thu Mar 14 09:16:50 2019 -0300 Was removed all UiComponent:::warning functions
+bec83f8 Thu Mar 14 09:15:38 2019 -0300 Was removed all UiComponent:::warning functions
+4c6afc6 Thu Mar 14 09:15:28 2019 -0300 Was removed a duplicate block of code.
+1231321 Thu Mar 14 09:15:06 2019 -0300 Was removed a duplicate block of code.
+70f218a Thu Mar 14 09:14:57 2019 -0300 Was removed a duplicate block of code.
+8d3c962 Thu Mar 14 09:13:47 2019 -0300 Was removed all UiComponent:::warning functions
+fa003a5 Thu Mar 14 09:13:30 2019 -0300 Was removed all UiComponent:::warning functions
+3604391 Thu Mar 14 09:13:11 2019 -0300 was added class CSS3 (style) of DetailView component Yii2 for custom viewer.
+08065d1 Thu Mar 14 09:11:40 2019 -0300 Remove column company_id of table User
+6a81d05 Thu Mar 14 09:11:10 2019 -0300 Was removed all UiComponent:::warning functions
+28c4077 Wed Mar 13 11:58:39 2019 -0300 removed function urlCreator
+7d09e0e Wed Mar 13 11:49:35 2019 -0300 custom buttons of Buttonactions
+ed72adf Wed Mar 13 11:49:23 2019 -0300 Add Icons for button actions.
+b228fba Wed Mar 13 11:49:01 2019 -0300 custom buttons of Buttonactions
+aa6bb9b Wed Mar 13 11:48:35 2019 -0300 A function assigned to a variable is created in app\models\queries\common
+2809759 Wed Mar 13 11:42:49 2019 -0300 Improvement in documentation of code
+e9daf46 Sun Mar 10 21:33:07 2019 -0300 Unifying transaction messages
+01ae8a7 Sun Mar 10 21:33:00 2019 -0300 Unifying transaction messages
+264c92e Sun Mar 10 21:32:52 2019 -0300 Unifying transaction messages
+c258196 Sun Mar 10 21:32:36 2019 -0300 Improvement in documentation of code
+25faf7a Sun Mar 10 21:32:26 2019 -0300 Sorted constants
+38c2d73 Sun Mar 10 21:32:05 2019 -0300 Indentation of profile.
+dc5144f Sun Mar 10 21:30:05 2019 -0300 Encrypt parameters sent via Get method. Do not show primary key of the registry to the user
+72baafb Sun Mar 10 21:29:41 2019 -0300 Improvement in documentation of code
+2a8d892 Sun Mar 10 21:28:30 2019 -0300 Remove column company_id of table User
+ff03e24 Sat Mar 9 23:40:24 2019 -0300 load files css/javascript compressed
+3f8f1ce Sat Mar 9 23:40:24 2019 -0300 Encrypt parameters sent via the Get method. Do not show the primary key of the registry to the user
+8745ec7 Sat Mar 9 23:29:34 2019 -0300 Unifying transaction messages
+981df40 Sat Mar 9 23:28:57 2019 -0300 Added to the Yuicompress project to reduce the size of CSS/JavaScript files
+818abb0 Sat Mar 9 23:28:33 2019 -0300 Added to the Yuicompress project to reduce the size of CSS/JavaScript files
+a28765f Sat Mar 9 23:28:22 2019 -0300 Added to the Yuicompress project to reduce the size of CSS/JavaScript files
+795a9c6 Thu Mar 7 17:24:29 2019 -0300 Setting datetime format
+1a62b72 Thu Mar 7 17:23:21 2019 -0300 rename directory signup (registration) instead of singup (a problem of traduction)
+b650e2b Thu Mar 7 17:21:28 2019 -0300 PHPDOC @properly add integer company_id
+71a6df4 Thu Mar 7 17:20:34 2019 -0300 The code has been indented
+ec3da48 Thu Mar 7 17:19:49 2019 -0300 KISS principle (keep more simple tasks)
+f489763 Thu Mar 7 17:16:59 2019 -0300 Improvement in documentation of code
+81e3925 Thu Mar 7 17:16:47 2019 -0300 Import exception used in try-catch
+4113dd0 Thu Mar 7 17:16:29 2019 -0300 Improvement in documentation of code
+4504fd0 Thu Mar 7 17:16:15 2019 -0300 sort import use files
+950d5fd Thu Mar 7 17:12:19 2019 -0300 Import exception used in try-catch
+138e939 Thu Mar 7 16:28:51 2019 -0300 Was removed duplicate array key, and add other keys more.
+696f620 Thu Mar 7 15:27:52 2019 -0300 rename directory signup instead of singup
+cd6de81 Sat Mar 2 14:48:22 2019 -0300 The code has been indented
+5cfdd2a Sat Mar 2 14:47:41 2019 -0300 Improvement in documentation of code
+f875d8d Sat Mar 2 14:47:30 2019 -0300 Import app\controllers\BaseController class
+affaccf Sat Mar 2 14:46:05 2019 -0300 Improvement in documentation of code
+7177015 Sat Mar 2 14:45:55 2019 -0300 Improvement in documentation of code
+22d943d Sat Mar 2 14:43:59 2019 -0300 Improvement in documentation of code
+993039c Sat Mar 2 14:43:48 2019 -0300 Improvement in documentation of code
+be51ffd Sat Mar 2 14:22:33 2019 -0300 Improvement in documentation of code
+f0dd373 Sat Mar 2 14:22:19 2019 -0300 Improvement in documentation of code
+a5cba4b Sat Mar 2 14:22:07 2019 -0300 Improvement in documentation of code
+57627af Sat Mar 2 14:21:50 2019 -0300 Improvement in documentation of code
+120ab28 Sat Mar 2 14:20:19 2019 -0300 Method is deprecated changed className by class.
+50a56e3 Sat Mar 2 14:19:54 2019 -0300 Method is deprecated changed className by class.
+0c95a8a Sat Mar 2 12:12:40 2019 -0300 Variable $ramdom might have not been defined
+af05ae1 Fri Mar 1 21:59:31 2019 -0300 Method is deprecated changed className by class.
+3631f5d Fri Mar 1 21:26:33 2019 -0300 Method is deprecated changed className by class.
+3ebbb57 Fri Mar 1 21:19:23 2019 -0300 Method is deprecated changed className by class.
+fbcf929 Fri Mar 1 21:05:13 2019 -0300 Undefined class correction based in valid keyword of phpDoc
+aa82420 Fri Mar 1 20:27:06 2019 -0300 Undefined class tinyint, char,
+65f4a50 Fri Mar 1 20:26:30 2019 -0300 Undefined class datetime, char, bigint
+801c1c3 Fri Mar 1 20:26:13 2019 -0300 Undefined class tinyint
+ca02ce2 Fri Mar 1 20:19:35 2019 -0300 unreachable statement (removed throw $errorexception; line)
+760d8c9 Fri Mar 1 20:18:17 2019 -0300 extension is missing in composer.json ext-openssl, ext-imagick, ext-json
+991f770 Fri Mar 1 20:14:50 2019 -0300 Properties may be safety replaced with 'border-radius' shorthand
+e67e886 Fri Mar 1 20:12:55 2019 -0300 Properties may be safely replaced with 'border' shorthand
+6ea7791 Fri Mar 1 20:12:16 2019 -0300 Properties may be safely replaced with 'border' shorthand
+ad9db73 Fri Mar 1 20:10:15 2019 -0300 Properly padding-bottom is overwritten (with the next statement)
+e7fc267 Fri Mar 1 20:07:47 2019 -0300 duplicate value of height in class
+85e2de0 Fri Mar 1 20:04:48 2019 -0300 was round the value 7.5px to an integer value (problems with different devices)
+04b4fec Fri Mar 1 20:03:02 2019 -0300 Has been declared .ui-tabs-anchor like a class
+93adcd2 Wed Feb 27 20:53:20 2019 -0300 removed import: is never used.
+609b7f4 Wed Feb 27 20:53:11 2019 -0300 removed import: is never used.
+aaeaa2c Wed Feb 27 20:52:59 2019 -0300 removed import: is never used.
+1bd73aa Wed Feb 27 20:52:50 2019 -0300 Improvement in documentation of code
+d7d470a Wed Feb 27 20:52:42 2019 -0300 Improvement in documentation of code
+3f2efdc Wed Feb 27 20:52:34 2019 -0300 HTML issue. don't have <p> (was added)
+9414b45 Wed Feb 27 20:52:05 2019 -0300 The code has been indented
+8d135d8 Wed Feb 27 20:51:57 2019 -0300 The code has been indented
+872d08d Wed Feb 27 20:51:50 2019 -0300 The code has been indented
+efa6c42 Wed Feb 27 20:51:36 2019 -0300 error Input issue, changed to input(...
+db7288f Wed Feb 27 20:51:03 2019 -0300 Improvement in documentation of code
+0c58b55 Wed Feb 27 20:50:55 2019 -0300 Improvement in documentation of code
+7178b5a Wed Feb 27 20:50:48 2019 -0300 Improvement in documentation of code
+f16883a Wed Feb 27 20:50:34 2019 -0300 removed import: is never used.
+fb8d3ff Wed Feb 27 20:50:27 2019 -0300 removed import: is never used.
+362e4a5 Wed Feb 27 20:50:20 2019 -0300 removed import: is never used.
+c93fb25 Wed Feb 27 20:50:10 2019 -0300 Improvement in documentation of code
+f3cca1c Wed Feb 27 20:50:03 2019 -0300 Improvement in documentation of code
+7901347 Wed Feb 27 20:49:55 2019 -0300 removed throw $errorException; We need that this function return a value like false for example.
+fcd4d0e Wed Feb 27 20:47:28 2019 -0300 removed import: is never used.
+d02eea8 Wed Feb 27 20:47:18 2019 -0300 removed import: is never used.
+a4402ad Wed Feb 27 20:47:07 2019 -0300 Improvement in documentation of code
+b0d6ca0 Wed Feb 27 20:46:55 2019 -0300 removed import: is never used.
+01d5919 Wed Feb 27 20:46:40 2019 -0300 Unnecesary fully qualified name
+c27e5f3 Wed Feb 27 20:46:32 2019 -0300 removed import: is never used.
+a0b355a Wed Feb 27 20:46:19 2019 -0300 Unnecesary fully qualified name
+2c03ac2 Wed Feb 27 20:41:07 2019 -0300 removed import: is never used.
+4328b56 Wed Feb 27 20:40:57 2019 -0300 removed import: is never used.
+509b73d Wed Feb 27 20:40:46 2019 -0300 removed import: is never used.
+4b1f54c Wed Feb 27 20:40:39 2019 -0300 removed import: is never used.
+9ff4b3d Wed Feb 27 20:40:32 2019 -0300 removed import: is never used.
+870b76d Wed Feb 27 20:39:58 2019 -0300 removed import: yii\helpers\Json (is never used).
+9133d50 Wed Feb 27 20:39:31 2019 -0300 removed imports: app\controllers\BaseController (is never used).
+a13b169 Wed Feb 27 20:39:03 2019 -0300 removed imports: app\controllers\BaseController (is never used).
+9e63106 Wed Feb 27 20:38:50 2019 -0300 removed imports: app\controllers\BaseController (is never used).
+1d2bd4e Wed Feb 27 20:38:31 2019 -0300 removed imports: app\controllers\BaseController (is never used).
+4cce565 Wed Feb 27 20:37:13 2019 -0300 removed import yii\helpers\Html (is never used).
+5bcb8bd Wed Feb 27 19:52:23 2019 -0300 The code has been indented
+58280e0 Wed Feb 27 19:52:06 2019 -0300 The code has been indented
+ff4b7e2 Wed Feb 27 19:51:01 2019 -0300 Improvement in documentation of code
+bc81f07 Wed Feb 27 19:50:35 2019 -0300 The code has been indented
+7527ebd Wed Feb 27 19:50:25 2019 -0300 was removed class (not used in file) yii\helpers\Html;
+3d4caf0 Wed Feb 27 19:49:59 2019 -0300 was added try-catch in function getProfilePermission
+ba275a3 Wed Feb 27 19:49:12 2019 -0300 Improvement in documentation of function
+91afb31 Wed Feb 27 19:49:01 2019 -0300 Improvement in documentation of function
+c098de8 Wed Feb 27 19:48:53 2019 -0300 Improvement in documentation of function
+0b0469e Wed Feb 27 19:48:38 2019 -0300 was removed class (not used in file) Yii\i18n\I18N
+06f09a4 Wed Feb 27 19:46:29 2019 -0300 function UiComponent::header only uses threee parameters (was removed the last two parameters)
+d35dd52 Wed Feb 27 19:46:18 2019 -0300 function UiComponent::header only uses threee parameters (was removed the last two parameters)
+225855d Wed Feb 27 19:45:19 2019 -0300 removed Field accessed via magic method echo Yii::$app->ui->header(
+ef78364 Wed Feb 27 19:45:06 2019 -0300 removed Field accessed via magic method echo Yii::$app->ui->header(
+c105d61 Wed Feb 27 19:44:44 2019 -0300 The code has been indented
+dbb38a9 Wed Feb 27 19:43:56 2019 -0300 improve layout intentation
+a8ca58a Wed Feb 27 19:43:27 2019 -0300 Added class
+503c8fc Wed Feb 27 19:43:04 2019 -0300 removed Field accessed via magic method echo Yii::$app->ui->header(
+f35d1c8 Wed Feb 27 19:42:22 2019 -0300 Improvement in documentation of function
+64cabda Wed Feb 27 19:42:10 2019 -0300 Added more constants in this web application
+293a370 Wed Feb 27 19:41:52 2019 -0300 Class ui-tabs-tab not defined
+c8005c3 Wed Feb 27 19:41:26 2019 -0300 solved issue with CONST_CLASS defined in header of this file.
+f181cc5 Wed Feb 27 19:38:51 2019 -0300 Improvement in documentation of function
+e38f415 Wed Feb 27 19:38:06 2019 -0300 changed class Name Common:: instead of common.
+4ca6006 Wed Feb 27 19:36:45 2019 -0300 Added action Actiondropdown, used in view via ajax method
+5b8d5ef Wed Feb 27 19:35:41 2019 -0300 removed all Field accessed via magic method echo Yii::$app->ui->buttonsCreate(8);
+945d4ba Wed Feb 27 19:34:29 2019 -0300 Function LoginForm::removeTokenEmail only uses 1 parameter
+7109262 Wed Feb 27 19:33:39 2019 -0300 Added try-catch in php function random_int
+93b0e79 Tue Feb 26 22:28:04 2019 -0300 The variable $supportedLanguages, is referenced in app/config/main.php
+0070e1d Tue Feb 26 22:26:58 2019 -0300 Add try-catch, library    Imagick, It depends on installation platform
+ac53ff6 Thu Feb 21 20:06:12 2019 -0300 Performance static class UiComponent::pageSize() instead of using Yii::$app->ui->pagesize() and improve codification to camelCase
+1227bb1 Thu Feb 21 17:02:17 2019 -0300 Documentation:: remove @throws
+1853d3c Thu Feb 21 17:00:43 2019 -0300 modularize user_id with User::getIdentityUserId()
+22b8339 Thu Feb 21 16:57:00 2019 -0300 Adding Try-catch source code and normalization of variables
+9452b98 Fri Nov 2 21:26:27 2018 -0300 We add a more structured method for transaction operations (delete and save)
+f55b948 Fri Nov 2 21:26:19 2018 -0300 review translation of view
+34c7714 Fri Nov 2 21:25:33 2018 -0300 We add a more structured method for transaction operations (delete and save)
+2024365 Fri Nov 2 21:23:00 2018 -0300 add PHPDoc weak warning fixed
+926857a Fri Nov 2 21:22:45 2018 -0300 Add functionality of password reset
+3678bda Fri Nov 2 21:22:29 2018 -0300 Add functionality of password reset
+1d63d57 Fri Nov 2 21:22:22 2018 -0300 add PHPDoc weak warning fixed
+28753c2 Fri Nov 2 21:22:09 2018 -0300 fix some issue of phpcs
+671c4b5 Fri Nov 2 21:21:35 2018 -0300 We add a more structured method for transaction operations (delete and save)
+1eb1272 Fri Nov 2 21:21:26 2018 -0300 We add a more structured method for transaction operations (delete and save)
+c3a45ba Fri Nov 2 21:21:01 2018 -0300 Break magic method referente of Yii::$app->ui->header(is More clearly of reference to one Class explicit)
+6c7084b Fri Nov 2 21:20:44 2018 -0300 We add a more structured method for transaction operations (delete and save)
+441ced8 Fri Nov 2 21:20:29 2018 -0300 Add functionality of password reset
+6637748 Fri Nov 2 21:20:04 2018 -0300 Add encoded sslopen
+2c6e131 Fri Nov 2 21:19:46 2018 -0300 We add a more structured method for transaction operations (delete and save)
+d0d49b3 Fri Nov 2 21:18:18 2018 -0300 We add more translation standardized tokens
+39c5e46 Fri Nov 2 21:17:20 2018 -0300 add PHPDoc weak warning fixed
+bfaf6d6 Fri Nov 2 21:16:55 2018 -0300 add functionality email confirmation used in loginController only
+d62cd68 Fri Nov 2 21:15:47 2018 -0300 Add functionality of password reset
+0692ad2 Fri Nov 2 21:14:56 2018 -0300 Break magic method referente of Yii::$app->ui->header(is More clearly of reference to one Class explicit)
+27a81ed Fri Nov 2 21:11:52 2018 -0300 Add structure layout
+653fbc6 Fri Nov 2 21:11:38 2018 -0300 save any error
+4156f21 Fri Nov 2 21:11:31 2018 -0300 save any error
+8fa5faf Fri Nov 2 21:10:50 2018 -0300 Add more constants
+dfb23b7 Fri Nov 2 21:10:05 2018 -0300 add user.passwordResetTokenExpire used in Password (model)
+2277f43 Fri Nov 2 21:09:25 2018 -0300 add PHPDoc weak warning fixed
+ffdaf06 Fri Nov 2 21:09:11 2018 -0300 add PHPDoc weak warning fixed
+01e8d39 Fri Nov 2 21:08:55 2018 -0300 add PHPDoc weak warning fixed
+17ef534 Fri Nov 2 20:57:03 2018 -0300 User table modification email_confirmation_token is set like not required default null
+2a21154 Wed Oct 31 23:41:07 2018 -0300 were removed classes not used add try-catch
+45e8d18 Wed Oct 31 23:31:04 2018 -0300 were removed classes not used add try-catch at transactionDelete
+511913e Wed Oct 31 23:28:46 2018 -0300 Add function transactionDelete() with try-catch
+ad3c3c8 Wed Oct 31 23:18:30 2018 -0300 PasswordController only displays Password activities
+fccb2c9 Wed Oct 31 23:07:41 2018 -0300 were removed classes not used LoginController only displays login activities
+aae95f8 Wed Oct 31 23:05:05 2018 -0300 was fixed some PHPDoc issues
+05f7b14 Wed Oct 31 23:03:29 2018 -0300 Setting language English
+4c56e1d Wed Oct 31 23:00:38 2018 -0300 Add function panelClose()
+7ed4c6e Wed Oct 31 23:00:15 2018 -0300 Message is ordered for unrealized translations.
+9346d1c Tue Oct 30 11:56:26 2018 -0300 Try-catch is added to the views that have widgets objects.
+4adaead Tue Oct 30 11:55:51 2018 -0300 Referential integrity is corrected when saving information in logs
+c0a6fa2 Sat Oct 27 15:13:40 2018 -0300 Common javascript functions are added.
+ea757bc Sat Oct 27 15:13:12 2018 -0300 Structure css.
+1c1ba4e Sat Oct 27 15:12:43 2018 -0300 Update constant.php
+f3a1a4d Sat Oct 27 15:12:25 2018 -0300 Remove magic calls Yii::$app->Ui::functions.
+da0726d Sat Oct 27 15:11:38 2018 -0300 Remove error typo:"Comercial"
+2a00eee Sat Oct 27 15:11:24 2018 -0300 Remove error typo:"Comercial"
+cc3eec0 Sat Oct 27 15:11:06 2018 -0300 Update messages.
+1e4f077 Sat Oct 27 15:10:51 2018 -0300 Remove error typo:"Comercial"
+2977311 Sat Oct 27 15:09:18 2018 -0300 DRY, SOLID are applied to eliminate functions in controllers
+872b056 Sat Oct 27 15:07:06 2018 -0300 Added functionality to detect browser language.
+3778bc4 Sat Oct 27 15:06:49 2018 -0300 The static statement is added to functions to eliminate magic calls Yii :: $ app-> Ui :: functions
+ff731ea Sat Oct 27 15:05:14 2018 -0300 Added functionality to detect browser language.
+9f210ef Sat Oct 27 15:03:01 2018 -0300 It adds instructions:
+91f1d7d Wed Oct 17 12:09:04 2018 -0300 was removed column company_id from user table
+887c39e Wed Oct 17 12:07:46 2018 -0300 Dictionary of data translated from Spanish into English
+25c873e Wed Oct 17 12:04:43 2018 -0300 The UI constants are adjusted from @app/web/constant.php
+6e07e36 Wed Oct 17 12:03:35 2018 -0300 Some comments from phpmd are corrected
+9751438 Wed Oct 17 12:02:14 2018 -0300 Application Data Dictionary
+53dcd99 Wed Oct 17 12:01:26 2018 -0300 Company (company_id) has been removed from user model user_id
+a0bcb94 Wed Oct 17 12:00:17 2018 -0300 It is established, all the UI layout constants are written in @app / web / constants.php
+ed9554b Sat Oct 6 21:31:19 2018 -0300 Is added UI component functionality  visible / No visible of  buttons
+7b58df0 Sat Oct 6 21:28:11 2018 -0300 Constant titles, column names are added
+fb3832d Sat Oct 6 21:27:01 2018 -0300 The error has been fixed: If the session is not started and the method invoked, an error occurs
+7f432f0 Sat Oct 6 21:25:20 2018 -0300 Some instructions for layout UI are added
+b241799 Sat Oct 6 21:24:40 2018 -0300 Some instructions for layout UI are added
+e52f15f Thu Oct 4 01:53:33 2018 -0300 Help texts are added in profile view
+95db21a Tue Oct 2 12:12:17 2018 -0300 If the Permission class is invoked, it must be declared
+b853c64 Tue Oct 2 12:11:21 2018 -0300 Help texts have been added in this view.
+fa5343f Tue Oct 2 12:10:31 2018 -0300 removed the "use app\models\User" class not used.
+7dfed42 Tue Oct 2 12:08:57 2018 -0300 Updated some messages of Permission view.
+f958799 Mon Oct 1 22:30:51 2018 -0300 Standarized view (constant title, tableOptions)
+ab11fe8 Mon Oct 1 22:29:57 2018 -0300 Add constant TITLE
+0b1a87f Mon Oct 1 22:29:42 2018 -0300 Add constant TITLE, STATUS_STATUS_NAME
+8354a4f Mon Oct 1 22:28:03 2018 -0300 Remove classes not used.
+94a6fb7 Mon Oct 1 21:58:13 2018 -0300 alphabetical order
+3524124 Mon Oct 1 21:57:25 2018 -0300 setting tableOptions in gridview properties (via one constant)
+7274e6a Mon Oct 1 21:55:42 2018 -0300 Add constant TABLE, TITLE, CONTROLLER_CONTROLLER_NAME
+8092653 Mon Oct 1 21:55:13 2018 -0300 remove space blank line
+9b7c177 Mon Oct 1 15:16:13 2018 -0300 MySQL script db_base.sql; With it you can re-create the database initial db_base
+cdb6508 Mon Oct 1 15:15:43 2018 -0300 The initial administrator account like user and password is admin admin
+86eb30b Mon Oct 1 15:13:58 2018 -0300 Update readme.md
+21a49ae Mon Oct 1 10:14:01 2018 -0300 remove spaces
+e5943e4 Mon Oct 1 10:11:53 2018 -0300 Functions that are common methods in controller are added such as:
+22fab88 Mon Oct 1 10:03:09 2018 -0300 Finish ordering text icons on buttons objects
+3616347 Sat Sep 29 21:37:29 2018 -0300 Initial commit;
+d7ffe6c Sat Sep 29 21:31:24 2018 -0300 Initial commit
