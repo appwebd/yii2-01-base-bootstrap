@@ -4954,7 +4954,8 @@ a[data-value=""] {
 -------------------------------------------------------------------------------------------------
 */
 .footer {
-    background: #333333 !important;
+    background: transparent !important;    
+    bottom: 0;
     color: #999999;
     border-top: 1px solid #ddd;
     padding: 7px;

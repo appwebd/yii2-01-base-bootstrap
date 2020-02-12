@@ -28,7 +28,7 @@ $config = [
         'log',
         [
             STR_CLASS => 'app\components\LanguageSelector',
-            'supportedLanguages' => ['en', 'es'],
+            'supportedLang' => ['en', 'es'],
         ],
     ],
     //'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
