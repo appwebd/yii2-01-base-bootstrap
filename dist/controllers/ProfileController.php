@@ -142,7 +142,7 @@ class ProfileController extends BaseController
      */
     public function actionDelete($id)
     {
-        $deleteRecord = New DeleteRecord();
+        $deleteRecord = new DeleteRecord();
         if (!$deleteRecord->isOkPermission(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
@@ -158,7 +158,7 @@ class ProfileController extends BaseController
             $status = $common->transaction($model, ACTION_DELETE);
             $deleteRecord->report($status);
         } catch (Exception $exception) {
-            $bitacora = New Bitacora();
+            $bitacora = new Bitacora();
             $bitacora->registerAndFlash($exception, 'actionDelete', MSG_ERROR);
         }
 
@@ -264,7 +264,7 @@ class ProfileController extends BaseController
         }
 
         $nroSelections = sizeof($result);
-        $status = [];
+        $status = ['','','',''];
         // 0: OK was deleted,      1: KO Error deleting record,
         // 2: Used in the system,  3: Not found record in the system
 
@@ -276,7 +276,7 @@ class ProfileController extends BaseController
                 $item = $deleteRecord->remove($model, $fkCheck);
                 $status[$item] .= $primaryKey . ',';
             } catch (Exception $exception) {
-                $bitacora = New Bitacora();
+                $bitacora = new Bitacora();
                 $bitacora->registerAndFlash(
                     $exception,
                     'actionRemove',

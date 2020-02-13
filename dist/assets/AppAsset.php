@@ -20,8 +20,8 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
+    public $basePath  = '@webroot';
+    public $jsOptions = ['position' => View::POS_END];
     public $css = [
         ['css/style.min.css', 'media' => 'all', 'type' => 'text/css'],
     ];

@@ -53,7 +53,7 @@ class UserController extends BaseController
             return $this->redirect(['/']);
         }
 
-        $bitacora = New Bitacora();
+        $bitacora = new Bitacora();
         $bitacora->register(
             Yii::t(
                 'app',
@@ -124,7 +124,7 @@ class UserController extends BaseController
                 return $this->redirect([ACTION_VIEW, 'id' => $privateKey]);
             }
         } catch (Exception $exception) {
-            $bitacora = New Bitacora();
+            $bitacora = new Bitacora();
             $bitacora->registerAndFlash($exception, '_saveRecord', MSG_ERROR);
         }
         return false;
@@ -141,13 +141,13 @@ class UserController extends BaseController
      */
     public function actionDelete($id)
     {
-        $deleteRecord = New DeleteRecord();
+        $deleteRecord = new DeleteRecord();
         if (!$deleteRecord->isOkPermission(ACTION_DELETE)) {
             return $this->redirect([ACTION_INDEX]);
         }
 
         $model = $this->findModel($id);
-        if ($this->_fkCheck($model->user_id) > 0) {
+        if ($this->fkCheck($model->user_id) > 0) {
             $deleteRecord->report(2);
             return $this->redirect([ACTION_INDEX]);
         }
@@ -157,7 +157,7 @@ class UserController extends BaseController
             $status = $common->transaction($model, ACTION_DELETE);
             $deleteRecord->report($status);
         } catch (Exception $exception) {
-            $bitacora = New Bitacora();
+            $bitacora = new Bitacora();
             $bitacora->registerAndFlash($exception, 'actionDelete', MSG_ERROR);
         }
         return $this->redirect([ACTION_INDEX]);
@@ -187,7 +187,7 @@ class UserController extends BaseController
             ['id' => $privateKey]
         );
 
-        $bitacora = New Bitacora();
+        $bitacora = new Bitacora();
         $bitacora->registerAndFlash($event, 'findModel', MSG_SECURITY_ISSUE);
 
         throw new NotFoundHttpException(
@@ -205,7 +205,7 @@ class UserController extends BaseController
      *
      * @return integer numbers of rows in other tables (integrity referential)
      */
-    private function _fkCheck($userId)
+    private function fkCheck($userId)
     {
         $common = new Common();
         return $common->getNroRowsForeignkey(
@@ -223,19 +223,19 @@ class UserController extends BaseController
     public function actionIndex()
     {
 
-        $searchmodel_user = new UserSearch();
-        $dataprovide_user = $searchmodel_user->search(
+        $smUser = new UserSearch();
+        $dmUser = $smUser->search(
             Yii::$app->request->queryParams
         );
 
         $pageSize = $this->pageSize();
-        $dataprovide_user->pagination->pageSize = $pageSize;
+        $dmUser->pagination->pageSize = $pageSize;
 
         return $this->render(
             ACTION_INDEX,
             [
-                'searchModelUser' => $searchmodel_user,
-                'dataProviderUser' => $dataprovide_user,
+                'searchModelUser' => $smUser,
+                'dataProviderUser' => $dmUser,
                 'pageSize' => $pageSize
             ]
         );
@@ -266,11 +266,11 @@ class UserController extends BaseController
             try {
                 $privateKey = $result[$counter];
                 $model = User::findOne($privateKey);
-                $fk_check = $this->_fkCheck($privateKey);
+                $fk_check = $this->fkCheck($privateKey);
                 $item = $deleteRecord->remove($model, $fk_check);
                 $status[$item] .= $privateKey . ',';
             } catch (Exception $exception) {
-                $bitacora = New Bitacora();
+                $bitacora = new Bitacora();
                 $bitacora->registerAndFlash(
                     $exception,
                     'actionRemove',
@@ -322,7 +322,7 @@ class UserController extends BaseController
         $model = $this->findModel($id);
 
         $event = Yii::t('app', 'view record {id}', ['id' => $model->user_id]);
-        $bitacora = New Bitacora();
+        $bitacora = new Bitacora();
         $bitacora->register($event, 'actionView', MSG_INFO);
 
         return $this->render(ACTION_VIEW, [MODEL => $model]);

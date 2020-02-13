@@ -51,8 +51,9 @@ $config = [
         'assetManager' => [
             'appendTimestamp' => true,
             'linkAssets' => false,
-            STR_CLASS => 'yii\web\AssetManager',
+            'class' => 'yii\web\AssetManager',
             'bundles' => $bundles,
+            'forceCopy' => true
         ],
         'cache' => DISABLE_CACHE ?
             'yii\caching\DummyCache' :
@@ -62,17 +63,26 @@ $config = [
             ],
         'db' => $db,
         'errorHandler' => [
+            'maxSourceLines' => 20,
             'errorAction' => 'site/error',
+        ],
+        'formatter' => [
+            'dateFormat' => 'd-M-Y',
+            'datetimeFormat' => 'd-M-Y H:i:s',
+            'timeFormat' => 'H:i:s',
+
+            'locale' => 'es-ES', //your language locale
+            'defaultTimeZone' => 'Chile/Continental', // time zone
         ],
         'i18n' => [
             'translations' => [
                 'yii' => [
-                    STR_CLASS => 'yii\i18n\PhpMessageSource',
+                    'class' => 'yii\i18n\PhpMessageSource',
                     'sourceLanguage' => 'en-US',
                     'basePath' => '@app/messages',
                 ],
                 'app*' => [
-                    STR_CLASS => 'yii\i18n\PhpMessageSource',
+                    'class' => 'yii\i18n\PhpMessageSource',
                     'fileMap' => [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
@@ -98,7 +108,7 @@ $config = [
                 ],
                 /*
                 'file'=>[
-                    STR_CLASS => 'yii\log\FileTarget',
+                    'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning','info'],
                     'logFile' => '@runtime/logs/sql.log',
                     'categories' => [
@@ -109,7 +119,7 @@ $config = [
                     ],
                 ],
                 'email' => [
-                    STR_CLASS => 'yii\log\EmailTarget',
+                    'class' => 'yii\log\EmailTarget',
                     'except' => ['yii\web\HttpException:404'],
                     'levels' => ['error', 'warning'],
                     //'categories' => ['yii\db\*'],
@@ -122,55 +132,93 @@ $config = [
             ],
         ],
         'mailer' => [
-            STR_CLASS => 'yii\swiftmailer\Mailer',
+            'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@app/mail',
             'transport' => [
-                STR_CLASS => 'Swift_SmtpTransport',
+                'class' => 'Swift_SmtpTransport',
                 'host' => 'localhost',
                 'username' => 'pro@dev-master.local',
                 'password' => 'password', // your password
                 'port' => '25',
-                //  'encryption' => 'tls',
+//                'encryption' => 'tls',
             ],
         ],
 
+// Enable the following instruction
+// only if you have a web page server with SSL certificate
+/*
+        'cookies' => [
+            'class' => 'yii\web\Cookie',
+            'httpOnly' => true,
+            'secure' => true
+        ],
+*/
         'request' => [
             'cookieValidationKey' => '-ep1N8LQ66XkS34oQIEgZAogO466l7HX',
             'enableCsrfValidation' => true,
             'enableCookieValidation' => true,
+// Enable the following instruction
+// only if you have a web page server with SSL certificate
+/*
             'csrfCookie' => [
                 'httpOnly' => true,
-            ],
+                'secure' => true
+            ]
+*/
         ],
         'session' => [
-            STR_CLASS => 'yii\web\DbSession',
+            'class' => 'yii\web\DbSession',
+            'sessionTable' => 'session',
             //'name' => 'MYAPPSID',
             //'savePath' => '@app/tmp/sessions',
-            'timeout' => 1440, //24 minutos?
+            'timeout' => 1440, //24 minutes?
+
+// Enable the following instruction
+// only if you have a web page server with SSL certificate
+/*
+            'cookieParams' => [
+                'httpOnly' => true,
+                'secure' => true
+            ]
+*/
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
             'loginUrl' => ['/login/index'],
+// Enable the following instruction
+// only if you have a web page server with SSL certificate
+/*
             'identityCookie' => [
                 'name' => '_identity-backend',
                 'httpOnly' => true,
+                'secure' => true,
+            ],
+*/
+        ],
+/*
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            // Disable r= routes
+            'enablePrettyUrl' => true,
+            // Disable index.php
+            'showScriptName' => true,
+//            'enableStrictParsing' => true,
+            'rules' => [
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                'defaultRoute' => '/site/index',
+                '' => '/site/index' // En caso de esablecer enableStrictParsing=>true
             ],
         ],
+*/
     ],
     'defaultRoute' => 'site/index',
-    'id' => 'basic',
-    'name' => 'Base',
+    'id' => 'base',
     'language' => 'en',
     'layoutPath' => '@app/views/layouts',
+    'name' => 'Base',
     'params' => $params,
     'sourceLanguage' => 'en',
     'vendorPath' => '@app/vendor',
@@ -178,15 +226,15 @@ $config = [
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-    $config[BOOTSTRAP][] = 'debug';
+    $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting
-        // from localhost.
+        // uncomment the following to add your IP
+        // if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
-    $config[BOOTSTRAP][] = 'gii';
+    $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting

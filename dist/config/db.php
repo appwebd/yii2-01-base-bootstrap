@@ -14,10 +14,10 @@
  */
 
 if (YII_DEBUG) {
-    $enableSchemaCache   = false;
+    $enableSchemaCache = false;
     $schemaCacheDuration = 3600;
 } else {
-    $enableSchemaCache   = true;
+    $enableSchemaCache = true;
     $schemaCacheDuration = 3600;
 }
 

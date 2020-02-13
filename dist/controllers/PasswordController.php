@@ -111,7 +111,7 @@ class PasswordController extends BaseController
                 $this->wrongToken($token);
             }
         } catch (Exception $exception) {
-            $bitacora = New Bitacora();
+            $bitacora = new Bitacora();
             $bitacora->register(
                 $exception,
                 'app\controllers\PasswordController::actionReset',
@@ -137,7 +137,7 @@ class PasswordController extends BaseController
             'Error, token password reset wrong {token}',
             ['token' => $token]
         );
-        $bitacora = New Bitacora();
+        $bitacora = new Bitacora();
         $bitacora->register($event, 'actionReset', MSG_SECURITY_ISSUE);
         return $this->redirect([ACTION_INDEX]);
     }

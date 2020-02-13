@@ -27,6 +27,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
+use app\models\Parameter;
 
 /**
  * Class BaseController
@@ -257,29 +258,40 @@ class BaseController extends Controller
         }
         return true;
     }
+
     /**
+     * Get / remember pageSize saved in database
+     *
      * @return array|mixed
      */
     public function pageSize()
     {
 
-        $session = Yii::$app->session;
+        $token = Yii::$app->controller->id . '.' . self::STR_PER_PAGE;
+        $token = $this->stringEncode($token);
+        $parameter = new Parameter();
+        $model = $parameter->getParameter($token);
+
         $pageSize = Yii::$app->request->get(self::STR_PER_PAGE);
-        $token = Yii::$app->controller->id.'.'.self::STR_PAGESIZE;
 
         if (!isset($pageSize)) {
             $pageSize = Yii::$app->request->post(self::STR_PER_PAGE);
+
             if (!isset($pageSize)) {
-                $pageSize = $session[self::STR_PAGESIZE];
+                $pageSize =($model !== null) ? $model->value : null;
+
                 if (!isset($pageSize)) {
                     $pageSize = Yii::$app->params['pageSizeDefault'];
                 }
             }
         }
 
-        $session->set($token, $pageSize);
+        $description = 'PageSize of ' . Yii::$app->controller->id;
+        $parameter->saveParameter($token, $pageSize, $description);
+
         return $pageSize;
     }
+
     /**
      * Resume of operation
      *
